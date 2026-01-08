@@ -113,20 +113,6 @@ DATABASES = {
     ),
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': config("DATABASE_ENGINE"),
-#         'NAME': config("DATABASE_NAME"),
-#         'HOST': config("DATABASE_HOST"),
-#         'PORT': config("DATABASE_PORT"),
-#         'USER': config("DATABASE_USER"),
-#         'PASSWORD': config("DATABASE_PASSWORD"),
-#         'OPTIONS': {
-#         'charset': 'utf8mb4',
-#         'init_command': "SET sql_mode='STRICT_TRANS_TABLES', innodb_strict_mode=1",
-#         },
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -168,6 +154,9 @@ STATIC_ROOT = BASE_DIR/"staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
     ]
+
+MEDIA_ROOT = BASE_DIR / "media" 
+MEDIA_URL = '/media/'
 
 EMAIL_FROM = os.environ.get('AUTHEMAIL_DEFAULT_EMAIL_FROM') or 'gusanujoshua39@gmail.com'
 EMAIL_BCC = os.environ.get('AUTHEMAIL_DEFAULT_EMAIL_BCC') or 'gusanujoshua39@gmail.com'
