@@ -13,7 +13,7 @@ class GiftCardStore(models.Model):
   ]
   category = models.CharField(choices=CATEGORY_CHOICES, max_length=50, default="All")
   name = models.CharField(max_length=50, unique=True)
-  image = models.ImageField(),
+  image = models.ImageField(upload_to="gift stores", null=True)
 
   user = models.ForeignKey(user, on_delete=models.CASCADE, related_name="gift_card_store_creator", null=True)
 
