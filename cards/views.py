@@ -11,5 +11,9 @@ class GiftCardStoreListView(ListAPIView):
   serializer_class = GiftCardStoreListSerializer
   queryset = GiftCardStore.objects.all()
   
+  def get_serializer_context(self):
+    context = super().get_serializer_context()
+    context["request"] = self.request
+    return context
   
 
