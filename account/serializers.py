@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from phonenumber_field.serializerfields import PhoneNumberField
 from .models import UserProfile, Level2Credentials, Level3Credentials
 
 
@@ -110,3 +111,12 @@ class ChangePasswordSerializer(serializers.Serializer):
         if attrs['new_password'] != attrs['confirm_new_password']:
             raise serializers.ValidationError({"confirm_new_password": "Passwords do not match."})
         return attrs
+
+
+class AddPhoneNumberSerializer(serializers.Serializer):
+    phone_number = PhoneNumberField()
+
+    def validate_phone_number(self, value):
+        if UserProfile.objects.filter(phone_number=value).exists():
+            raise serializers.ValidationError("This phone number is already registered.")
+        return value

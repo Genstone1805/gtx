@@ -7,7 +7,7 @@ from .views import (
     SubmitLevel2CredentialsView, SubmitLevel3CredentialsView,
     CurrentUserView, UploadProfilePictureView,
     UpdateProfilePictureView,
-    ChangePasswordView
+    ChangePasswordView, AddPhoneNumberView
 )
 
 urlpatterns = [
@@ -32,4 +32,5 @@ urlpatterns = [
     path('me/', CurrentUserView.as_view(), name='current-user'),
     path('profile/picture/upload/', UploadProfilePictureView.as_view(), name='profile-picture-upload'),
     path('profile/picture/update/', UpdateProfilePictureView.as_view(), name='profile-picture-update'),
+    path('phone/update/', AddPhoneNumberView.as_view(), name='add-phone-number'),
 ]
