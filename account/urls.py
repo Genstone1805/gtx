@@ -5,7 +5,7 @@ from .views import (
     PasswordResetRequestView, PasswordResetVerifyView,
     LoginView, CreateTransactionPinView, UpdateTransactionPinView,
     SubmitLevel2CredentialsView, SubmitLevel3CredentialsView,
-    UserDetailView, CurrentUserView, UploadProfilePictureView,
+    CurrentUserView, UploadProfilePictureView,
     UpdateProfilePictureView
 )
 
@@ -28,7 +28,6 @@ urlpatterns = [
 
     # User profile
     path('me/', CurrentUserView.as_view(), name='current-user'),
-    path('user/<int:user_id>/', UserDetailView.as_view(), name='user-detail'),
     path('profile/picture/upload/', UploadProfilePictureView.as_view(), name='profile-picture-upload'),
     path('profile/picture/update/', UpdateProfilePictureView.as_view(), name='profile-picture-update'),
 ]

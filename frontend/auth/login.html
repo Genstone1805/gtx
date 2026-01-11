@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - GTX</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Welcome Back</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <p class="text-right mb-20">
+                    <a href="forgot-password.html" class="link">Forgot Password?</a>
+                </p>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <p class="text-center mt-20">
+                Don't have an account? <a href="signup.html" class="link">Sign Up</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        // Check if already logged in
+        if (TokenManager.getAccessToken()) {
+            window.location.href = '../profile/dashboard.html';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const form = this;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            UI.showLoader(submitBtn);
+
+            try {
+                const response = await api.login(email, password);
+                const data = await response.json();
+
+                if (response.ok) {
+                    TokenManager.setTokens(data.access, data.refresh);
+                    TokenManager.setUser(data.user);
+                    UI.showAlert(form, 'Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = '../profile/dashboard.html';
+                    }, 1000);
+                } else {
+                    if (response.status === 403 && data.detail.includes('verify')) {
+                        sessionStorage.setItem('verifyEmail', email);
+                        UI.showAlert(form, data.detail + ' Redirecting to verification...', 'info');
+                        setTimeout(() => {
+                            window.location.href = 'verify.html';
+                        }, 2000);
+                    } else {
+                        UI.showAlert(form, data.detail || 'Login failed. Please try again.');
+                    }
+                }
+            } catch (error) {
+                UI.showAlert(form, 'Network error. Please try again.');
+            } finally {
+                UI.hideLoader(submitBtn);
+            }
+        });
+    </script>
+</body>
+</html>

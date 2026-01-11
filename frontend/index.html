@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTX - Gift Card Trading Platform</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #6c757d;
+            margin-bottom: 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-buttons .btn {
+            min-width: 150px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .feature p {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .quick-links {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .quick-links h3 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .links-grid a {
+            display: block;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            text-align: center;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .links-grid a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container card-wide">
+        <div class="card">
+            <div class="hero">
+                <h1>Welcome to GTX</h1>
+                <p>Your trusted platform for gift card trading. Fast, secure, and reliable.</p>
+
+                <div class="cta-buttons">
+                    <a href="auth/signup.html" class="btn btn-primary">Get Started</a>
+                    <a href="auth/login.html" class="btn btn-secondary">Login</a>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure Transactions</h3>
+                    <p>Your transactions are protected with industry-standard security measures.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Fast Processing</h3>
+                    <p>Quick verification and instant payments for your gift cards.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📈</div>
+                    <h3>Best Rates</h3>
+                    <p>Competitive rates that increase as you level up your account.</p>
+                </div>
+            </div>
+
+            <div class="quick-links">
+                <h3>Quick Links</h3>
+                <div class="links-grid">
+                    <a href="auth/signup.html">Sign Up</a>
+                    <a href="auth/login.html">Login</a>
+                    <a href="auth/forgot-password.html">Forgot Password</a>
+                    <a href="profile/dashboard.html">Dashboard</a>
+                    <a href="profile/transaction-pin.html">Transaction PIN</a>
+                    <a href="credentials/level2.html">Level 2 Verification</a>
+                    <a href="credentials/level3.html">Level 3 Verification</a>
+                    <a href="admin/dashboard.html">Admin Panel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        // Check if user is already logged in
+        if (TokenManager.getAccessToken()) {
+            // User is logged in, redirect to dashboard
+            const ctaButtons = document.querySelector('.cta-buttons');
+            ctaButtons.innerHTML = `
+                <a href="profile/dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+                <a href="#" class="btn btn-secondary" onclick="logout()">Logout</a>
+            `;
+        }
+    </script>
+</body>
+</html>

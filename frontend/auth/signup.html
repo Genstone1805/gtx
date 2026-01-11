@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - GTX</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Create Account</h1>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" minlength="8" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+            <p class="text-center mt-20">
+                Already have an account? <a href="login.html" class="link">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const form = this;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const fullName = document.getElementById('fullName').value;
+
+            if (password !== confirmPassword) {
+                UI.showAlert(form, 'Passwords do not match');
+                return;
+            }
+
+            if (password.length < 8) {
+                UI.showAlert(form, 'Password must be at least 8 characters');
+                return;
+            }
+
+            UI.showLoader(submitBtn);
+
+            try {
+                const response = await api.signup(email, password, fullName);
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store email for verification page
+                    sessionStorage.setItem('verifyEmail', email);
+                    UI.showAlert(form, 'Account created! Please check your email for verification code.', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'verify.html';
+                    }, 2000);
+                } else {
+                    UI.showAlert(form, data.detail || 'Signup failed. Please try again.');
+                }
+            } catch (error) {
+                UI.showAlert(form, 'Network error. Please try again.');
+            } finally {
+                UI.hideLoader(submitBtn);
+            }
+        });
+    </script>
+</body>
+</html>

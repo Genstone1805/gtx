@@ -88,7 +88,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'email', 'full_name', 'phone_number', 'dp', 'level',
             'transaction_limit', 'status', 'is_verified', 'date_joined',
-            'last_login', 'level2_credentials', 'level3_credentials'
+            'last_login', 'level2_credentials', 'level3_credentials','has_pin'
         ]
         read_only_fields = [
             'id', 'email', 'level', 'transaction_limit', 'status',

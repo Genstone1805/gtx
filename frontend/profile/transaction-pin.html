@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction PIN - GTX</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container card-wide">
+        <nav class="nav">
+            <div class="nav-brand">GTX</div>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="transaction-pin.html" class="active">Transaction PIN</a>
+                <a href="profile-picture.html">Profile Picture</a>
+                <a href="../credentials/level2.html">Upgrade Account</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </nav>
+
+        <div class="card">
+            <h2>Transaction PIN</h2>
+
+            <!-- Create PIN Form -->
+            <div id="createPinSection">
+                <p class="text-muted text-center mb-20">
+                    Create a 4-digit PIN to authorize your transactions
+                </p>
+                <form id="createPinForm">
+                    <div class="form-group">
+                        <label>Enter PIN</label>
+                        <div class="pin-input-group">
+                            <input type="password" class="pin-input create-pin" maxlength="1" data-index="0">
+                            <input type="password" class="pin-input create-pin" maxlength="1" data-index="1">
+                            <input type="password" class="pin-input create-pin" maxlength="1" data-index="2">
+                            <input type="password" class="pin-input create-pin" maxlength="1" data-index="3">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm PIN</label>
+                        <div class="pin-input-group">
+                            <input type="password" class="pin-input confirm-pin" maxlength="1" data-index="0">
+                            <input type="password" class="pin-input confirm-pin" maxlength="1" data-index="1">
+                            <input type="password" class="pin-input confirm-pin" maxlength="1" data-index="2">
+                            <input type="password" class="pin-input confirm-pin" maxlength="1" data-index="3">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create PIN</button>
+                </form>
+            </div>
+
+            <!-- Update PIN Form -->
+            <div id="updatePinSection" class="hidden">
+                <p class="text-muted text-center mb-20">
+                    Update your transaction PIN
+                </p>
+                <form id="updatePinForm">
+                    <div class="form-group">
+                        <label>Current PIN</label>
+                        <div class="pin-input-group">
+                            <input type="password" class="pin-input old-pin" maxlength="1" data-index="0">
+                            <input type="password" class="pin-input old-pin" maxlength="1" data-index="1">
+                            <input type="password" class="pin-input old-pin" maxlength="1" data-index="2">
+                            <input type="password" class="pin-input old-pin" maxlength="1" data-index="3">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>New PIN</label>
+                        <div class="pin-input-group">
+                            <input type="password" class="pin-input new-pin" maxlength="1" data-index="0">
+                            <input type="password" class="pin-input new-pin" maxlength="1" data-index="1">
+                            <input type="password" class="pin-input new-pin" maxlength="1" data-index="2">
+                            <input type="password" class="pin-input new-pin" maxlength="1" data-index="3">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm New PIN</label>
+                        <div class="pin-input-group">
+                            <input type="password" class="pin-input confirm-new-pin" maxlength="1" data-index="0">
+                            <input type="password" class="pin-input confirm-new-pin" maxlength="1" data-index="1">
+                            <input type="password" class="pin-input confirm-new-pin" maxlength="1" data-index="2">
+                            <input type="password" class="pin-input confirm-new-pin" maxlength="1" data-index="3">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update PIN</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        if (!requireAuth()) {
+            // Redirect handled in requireAuth
+        }
+
+        // Setup PIN input handlers for a group
+        function setupPinInputs(selector) {
+            const inputs = document.querySelectorAll(selector);
+
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', function(e) {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+
+                    if (this.value && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                });
+
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && !this.value && index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                });
+            });
+        }
+
+        function getPinValue(selector) {
+            const inputs = document.querySelectorAll(selector);
+            return Array.from(inputs).map(input => input.value).join('');
+        }
+
+        function clearPinInputs(selector) {
+            const inputs = document.querySelectorAll(selector);
+            inputs.forEach(input => input.value = '');
+            if (inputs[0]) inputs[0].focus();
+        }
+
+        // Setup all PIN inputs
+        setupPinInputs('.create-pin');
+        setupPinInputs('.confirm-pin');
+        setupPinInputs('.old-pin');
+        setupPinInputs('.new-pin');
+        setupPinInputs('.confirm-new-pin');
+
+        // Check if user has PIN
+        async function checkPinStatus() {
+            try {
+                // Try to create PIN - if it fails with "already exists", show update form
+                const response = await api.createTransactionPin('0000', '0000');
+                const data = await response.json();
+
+                if (response.status === 400 && data.detail && data.detail.includes('already exists')) {
+                    document.getElementById('createPinSection').classList.add('hidden');
+                    document.getElementById('updatePinSection').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error checking PIN status:', error);
+            }
+        }
+
+        // Create PIN form
+        document.getElementById('createPinForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const form = this;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const pin = getPinValue('.create-pin');
+            const confirmPin = getPinValue('.confirm-pin');
+
+            if (pin.length !== 4) {
+                UI.showAlert(form, 'Please enter a complete 4-digit PIN');
+                return;
+            }
+
+            if (pin !== confirmPin) {
+                UI.showAlert(form, 'PINs do not match');
+                return;
+            }
+
+            UI.showLoader(submitBtn);
+
+            try {
+                const response = await api.createTransactionPin(pin, confirmPin);
+                const data = await response.json();
+
+                if (response.ok) {
+                    UI.showAlert(form, 'Transaction PIN created successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    UI.showAlert(form, data.detail || 'Failed to create PIN');
+                    clearPinInputs('.create-pin');
+                    clearPinInputs('.confirm-pin');
+                }
+            } catch (error) {
+                UI.showAlert(form, 'Network error. Please try again.');
+            } finally {
+                UI.hideLoader(submitBtn);
+            }
+        });
+
+        // Update PIN form
+        document.getElementById('updatePinForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const form = this;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const oldPin = getPinValue('.old-pin');
+            const newPin = getPinValue('.new-pin');
+            const confirmNewPin = getPinValue('.confirm-new-pin');
+
+            if (oldPin.length !== 4 || newPin.length !== 4) {
+                UI.showAlert(form, 'Please enter complete 4-digit PINs');
+                return;
+            }
+
+            if (newPin !== confirmNewPin) {
+                UI.showAlert(form, 'New PINs do not match');
+                return;
+            }
+
+            UI.showLoader(submitBtn);
+
+            try {
+                const response = await api.updateTransactionPin(oldPin, newPin, confirmNewPin);
+                const data = await response.json();
+
+                if (response.ok) {
+                    UI.showAlert(form, 'Transaction PIN updated successfully!', 'success');
+                    clearPinInputs('.old-pin');
+                    clearPinInputs('.new-pin');
+                    clearPinInputs('.confirm-new-pin');
+                } else {
+                    UI.showAlert(form, data.detail || 'Failed to update PIN');
+                }
+            } catch (error) {
+                UI.showAlert(form, 'Network error. Please try again.');
+            } finally {
+                UI.hideLoader(submitBtn);
+            }
+        });
+
+        checkPinStatus();
+    </script>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 2 Approvals - GTX Admin</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+        }
+
+        .credential-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #fafafa;
+        }
+
+        .credential-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .credential-user h4 {
+            margin: 0 0 5px 0;
+        }
+
+        .credential-user p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .credential-body {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .credential-info p {
+            margin: 5px 0;
+        }
+
+        .credential-info label {
+            font-weight: 600;
+            color: #6c757d;
+            font-size: 12px;
+        }
+
+        .nin-image {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .nin-image:hover {
+            transform: scale(1.05);
+        }
+
+        .credential-actions {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .credential-body {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container card-wide">
+        <nav class="nav">
+            <div class="nav-brand">GTX Admin</div>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="pending-level2.html" class="active">Level 2 Approvals</a>
+                <a href="pending-level3.html">Level 3 Approvals</a>
+                <a href="../create-gift-store.html">Gift Cards</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </nav>
+
+        <div class="card">
+            <h2>Pending Level 2 Approvals</h2>
+
+            <div id="credentialsList">
+                <div class="text-center">
+                    <span class="loader"></span>
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="modal" id="imageModal">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="NIN Image">
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        // Check admin access
+        async function checkAdmin() {
+            if (!TokenManager.getAccessToken()) {
+                window.location.href = '../auth/login.html';
+                return false;
+            }
+
+            try {
+                const response = await api.getCurrentUser();
+                if (response.ok) {
+                    const user = await response.json();
+                    if (!user.is_staff) {
+                        alert('Access denied. Admin only.');
+                        window.location.href = '../profile/dashboard.html';
+                        return false;
+                    }
+                    return true;
+                } else {
+                    window.location.href = '../auth/login.html';
+                    return false;
+                }
+            } catch (error) {
+                console.error('Admin check failed:', error);
+                return false;
+            }
+        }
+
+        async function loadPendingCredentials() {
+            const container = document.getElementById('credentialsList');
+
+            try {
+                const response = await api.getPendingLevel2Credentials();
+
+                if (response.ok) {
+                    const credentials = await response.json();
+
+                    if (!credentials || credentials.length === 0) {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <div class="empty-state-icon">✓</div>
+                                <h3>No Pending Approvals</h3>
+                                <p>All Level 2 verification requests have been processed.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    container.innerHTML = credentials.map(cred => `
+                        <div class="credential-card" id="credential-${cred.id}">
+                            <div class="credential-header">
+                                <div class="credential-user">
+                                    <h4>${cred.user?.full_name || cred.user?.email || 'Unknown User'}</h4>
+                                    <p>${cred.user?.email || ''}</p>
+                                    <p>Phone: ${cred.user?.phone_number || 'Not set'}</p>
+                                </div>
+                                <span class="badge badge-pending">Pending</span>
+                            </div>
+                            <div class="credential-body">
+                                <div class="credential-info">
+                                    <p>
+                                        <label>NIN</label><br>
+                                        <strong>${cred.nin}</strong>
+                                    </p>
+                                    <p>
+                                        <label>Current Level</label><br>
+                                        <strong>${cred.user?.level || 'Level 1'}</strong>
+                                    </p>
+                                    <p>
+                                        <label>Current Limit</label><br>
+                                        <strong>${cred.user?.transaction_limit ? UI.formatCurrency(cred.user.transaction_limit) : 'N/A'}</strong>
+                                    </p>
+                                </div>
+                                <div class="credential-image">
+                                    <label>NIN Image</label><br>
+                                    <img src="${API_BASE_URL}${cred.nin_image}"
+                                         class="nin-image"
+                                         alt="NIN Image"
+                                         onclick="openModal('${API_BASE_URL}${cred.nin_image}')">
+                                </div>
+                            </div>
+                            <div class="credential-actions">
+                                <button class="btn btn-success" onclick="handleApproval(${cred.id}, 'approve')">
+                                    Approve
+                                </button>
+                                <button class="btn btn-danger" onclick="handleApproval(${cred.id}, 'reject')">
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = `
+                        <div class="alert alert-error">
+                            Failed to load pending credentials. Please refresh the page.
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Failed to load credentials:', error);
+                container.innerHTML = `
+                    <div class="alert alert-error">
+                        Network error. Please check your connection and refresh.
+                    </div>
+                `;
+            }
+        }
+
+        async function handleApproval(credentialId, action) {
+            const confirmMessage = action === 'approve'
+                ? 'Are you sure you want to APPROVE this Level 2 verification? The user will be upgraded to Level 2 with a ₦5,000,000 transaction limit.'
+                : 'Are you sure you want to REJECT this Level 2 verification?';
+
+            if (!confirm(confirmMessage)) return;
+
+            const card = document.getElementById(`credential-${credentialId}`);
+            const buttons = card.querySelectorAll('button');
+            buttons.forEach(btn => btn.disabled = true);
+
+            try {
+                const response = await api.approveLevel2Credential(credentialId, action);
+                const data = await response.json();
+
+                if (response.ok) {
+                    card.style.opacity = '0.5';
+                    card.innerHTML = `
+                        <div class="alert alert-${action === 'approve' ? 'success' : 'info'}">
+                            ${data.detail}
+                        </div>
+                    `;
+                    setTimeout(() => {
+                        card.remove();
+                        // Check if no more credentials
+                        const remaining = document.querySelectorAll('.credential-card');
+                        if (remaining.length === 0) {
+                            loadPendingCredentials();
+                        }
+                    }, 2000);
+                } else {
+                    alert(data.detail || 'Action failed. Please try again.');
+                    buttons.forEach(btn => btn.disabled = false);
+                }
+            } catch (error) {
+                console.error('Approval failed:', error);
+                alert('Network error. Please try again.');
+                buttons.forEach(btn => btn.disabled = false);
+            }
+        }
+
+        function openModal(imageSrc) {
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('imageModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.remove('active');
+        }
+
+        // Close modal on click outside
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        checkAdmin().then(isAdmin => {
+            if (isAdmin) {
+                loadPendingCredentials();
+            }
+        });
+    </script>
+</body>
+</html>

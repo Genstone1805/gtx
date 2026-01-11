@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Picture - GTX</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .image-preview {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #667eea;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container card-wide">
+        <nav class="nav">
+            <div class="nav-brand">GTX</div>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="transaction-pin.html">Transaction PIN</a>
+                <a href="profile-picture.html" class="active">Profile Picture</a>
+                <a href="../credentials/level2.html">Upgrade Account</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </nav>
+
+        <div class="card">
+            <h2>Profile Picture</h2>
+
+            <div id="currentPicture" class="text-center">
+                <!-- Current picture will be loaded here -->
+            </div>
+
+            <form id="uploadForm">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📷</div>
+                    <p>Click or drag an image here to upload</p>
+                    <p class="text-muted">Supports: JPG, PNG, GIF (Max 5MB)</p>
+                    <input type="file" id="imageInput" class="file-input" accept="image/*">
+                </div>
+
+                <div id="previewSection" class="hidden text-center mt-20">
+                    <img id="imagePreview" class="image-preview" alt="Preview">
+                    <p class="text-muted">Preview</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-20" id="uploadBtn" disabled>
+                    Upload Picture
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        if (!requireAuth()) {
+            // Redirect handled in requireAuth
+        }
+
+        let hasExistingPicture = false;
+        let selectedFile = null;
+
+        const uploadArea = document.getElementById('uploadArea');
+        const imageInput = document.getElementById('imageInput');
+        const previewSection = document.getElementById('previewSection');
+        const imagePreview = document.getElementById('imagePreview');
+        const uploadBtn = document.getElementById('uploadBtn');
+
+        // Load current profile picture
+        async function loadCurrentPicture() {
+            try {
+                const response = await api.getCurrentUser();
+                if (response.ok) {
+                    const user = await response.json();
+                    const container = document.getElementById('currentPicture');
+
+                    if (user.dp) {
+                        hasExistingPicture = true;
+                        container.innerHTML = `
+                            <img src="${API_BASE_URL}${user.dp}" class="image-preview" alt="Current Profile Picture">
+                            <p class="text-muted">Current Profile Picture</p>
+                        `;
+                        uploadBtn.textContent = 'Update Picture';
+                    } else {
+                        container.innerHTML = `
+                            <div class="profile-placeholder" style="width:200px;height:200px;font-size:64px;margin:20px auto;">
+                                ${user.full_name ? user.full_name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+                            </div>
+                            <p class="text-muted">No profile picture set</p>
+                        `;
+                        uploadBtn.textContent = 'Upload Picture';
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load current picture:', error);
+            }
+        }
+
+        // Click to upload
+        uploadArea.addEventListener('click', () => {
+            imageInput.click();
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleFile(file);
+            }
+        });
+
+        // File input change
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        });
+
+        function handleFile(file) {
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                UI.showAlert(document.getElementById('uploadForm'), 'File size must be less than 5MB');
+                return;
+            }
+
+            selectedFile = file;
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                previewSection.classList.remove('hidden');
+                uploadBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Upload form submit
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!selectedFile) {
+                UI.showAlert(this, 'Please select an image to upload');
+                return;
+            }
+
+            const form = this;
+            UI.showLoader(uploadBtn);
+
+            try {
+                let response;
+                if (hasExistingPicture) {
+                    response = await api.updateProfilePicture(selectedFile);
+                } else {
+                    response = await api.uploadProfilePicture(selectedFile);
+                }
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    UI.showAlert(form, 'Profile picture updated successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    UI.showAlert(form, data.detail || 'Failed to upload picture');
+                }
+            } catch (error) {
+                UI.showAlert(form, 'Network error. Please try again.');
+            } finally {
+                UI.hideLoader(uploadBtn);
+            }
+        });
+
+        loadCurrentPicture();
+    </script>
+</body>
+</html>

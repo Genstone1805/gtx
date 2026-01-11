@@ -88,6 +88,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     level2_credentials = models.ForeignKey(Level2Credentials, on_delete=models.SET_NULL, null=True, blank=True)
     level3_credentials = models.ForeignKey(Level3Credentials, on_delete=models.SET_NULL, null=True, blank=True)
     transaction_pin = models.CharField(max_length=4, blank=True)
+    has_pin = models.BooleanField(default=False)
     transaction_limit = models.DecimalField(decimal_places=2, max_digits=12, default=Decimal("250000.00"))
     status = models.CharField(choices=STATUS, default="Active", max_length=12)
     disabled = models.BooleanField(default=False)

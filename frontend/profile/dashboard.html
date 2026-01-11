@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - GTX</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container card-wide">
+        <nav class="nav">
+            <div class="nav-brand">GTX</div>
+            <div class="nav-links">
+                <a href="dashboard.html" class="active">Dashboard</a>
+                <a href="transaction-pin.html">Transaction PIN</a>
+                <a href="profile-picture.html">Profile Picture</a>
+                <a href="../credentials/level2.html">Upgrade Account</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </nav>
+
+        <div class="card">
+            <div class="text-center">
+                <div id="profilePicture"></div>
+                <h2 id="userName">Loading...</h2>
+                <span class="badge badge-pending" id="userLevel">Level 1</span>
+            </div>
+
+            <div class="user-info mt-20" id="userInfo">
+                <!-- User info will be loaded here -->
+            </div>
+
+            <div class="mt-20">
+                <h3>Quick Actions</h3>
+                <div class="btn-group mt-20">
+                    <a href="transaction-pin.html" class="btn btn-primary" style="flex:1">Manage PIN</a>
+                    <a href="profile-picture.html" class="btn btn-secondary" style="flex:1">Change Picture</a>
+                    <a href="../credentials/level2.html" class="btn btn-success" style="flex:1">Upgrade Account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        if (!requireAuth()) {
+            // Redirect handled in requireAuth
+        }
+
+        async function loadProfile() {
+            try {
+                const response = await api.getCurrentUser();
+
+                if (response.ok) {
+                    const user = await response.json();
+                    displayProfile(user);
+                } else if (response.status === 401) {
+                    logout();
+                }
+            } catch (error) {
+                console.error('Failed to load profile:', error);
+            }
+        }
+
+        function displayProfile(user) {
+            // Profile picture
+            const picContainer = document.getElementById('profilePicture');
+            if (user.dp) {
+                picContainer.innerHTML = `<img src="${API_BASE_URL}${user.dp}" class="profile-picture" alt="Profile Picture">`;
+            } else {
+                picContainer.innerHTML = `<div class="profile-placeholder">${user.full_name ? user.full_name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}</div>`;
+            }
+
+            // Name and level
+            document.getElementById('userName').textContent = user.full_name || user.email;
+
+            const levelBadge = document.getElementById('userLevel');
+            levelBadge.textContent = user.level;
+            levelBadge.className = 'badge';
+            if (user.level === 'Level 3') {
+                levelBadge.classList.add('badge-approved');
+            } else if (user.level === 'Level 2') {
+                levelBadge.classList.add('badge-pending');
+            } else {
+                levelBadge.classList.add('badge-pending');
+            }
+
+            // User info
+            const userInfo = document.getElementById('userInfo');
+            userInfo.innerHTML = `
+                <div class="user-info-item">
+                    <label>Email</label>
+                    <div class="value">${user.email}</div>
+                </div>
+                <div class="user-info-item">
+                    <label>Phone Number</label>
+                    <div class="value">${user.phone_number || 'Not set'}</div>
+                </div>
+                <div class="user-info-item">
+                    <label>Transaction Limit</label>
+                    <div class="value">${UI.formatCurrency(user.transaction_limit)}</div>
+                </div>
+                <div class="user-info-item">
+                    <label>Account Status</label>
+                    <div class="value">${user.status}</div>
+                </div>
+                <div class="user-info-item">
+                    <label>Email Verified</label>
+                    <div class="value">${user.is_verified ? 'Yes' : 'No'}</div>
+                </div>
+                <div class="user-info-item">
+                    <label>Member Since</label>
+                    <div class="value">${UI.formatDate(user.date_joined)}</div>
+                </div>
+            `;
+        }
+
+        loadProfile();
+    </script>
+</body>
+</html>

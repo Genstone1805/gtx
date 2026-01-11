@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email - GTX</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Verify Your Email</h1>
+            <p class="text-center text-muted mb-20">
+                We've sent a 6-digit verification code to<br>
+                <strong id="emailDisplay"></strong>
+            </p>
+            <form id="verifyForm">
+                <div class="form-group">
+                    <label for="code">Verification Code</label>
+                    <div class="pin-input-group">
+                        <input type="text" class="pin-input" maxlength="1" data-index="0">
+                        <input type="text" class="pin-input" maxlength="1" data-index="1">
+                        <input type="text" class="pin-input" maxlength="1" data-index="2">
+                        <input type="text" class="pin-input" maxlength="1" data-index="3">
+                        <input type="text" class="pin-input" maxlength="1" data-index="4">
+                        <input type="text" class="pin-input" maxlength="1" data-index="5">
+                    </div>
+                    <input type="hidden" id="code" name="code">
+                </div>
+                <button type="submit" class="btn btn-primary">Verify Email</button>
+            </form>
+            <p class="text-center mt-20">
+                Didn't receive the code?
+                <a href="#" id="resendLink" class="link">Resend Code</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        const email = sessionStorage.getItem('verifyEmail');
+
+        if (!email) {
+            window.location.href = 'signup.html';
+        }
+
+        document.getElementById('emailDisplay').textContent = email;
+
+        // PIN input handling
+        const pinInputs = document.querySelectorAll('.pin-input');
+
+        pinInputs.forEach((input, index) => {
+            input.addEventListener('input', function(e) {
+                // Only allow digits
+                this.value = this.value.replace(/[^0-9]/g, '');
+
+                if (this.value && index < pinInputs.length - 1) {
+                    pinInputs[index + 1].focus();
+                }
+                updateHiddenCode();
+            });
+
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && !this.value && index > 0) {
+                    pinInputs[index - 1].focus();
+                }
+            });
+
+            input.addEventListener('paste', function(e) {
+                e.preventDefault();
+                const paste = (e.clipboardData || window.clipboardData).getData('text');
+                const digits = paste.replace(/[^0-9]/g, '').slice(0, 6);
+
+                digits.split('').forEach((digit, i) => {
+                    if (pinInputs[i]) {
+                        pinInputs[i].value = digit;
+                    }
+                });
+                updateHiddenCode();
+                if (digits.length === 6) {
+                    pinInputs[5].focus();
+                }
+            });
+        });
+
+        function updateHiddenCode() {
+            const code = Array.from(pinInputs).map(input => input.value).join('');
+            document.getElementById('code').value = code;
+        }
+
+        document.getElementById('verifyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const form = this;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const code = document.getElementById('code').value;
+
+            if (code.length !== 6) {
+                UI.showAlert(form, 'Please enter the complete 6-digit code');
+                return;
+            }
+
+            UI.showLoader(submitBtn);
+
+            try {
+                const response = await api.verifyEmail(email, code);
+                const data = await response.json();
+
+                if (response.ok) {
+                    sessionStorage.removeItem('verifyEmail');
+                    UI.showAlert(form, 'Email verified successfully! Redirecting to login...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    UI.showAlert(form, data.detail || 'Verification failed. Please try again.');
+                }
+            } catch (error) {
+                UI.showAlert(form, 'Network error. Please try again.');
+            } finally {
+                UI.hideLoader(submitBtn);
+            }
+        });
+
+        document.getElementById('resendLink').addEventListener('click', async function(e) {
+            e.preventDefault();
+
+            const form = document.getElementById('verifyForm');
+
+            try {
+                const response = await api.resendCode(email);
+                const data = await response.json();
+
+                if (response.ok) {
+                    UI.showAlert(form, 'Verification code sent!', 'success');
+                } else {
+                    UI.showAlert(form, data.detail || 'Failed to resend code.');
+                }
+            } catch (error) {
+                UI.showAlert(form, 'Network error. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

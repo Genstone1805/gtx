@@ -46,7 +46,7 @@ class SignupView(APIView):
 
     def post(self, request):
         serializer = SignupSerializer(data=request.data)
-        if not serializer.is_valid():
+        if not serializer.is_valid(raise_exception=True):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         email = serializer.validated_data['email']
@@ -533,16 +533,6 @@ class SubmitLevel3CredentialsView(APIView):
             {'detail': 'Level 3 credentials submitted successfully. Awaiting approval.'},
             status=status.HTTP_201_CREATED
         )
-
-
-class UserDetailView(APIView):
-    """Get user details by ID."""
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, user_id):
-        user = get_object_or_404(UserProfile, id=user_id)
-        serializer = UserProfileSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CurrentUserView(APIView):

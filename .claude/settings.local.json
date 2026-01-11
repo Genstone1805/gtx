@@ -3,7 +3,8 @@
     "allow": [
       "Bash(\"c:\\\\Users\\\\gusan\\\\Documents\\\\projects\\\\business\\\\gtx\\\\env\\\\Scripts\\\\python.exe\" manage.py makemigrations account)",
       "Bash(\"c:\\\\Users\\\\gusan\\\\Documents\\\\projects\\\\business\\\\gtx\\\\env\\\\Scripts\\\\python.exe\" manage.py migrate)",
-      "Bash(\"c:\\\\Users\\\\gusan\\\\Documents\\\\projects\\\\business\\\\gtx\\\\env\\\\Scripts\\\\pip.exe\" show djangorestframework-simplejwt)"
+      "Bash(\"c:\\\\Users\\\\gusan\\\\Documents\\\\projects\\\\business\\\\gtx\\\\env\\\\Scripts\\\\pip.exe\" show djangorestframework-simplejwt)",
+      "Bash(dir:*)"
     ]
   }
 }
