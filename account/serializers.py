@@ -2,10 +2,11 @@ from rest_framework import serializers
 from .models import UserProfile, Level2Credentials, Level3Credentials
 
 
-class SignupSerializer(serializers.Serializer):
-    email = serializers.EmailField(max_length=255)
-    password = serializers.CharField(max_length=128)
-    full_name = serializers.CharField(max_length=80, required=False, default='')
+class SignupSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(max_length=80, required=True)
+    class Meta:
+        model = UserProfile
+        fields = ['email', 'password', 'full_name']
 
 
 class VerifyCodeSerializer(serializers.Serializer):
@@ -98,3 +99,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class ProfilePictureSerializer(serializers.Serializer):
     dp = serializers.ImageField()
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(max_length=128)
+    new_password = serializers.CharField(max_length=128, min_length=8)
+    confirm_new_password = serializers.CharField(max_length=128, min_length=8)
+
+    def validate(self, attrs):
+        if attrs['new_password'] != attrs['confirm_new_password']:
+            raise serializers.ValidationError({"confirm_new_password": "Passwords do not match."})
+        return attrs

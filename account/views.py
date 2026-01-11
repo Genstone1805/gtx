@@ -9,8 +9,6 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.utils import timezone
-from django.shortcuts import get_object_or_404
-from decimal import Decimal
 
 from .models import UserProfile, EmailVerificationCode, PasswordResetCode, Level2Credentials, Level3Credentials
 from .serializers import (
@@ -18,7 +16,7 @@ from .serializers import (
     PasswordResetRequestSerializer, PasswordResetVerifySerializer,
     LoginSerializer, CreateTransactionPinSerializer, UpdateTransactionPinSerializer,
     Level2CredentialsSerializer, Level3CredentialsSerializer,
-    UserProfileSerializer, ProfilePictureSerializer
+    UserProfileSerializer, ProfilePictureSerializer, ChangePasswordSerializer
 )
 
 
@@ -42,10 +40,10 @@ def send_verification_email(user, code):
 
 
 class SignupView(APIView):
-    """Handle user signup with email verification code."""
-
+    serializer_class = SignupSerializer
     def post(self, request):
-        serializer = SignupSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
+
         if not serializer.is_valid(raise_exception=True):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -83,10 +81,10 @@ class SignupView(APIView):
 
 
 class VerifyEmailView(APIView):
-    """Verify email with 6-digit code."""
+    serializer_class = VerifyCodeSerializer
 
     def post(self, request):
-        serializer = VerifyCodeSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -139,9 +137,10 @@ class VerifyEmailView(APIView):
 
 class ResendCodeView(APIView):
     """Resend verification code."""
+    serializer_class = ResendCodeSerializer
 
     def post(self, request):
-        serializer = ResendCodeSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -257,9 +256,10 @@ def get_client_ip(request):
 
 class PasswordResetRequestView(APIView):
     """Request password reset - sends 6-digit code to email."""
+    serializer_class = PasswordResetRequestSerializer
 
     def post(self, request):
-        serializer = PasswordResetRequestSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -286,9 +286,10 @@ class PasswordResetRequestView(APIView):
 
 class PasswordResetVerifyView(APIView):
     """Verify reset code and set new password."""
+    serializer_class = PasswordResetVerifySerializer
 
     def post(self, request):
-        serializer = PasswordResetVerifySerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -336,9 +337,9 @@ class PasswordResetVerifyView(APIView):
 
 class LoginView(APIView):
     """Handle user login with new login notification."""
-
+    serializer_class = LoginSerializer
     def post(self, request):
-        serializer = LoginSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -389,6 +390,7 @@ class LoginView(APIView):
 
 class CreateTransactionPinView(APIView):
     """Create a 4-digit transaction PIN for the authenticated user."""
+    serializer_class = CreateTransactionPinSerializer
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -400,7 +402,7 @@ class CreateTransactionPinView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        serializer = CreateTransactionPinSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -414,6 +416,7 @@ class CreateTransactionPinView(APIView):
 
 
 class UpdateTransactionPinView(APIView):
+    serializer_class = UpdateTransactionPinSerializer
     """Update the transaction PIN for the authenticated user."""
     permission_classes = [IsAuthenticated]
 
@@ -449,6 +452,7 @@ class SubmitLevel2CredentialsView(APIView):
     """Submit Level 2 credentials (NIN verification) to upgrade account."""
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
+    serializer_class = Level2CredentialsSerializer
 
     def post(self, request):
         user = request.user
@@ -465,7 +469,7 @@ class SubmitLevel2CredentialsView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        serializer = Level2CredentialsSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -488,6 +492,7 @@ class SubmitLevel3CredentialsView(APIView):
     """Submit Level 3 credentials (address verification) to upgrade account."""
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
+    serializer_class = Level3CredentialsSerializer
 
     def post(self, request):
         user = request.user
@@ -510,7 +515,7 @@ class SubmitLevel3CredentialsView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        serializer = Level3CredentialsSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -538,9 +543,10 @@ class SubmitLevel3CredentialsView(APIView):
 class CurrentUserView(APIView):
     """Get current authenticated user's details."""
     permission_classes = [IsAuthenticated]
+    serializer_class = UserProfileSerializer
 
     def get(self, request):
-        serializer = UserProfileSerializer(request.user)
+        serializer = self.serializer_class(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -548,6 +554,7 @@ class UploadProfilePictureView(APIView):
     """Upload profile picture for the authenticated user."""
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
+    serializer_class = ProfilePictureSerializer
 
     def post(self, request):
         user = request.user
@@ -558,7 +565,7 @@ class UploadProfilePictureView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        serializer = ProfilePictureSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -575,11 +582,12 @@ class UpdateProfilePictureView(APIView):
     """Update profile picture for the authenticated user."""
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
+    serializer_class = ProfilePictureSerializer
 
     def post(self, request):
         user = request.user
 
-        serializer = ProfilePictureSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -592,5 +600,35 @@ class UpdateProfilePictureView(APIView):
 
         return Response(
             {'detail': 'Profile picture updated successfully.'},
+            status=status.HTTP_200_OK
+        )
+
+
+class ChangePasswordView(APIView):
+    """Change password for authenticated user."""
+    permission_classes = [IsAuthenticated]
+    serializer_class = ChangePasswordSerializer
+
+    def post(self, request):
+        user = request.user
+
+        serializer = self.serializer_class(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        old_password = serializer.validated_data['old_password']
+        new_password = serializer.validated_data['new_password']
+
+        if not user.check_password(old_password):
+            return Response(
+                {'detail': 'Current password is incorrect.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response(
+            {'detail': 'Password changed successfully.'},
             status=status.HTTP_200_OK
         )

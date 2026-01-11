@@ -6,7 +6,8 @@ from .views import (
     LoginView, CreateTransactionPinView, UpdateTransactionPinView,
     SubmitLevel2CredentialsView, SubmitLevel3CredentialsView,
     CurrentUserView, UploadProfilePictureView,
-    UpdateProfilePictureView
+    UpdateProfilePictureView,
+    ChangePasswordView
 )
 
 urlpatterns = [
@@ -15,6 +16,7 @@ urlpatterns = [
     path('signup/resend-code/', ResendCodeView.as_view(), name='resend-code'),
     path('login/', LoginView.as_view(), name='login'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
+    path('change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('password/reset/', PasswordResetRequestView.as_view(), name='password-reset'),
     path('password/reset/verify/', PasswordResetVerifyView.as_view(), name='password-reset-verify'),
 
