@@ -383,8 +383,7 @@ class LoginView(APIView):
             'access': str(refresh.access_token),
             'refresh': str(refresh),
             'user': {
-                'email': user.email,
-                'full_name': user.full_name,
+                "has_pin": user.has_pin,
             }
         }, status=status.HTTP_200_OK)
 
