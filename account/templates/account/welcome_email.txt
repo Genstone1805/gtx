@@ -1,0 +1,11 @@
+Welcome to GTX!
+
+Hi{{ user.full_name|default:"" }},
+
+Thank you for signing up! Your account has been successfully verified and you're all set to get started.
+
+Your account is now active!
+
+If you have any questions, feel free to reach out to our support team.
+
+Welcome aboard!

@@ -1,0 +1,10 @@
+New Login Detected
+
+Hi{{ user.full_name|default:"" }},
+
+A new login to your account was detected.
+
+Time: {{ timestamp }}
+IP Address: {{ ip_address }}
+
+If this wasn't you, please reset your password immediately and contact our support team.

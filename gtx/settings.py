@@ -45,19 +45,20 @@ INSTALLED_APPS = [
 
     # installed apps
     'rest_framework',
-    "phonenumber_field",
-    'rest_framework.authtoken',
-    'authemail',
+    'rest_framework_simplejwt',
+    'phonenumber_field',
+    'corsheaders',
 
     # project apps
-    "account",
-    "cards",
-    "control",
+    'account',
+    'cards',
+    'control',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,7 +70,6 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'gtx.urls'
 AUTH_USER_MODEL = "account.UserProfile"
 WSGI_APPLICATION = 'gtx.wsgi.application'
-AUTH_EMAIL_VERIFICATION = True
 
 TEMPLATES = [
     {
@@ -99,29 +99,39 @@ WSGI_APPLICATION = 'gtx.wsgi.application'
 
 
 REST_FRAMEWORK = {
-	'DEFAULT_AUTHENTICATION_CLASSES': (
-		'rest_framework.authentication.TokenAuthentication',
-	)
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    'default': dj_database_url.config(
-      default="postgresql://postgres:NgbrBsrhtnqPuRblRHfcKKXDmWnGVTlm@tramway.proxy.rlwy.net:49619/railway",
-        conn_max_age=600,
-        conn_health_checks=True,
-    ),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#       default="postgresql://postgres:NgbrBsrhtnqPuRblRHfcKKXDmWnGVTlm@tramway.proxy.rlwy.net:49619/railway",
+#         conn_max_age=600,
+#         conn_health_checks=True,
+#     ),
+# }
 
 
 # Password validation
@@ -177,3 +187,6 @@ EMAIL_HOST_USER = os.environ.get('AUTHEMAIL_EMAIL_HOST_USER') or 'gusanujoshua39
 EMAIL_HOST_PASSWORD = os.environ.get('AUTHEMAIL_EMAIL_HOST_PASSWORD') or 'gelm uqlv fqoh kgjn'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+# CORS settings
+CORS_ALLOW_ALL_ORIGINS = True  # For development only

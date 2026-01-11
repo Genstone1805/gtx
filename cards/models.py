@@ -25,7 +25,7 @@ class GiftCardNames(models.Model):
   TYPE_CHOICES = [
     ("Both", "Both"),
     ("Physical", "Physical"),
-    ("E-ncode", "E-ncode"),
+    ("E-code", "E-code"),
 
   ]
   type = models.CharField(choices=TYPE_CHOICES, max_length=50, default="Both")
