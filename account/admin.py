@@ -12,7 +12,7 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal Info', {'fields': ('full_name', 'phone_number', 'dp', "has_pin")}),
+        ('Personal Info', {'fields': ('full_name', 'phone_number', 'dp', "has_pin", "transaction_pin")}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'is_verified', 'groups', 'user_permissions')}),
         ('Account Status', {'fields': ('level', 'status', 'disabled')}),
         ('Important dates', {'fields': ('last_login', 'date_joined', 'created_at')}),
