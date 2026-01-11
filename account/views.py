@@ -408,6 +408,7 @@ class CreateTransactionPinView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         user.transaction_pin = serializer.validated_data['pin']
+        user.has_pin = True
         user.save()
 
         return Response(
