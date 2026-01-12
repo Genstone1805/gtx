@@ -1,0 +1,59 @@
+# Virtual environment
+env/
+venv/
+.venv/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Database
+db.sqlite3
+*.sqlite3
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.docker/
+
+# Claude
+.claude/
+
+# Vercel
+.vercel/
+vercel.json
+.vercelignore
+
+# Static files (will be collected during build)
+staticfiles/
+
+# Media files (mounted as volume)
+media/
+
+# Misc
+*.log
+*.pot
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
