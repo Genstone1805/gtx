@@ -3,8 +3,9 @@ services:
     build: .
     ports:
       - "1805:8000"
+    network_mode: host
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/gtx
+      - DATABASE_URL=postgresql://postgres:postgres@localhost:5432/gtx
       - DEBUG=True
       - SECRET_KEY=django-insecure-change-this-in-production
     depends_on:
