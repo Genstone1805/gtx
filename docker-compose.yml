@@ -34,7 +34,7 @@ services:
     network_mode: host
     environment:
       - NGROK_AUTHTOKEN=25asNadK1r4iV72xLxIFhEerujL_3JVfLiNDqH5bZqBLzgwWd
-    command: http 8000 --log stdout
+    command: http 8000 --domain=nevaeh-overclean-adela.ngrok-free.app --log stdout
     depends_on:
       - web
     restart: unless-stopped
