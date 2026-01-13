@@ -1,6 +1,8 @@
 services:
   web:
     build: .
+    ports:
+      - "1805:8000"
     network_mode: host
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@localhost:5432/gtx
@@ -15,7 +17,6 @@ services:
 
   db:
     image: postgres:16-alpine
-    network_mode: host
     environment:
       - POSTGRES_DB=gtx
       - POSTGRES_USER=postgres
@@ -27,16 +28,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
-
-  ngrok:
-    image: ngrok/ngrok:latest
-    network_mode: host
-    environment:
-      - NGROK_AUTHTOKEN=25asNadK1r4iV72xLxIFhEerujL_3JVfLiNDqH5bZqBLzgwWd
-    command: http 8000 --domain=nevaeh-overclean-adela.ngrok-free.app --log stdout
-    depends_on:
-      - web
     restart: unless-stopped
 
 volumes:
