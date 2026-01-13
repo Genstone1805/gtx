@@ -1,0 +1,1725 @@
+openapi: 3.0.3
+info:
+  title: GTX Crypto App
+  version: 1.0.0
+  description: This is a platform where you sell giftcards
+paths:
+  /account/change-password/:
+    post:
+      operationId: account_change_password_create
+      description: Change password for authenticated user.
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangePassword'
+          description: ''
+  /account/credentials/level2/:
+    post:
+      operationId: account_credentials_level2_create
+      description: Submit Level 2 credentials (NIN verification) to upgrade account.
+      tags:
+      - account
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Level2Credentials'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Level2Credentials'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Level2Credentials'
+          description: ''
+  /account/credentials/level3/:
+    post:
+      operationId: account_credentials_level3_create
+      description: Submit Level 3 credentials (address verification) to upgrade account.
+      tags:
+      - account
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Level3Credentials'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Level3Credentials'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Level3Credentials'
+          description: ''
+  /account/login/:
+    post:
+      operationId: account_login_create
+      description: Handle user login with new login notification.
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+          description: ''
+  /account/me/:
+    get:
+      operationId: account_me_retrieve
+      description: Get current authenticated user's details.
+      tags:
+      - account
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /account/password/reset/:
+    post:
+      operationId: account_password_reset_create
+      description: Request password reset - sends 6-digit code to email.
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetRequest'
+          description: ''
+  /account/password/reset/verify/:
+    post:
+      operationId: account_password_reset_verify_create
+      description: Verify reset code and set new password.
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetVerify'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetVerify'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetVerify'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetVerify'
+          description: ''
+  /account/phone/update/:
+    post:
+      operationId: account_phone_update_create
+      description: Add phone number to authenticated user's profile.
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddPhoneNumber'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddPhoneNumber'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AddPhoneNumber'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddPhoneNumber'
+          description: ''
+  /account/pin/create/:
+    post:
+      operationId: account_pin_create_create
+      description: Create a 4-digit transaction PIN for the authenticated user.
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransactionPin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateTransactionPin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateTransactionPin'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTransactionPin'
+          description: ''
+  /account/pin/update/:
+    post:
+      operationId: account_pin_update_create
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTransactionPin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateTransactionPin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateTransactionPin'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateTransactionPin'
+          description: ''
+  /account/profile/picture/update/:
+    post:
+      operationId: account_profile_picture_update_create
+      description: Update profile picture for the authenticated user.
+      tags:
+      - account
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProfilePicture'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProfilePicture'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfilePicture'
+          description: ''
+  /account/profile/picture/upload/:
+    post:
+      operationId: account_profile_picture_upload_create
+      description: Upload profile picture for the authenticated user.
+      tags:
+      - account
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProfilePicture'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProfilePicture'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfilePicture'
+          description: ''
+  /account/signup/:
+    post:
+      operationId: account_signup_create
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Signup'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Signup'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Signup'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Signup'
+          description: ''
+  /account/signup/resend-code/:
+    post:
+      operationId: account_signup_resend_code_create
+      description: Resend verification code.
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendCode'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResendCode'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResendCode'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResendCode'
+          description: ''
+  /account/signup/verify/:
+    post:
+      operationId: account_signup_verify_create
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyCode'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VerifyCode'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VerifyCode'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyCode'
+          description: ''
+  /account/token/refresh/:
+    post:
+      operationId: account_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /admin/approve/level2/{credential_id}/:
+    post:
+      operationId: admin_approve_level2_create
+      description: Approve or reject Level 2 credentials.
+      parameters:
+      - in: path
+        name: credential_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /admin/approve/level3/{credential_id}/:
+    post:
+      operationId: admin_approve_level3_create
+      description: Approve or reject Level 3 credentials.
+      parameters:
+      - in: path
+        name: credential_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /admin/create-gift-card/:
+    post:
+      operationId: admin_create_gift_card_create
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGiftCard'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateGiftCard'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateGiftCard'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGiftCard'
+          description: ''
+  /admin/create-gift-store/:
+    post:
+      operationId: admin_create_gift_store_create
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGiftStore'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateGiftStore'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateGiftStore'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGiftStore'
+          description: ''
+  /admin/get-gift-card/{id}/:
+    get:
+      operationId: admin_get_gift_card_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGiftCard'
+          description: ''
+    put:
+      operationId: admin_get_gift_card_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGiftCard'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateGiftCard'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateGiftCard'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGiftCard'
+          description: ''
+    patch:
+      operationId: admin_get_gift_card_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCreateGiftCard'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCreateGiftCard'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCreateGiftCard'
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGiftCard'
+          description: ''
+    delete:
+      operationId: admin_get_gift_card_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /admin/get-gift-store/{id}/:
+    get:
+      operationId: admin_get_gift_store_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateGiftStore'
+          description: ''
+    put:
+      operationId: admin_get_gift_store_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateGiftStore'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateGiftStore'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateGiftStore'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateGiftStore'
+          description: ''
+    patch:
+      operationId: admin_get_gift_store_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateGiftStore'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateGiftStore'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateGiftStore'
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateGiftStore'
+          description: ''
+    delete:
+      operationId: admin_get_gift_store_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /admin/list-gift-cards/:
+    get:
+      operationId: admin_list_gift_cards_list
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GiftCardList'
+          description: ''
+  /admin/list-gift-stores/:
+    get:
+      operationId: admin_list_gift_stores_list
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GiftStoreList'
+          description: ''
+  /admin/pending/level2/:
+    get:
+      operationId: admin_pending_level2_list
+      description: List all pending Level 2 credential submissions.
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Level2CredentialsPending'
+          description: ''
+  /admin/pending/level3/:
+    get:
+      operationId: admin_pending_level3_list
+      description: List all pending Level 3 credential submissions.
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Level3CredentialsPending'
+          description: ''
+  /api/account/change-password/:
+    post:
+      operationId: api_account_change_password_create
+      description: Change password for authenticated user.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangePassword'
+          description: ''
+  /api/account/credentials/level2/:
+    post:
+      operationId: api_account_credentials_level2_create
+      description: Submit Level 2 credentials (NIN verification) to upgrade account.
+      tags:
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Level2Credentials'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Level2Credentials'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Level2Credentials'
+          description: ''
+  /api/account/credentials/level3/:
+    post:
+      operationId: api_account_credentials_level3_create
+      description: Submit Level 3 credentials (address verification) to upgrade account.
+      tags:
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Level3Credentials'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Level3Credentials'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Level3Credentials'
+          description: ''
+  /api/account/login/:
+    post:
+      operationId: api_account_login_create
+      description: Handle user login with new login notification.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+          description: ''
+  /api/account/me/:
+    get:
+      operationId: api_account_me_retrieve
+      description: Get current authenticated user's details.
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/account/password/reset/:
+    post:
+      operationId: api_account_password_reset_create
+      description: Request password reset - sends 6-digit code to email.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetRequest'
+          description: ''
+  /api/account/password/reset/verify/:
+    post:
+      operationId: api_account_password_reset_verify_create
+      description: Verify reset code and set new password.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetVerify'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetVerify'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetVerify'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetVerify'
+          description: ''
+  /api/account/phone/update/:
+    post:
+      operationId: api_account_phone_update_create
+      description: Add phone number to authenticated user's profile.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddPhoneNumber'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddPhoneNumber'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AddPhoneNumber'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddPhoneNumber'
+          description: ''
+  /api/account/pin/create/:
+    post:
+      operationId: api_account_pin_create_create
+      description: Create a 4-digit transaction PIN for the authenticated user.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransactionPin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateTransactionPin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateTransactionPin'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTransactionPin'
+          description: ''
+  /api/account/pin/update/:
+    post:
+      operationId: api_account_pin_update_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTransactionPin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateTransactionPin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateTransactionPin'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateTransactionPin'
+          description: ''
+  /api/account/profile/picture/update/:
+    post:
+      operationId: api_account_profile_picture_update_create
+      description: Update profile picture for the authenticated user.
+      tags:
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProfilePicture'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProfilePicture'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfilePicture'
+          description: ''
+  /api/account/profile/picture/upload/:
+    post:
+      operationId: api_account_profile_picture_upload_create
+      description: Upload profile picture for the authenticated user.
+      tags:
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProfilePicture'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProfilePicture'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfilePicture'
+          description: ''
+  /api/account/signup/:
+    post:
+      operationId: api_account_signup_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Signup'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Signup'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Signup'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Signup'
+          description: ''
+  /api/account/signup/resend-code/:
+    post:
+      operationId: api_account_signup_resend_code_create
+      description: Resend verification code.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendCode'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResendCode'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResendCode'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResendCode'
+          description: ''
+  /api/account/signup/verify/:
+    post:
+      operationId: api_account_signup_verify_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyCode'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VerifyCode'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VerifyCode'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyCode'
+          description: ''
+  /api/account/token/refresh/:
+    post:
+      operationId: api_account_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /cards/gift-card-stores/:
+    get:
+      operationId: cards_gift_card_stores_list
+      tags:
+      - cards
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GiftCardStoreList'
+          description: ''
+components:
+  schemas:
+    AddPhoneNumber:
+      type: object
+      properties:
+        phone_number:
+          type: string
+      required:
+      - phone_number
+    CategoryEnum:
+      enum:
+      - All
+      - Popular
+      - Shopping
+      type: string
+      description: |-
+        * `All` - All
+        * `Popular` - Popular
+        * `Shopping` - Shopping
+    ChangePassword:
+      type: object
+      properties:
+        old_password:
+          type: string
+          maxLength: 128
+        new_password:
+          type: string
+          maxLength: 128
+          minLength: 8
+        confirm_new_password:
+          type: string
+          maxLength: 128
+          minLength: 8
+      required:
+      - confirm_new_password
+      - new_password
+      - old_password
+    CreateGiftCard:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        name:
+          type: string
+          maxLength: 150
+        store:
+          type: integer
+        rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+      required:
+      - name
+      - store
+    CreateGiftStore:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        name:
+          type: string
+          maxLength: 50
+        image:
+          type: string
+        cards:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          writeOnly: true
+      required:
+      - image
+      - name
+    CreateTransactionPin:
+      type: object
+      properties:
+        pin:
+          type: string
+          maxLength: 4
+          minLength: 4
+        confirm_pin:
+          type: string
+          maxLength: 4
+          minLength: 4
+      required:
+      - confirm_pin
+      - pin
+    GiftCardList:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 150
+        rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        store:
+          allOf:
+          - $ref: '#/components/schemas/GiftStoreList'
+          readOnly: true
+      required:
+      - id
+      - name
+      - store
+    GiftCardStoreList:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        name:
+          type: string
+          maxLength: 50
+        image:
+          type: string
+          format: uri
+        cards:
+          type: string
+          readOnly: true
+      required:
+      - cards
+      - image
+      - name
+    GiftStoreList:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+      required:
+      - id
+      - name
+    Level2Credentials:
+      type: object
+      properties:
+        nin:
+          type: string
+          maxLength: 12
+        nin_image:
+          type: string
+          format: uri
+      required:
+      - nin_image
+    Level2CredentialsPending:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nin:
+          type: string
+          maxLength: 12
+        nin_image:
+          type: string
+          format: uri
+        status:
+          $ref: '#/components/schemas/Status31eEnum'
+        approved:
+          type: boolean
+        user:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - nin_image
+      - user
+    Level3Credentials:
+      type: object
+      properties:
+        house_address_1:
+          type: string
+          maxLength: 100
+        house_address_2:
+          type: string
+          maxLength: 100
+        nearest_bus_stop:
+          type: string
+          maxLength: 60
+        city:
+          type: string
+          maxLength: 50
+        state:
+          type: string
+          maxLength: 50
+        country:
+          type: string
+          maxLength: 50
+        proof_of_address_image:
+          type: string
+          format: uri
+        face_verification_image:
+          type: string
+          format: uri
+      required:
+      - city
+      - country
+      - face_verification_image
+      - house_address_1
+      - nearest_bus_stop
+      - proof_of_address_image
+      - state
+    Level3CredentialsPending:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        house_address_1:
+          type: string
+          maxLength: 100
+        house_address_2:
+          type: string
+          maxLength: 100
+        nearest_bus_stop:
+          type: string
+          maxLength: 60
+        city:
+          type: string
+          maxLength: 50
+        state:
+          type: string
+          maxLength: 50
+        country:
+          type: string
+          maxLength: 50
+        proof_of_address_image:
+          type: string
+          format: uri
+        face_verification_image:
+          type: string
+          format: uri
+        status:
+          $ref: '#/components/schemas/Status31eEnum'
+        approved:
+          type: boolean
+        user:
+          type: string
+          readOnly: true
+      required:
+      - city
+      - country
+      - face_verification_image
+      - house_address_1
+      - id
+      - nearest_bus_stop
+      - proof_of_address_image
+      - state
+      - user
+    LevelEnum:
+      enum:
+      - Level 1
+      - Level 2
+      - Level 3
+      type: string
+      description: |-
+        * `Level 1` - Level 1
+        * `Level 2` - Level 2
+        * `Level 3` - Level 3
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        password:
+          type: string
+          maxLength: 128
+      required:
+      - email
+      - password
+    PasswordResetRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+      required:
+      - email
+    PasswordResetVerify:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        code:
+          type: string
+          maxLength: 6
+          minLength: 6
+        new_password:
+          type: string
+          maxLength: 128
+          minLength: 8
+      required:
+      - code
+      - email
+      - new_password
+    PatchedCreateGiftCard:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        name:
+          type: string
+          maxLength: 150
+        store:
+          type: integer
+        rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+    PatchedUpdateGiftStore:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        name:
+          type: string
+          maxLength: 50
+        image:
+          type: string
+    ProfilePicture:
+      type: object
+      properties:
+        dp:
+          type: string
+          format: uri
+      required:
+      - dp
+    ResendCode:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+      required:
+      - email
+    Signup:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          type: string
+          maxLength: 128
+        full_name:
+          type: string
+          maxLength: 80
+      required:
+      - email
+      - full_name
+      - password
+    Status31eEnum:
+      enum:
+      - Pending
+      - Approved
+      - Rejected
+      type: string
+      description: |-
+        * `Pending` - Pending
+        * `Approved` - Approved
+        * `Rejected` - Rejected
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TypeEnum:
+      enum:
+      - Both
+      - Physical
+      - E-code
+      type: string
+      description: |-
+        * `Both` - Both
+        * `Physical` - Physical
+        * `E-code` - E-code
+    UpdateGiftStore:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        name:
+          type: string
+          maxLength: 50
+        image:
+          type: string
+      required:
+      - name
+    UpdateTransactionPin:
+      type: object
+      properties:
+        old_pin:
+          type: string
+          maxLength: 4
+          minLength: 4
+        new_pin:
+          type: string
+          maxLength: 4
+          minLength: 4
+        confirm_new_pin:
+          type: string
+          maxLength: 4
+          minLength: 4
+      required:
+      - confirm_new_pin
+      - new_pin
+      - old_pin
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+        full_name:
+          type: string
+          maxLength: 80
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 128
+        dp:
+          type: string
+          format: uri
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelEnum'
+          readOnly: true
+        transaction_limit:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/UserProfileStatusEnum'
+          readOnly: true
+        is_verified:
+          type: boolean
+          readOnly: true
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+        last_login:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        level2_credentials:
+          allOf:
+          - $ref: '#/components/schemas/Level2Credentials'
+          readOnly: true
+        level3_credentials:
+          allOf:
+          - $ref: '#/components/schemas/Level3Credentials'
+          readOnly: true
+        has_pin:
+          type: boolean
+      required:
+      - date_joined
+      - email
+      - id
+      - is_verified
+      - last_login
+      - level
+      - level2_credentials
+      - level3_credentials
+      - status
+      - transaction_limit
+    UserProfileStatusEnum:
+      enum:
+      - Active
+      - Warning
+      - Disabled
+      - Under Review
+      type: string
+      description: |-
+        * `Active` - Active
+        * `Warning` - Warning
+        * `Disabled` - Disabled
+        * `Under Review` - Under Review
+    VerifyCode:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        code:
+          type: string
+          maxLength: 6
+          minLength: 6
+      required:
+      - code
+      - email
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

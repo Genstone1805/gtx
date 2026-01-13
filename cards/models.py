@@ -6,7 +6,6 @@ user = get_user_model()
 
 class GiftCardStore(models.Model):
   CATEGORY_CHOICES = [
-    ("All", "All"),
     ("Popular", "Popular"),
     ("Shopping", "Shopping"),
 
@@ -23,7 +22,6 @@ class GiftCardStore(models.Model):
 
 class GiftCardNames(models.Model):
   TYPE_CHOICES = [
-    ("Both", "Both"),
     ("Physical", "Physical"),
     ("E-code", "E-code"),
 
