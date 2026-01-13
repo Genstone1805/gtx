@@ -2,33 +2,11 @@ services:
   web:
     build: .
     ports:
-      - "1805:8000"
-    network_mode: host
+      - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@localhost:5432/gtx
       - DEBUG=True
       - SECRET_KEY=django-insecure-change-this-in-production
-    depends_on:
-      db:
-        condition: service_healthy
     volumes:
       - ./media:/app/media
+      - ./db.sqlite3:/app/db.sqlite3
     restart: unless-stopped
-
-  db:
-    image: postgres:16-alpine
-    environment:
-      - POSTGRES_DB=gtx
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d gtx"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-
-volumes:
-  postgres_data:
