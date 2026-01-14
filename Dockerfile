@@ -24,8 +24,11 @@ COPY . .
 RUN mkdir -p static staticfiles media
 
 # Collect static files
-RUN python manage.py collectstatic --noinput
+RUN python manage.py makemigrations
 RUN python manage.py migrate
+RUN python manage.py collectstatic --noinput
+RUN python manage.py spectacular --color --file schema.yml
+
 
 # Expose port
 EXPOSE 8000

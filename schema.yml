@@ -1199,6 +1199,29 @@ paths:
                 items:
                   $ref: '#/components/schemas/GiftCardStoreList'
           description: ''
+  /order/create/:
+    post:
+      operationId: order_create_create
+      tags:
+      - order
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GiftCardOrderCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GiftCardOrderCreate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GiftCardOrderCreate'
+          description: ''
 components:
   schemas:
     AddPhoneNumber:
@@ -1210,12 +1233,10 @@ components:
       - phone_number
     CategoryEnum:
       enum:
-      - All
       - Popular
       - Shopping
       type: string
       description: |-
-        * `All` - All
         * `Popular` - Popular
         * `Shopping` - Shopping
     ChangePassword:
@@ -1240,7 +1261,7 @@ components:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/TypeEnum'
+          $ref: '#/components/schemas/Type137Enum'
         name:
           type: string
           maxLength: 150
@@ -1300,7 +1321,7 @@ components:
           format: decimal
           pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
         type:
-          $ref: '#/components/schemas/TypeEnum'
+          $ref: '#/components/schemas/Type137Enum'
         store:
           allOf:
           - $ref: '#/components/schemas/GiftStoreList'
@@ -1309,9 +1330,40 @@ components:
       - id
       - name
       - store
+    GiftCardOrderCreate:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/GiftCardOrderCreateTypeEnum'
+        name:
+          type: integer
+          nullable: true
+        image:
+          type: string
+          format: uri
+        amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+      required:
+      - amount
+      - image
+      - type
+    GiftCardOrderCreateTypeEnum:
+      enum:
+      - Physical
+      - E-Code
+      type: string
+      description: |-
+        * `Physical` - Physical
+        * `E-Code` - E-Code
     GiftCardStoreList:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         category:
           $ref: '#/components/schemas/CategoryEnum'
         name:
@@ -1325,6 +1377,7 @@ components:
           readOnly: true
       required:
       - cards
+      - id
       - image
       - name
     GiftStoreList:
@@ -1510,7 +1563,7 @@ components:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/TypeEnum'
+          $ref: '#/components/schemas/Type137Enum'
         name:
           type: string
           maxLength: 150
@@ -1585,7 +1638,7 @@ components:
       required:
       - access
       - refresh
-    TypeEnum:
+    Type137Enum:
       enum:
       - Both
       - Physical
