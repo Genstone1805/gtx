@@ -5,7 +5,7 @@ from .models import GiftCardOrder
 class GiftCardOrderCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = GiftCardOrder
-        fields = ['type', 'name', 'image', 'amount']
+        fields = ["id", 'type', 'name', 'image', 'amount']
 
     def validate_amount(self, value):
         if value <= 0:
