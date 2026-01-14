@@ -22,6 +22,7 @@ class GiftCardStore(models.Model):
 
 class GiftCardNames(models.Model):
   TYPE_CHOICES = [
+    ("Both", "Both"),
     ("Physical", "Physical"),
     ("E-code", "E-code"),
 
