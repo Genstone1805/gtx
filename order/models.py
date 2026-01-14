@@ -19,6 +19,6 @@ class GiftCardOrder(models.Model):
   user = models.ForeignKey(user, on_delete=models.CASCADE)
   type = models.CharField(choices=TYPE_CHOICES, max_length=50)
   name = models.ForeignKey(GiftCardNames, on_delete=models.SET_NULL, null=True)
-  image = models.ImageField(),
-  amount = models.IntegerField(),
-  status = models.CharField(choices=STATUS_CHOICES, max_length=50)
+  image = models.ImageField(upload_to="orders/")
+  amount = models.IntegerField()
+  status = models.CharField(choices=STATUS_CHOICES, max_length=50, default="Processing")
