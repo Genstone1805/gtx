@@ -6,7 +6,6 @@ ENV PYTHONUNBUFFERED=1
 
 # Set work directory
 WORKDIR /app
-RUN touch /app/db.sqlite3
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
