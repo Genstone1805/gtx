@@ -3,9 +3,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.views.generic import TemplateView
 
 from .models import GiftCardOrder
 from .serializers import GiftCardOrderCreateSerializer
+
+
+class CreateOrderPageView(TemplateView):
+    template_name = 'order/create_order.html'
 
 
 class CreateGiftCardOrderView(APIView):
@@ -22,8 +27,9 @@ class CreateGiftCardOrderView(APIView):
         order = GiftCardOrder.objects.create(
             user=request.user,
             type=serializer.validated_data['type'],
-            name=serializer.validated_data['name'],
-            image=serializer.validated_data['image'],
+            card=serializer.validated_data['card'],
+            image=serializer.validated_data.get('image', None),
+            e_code_pin=serializer.validated_data.get('e_code_pin', None),
             amount=serializer.validated_data['amount'],
         )
 

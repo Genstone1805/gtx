@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from cards.models import GiftCardNames, GiftCardStore
 from account.models import Level2Credentials, Level3Credentials, UserProfile
+from order.models import GiftCardOrder
 
 class CreateGiftStoreSerializer(serializers.ModelSerializer):
   image = serializers.ImageField(use_url=False)
@@ -82,3 +83,20 @@ class CredentialApprovalSerializer(serializers.Serializer):
     ]
     action = serializers.ChoiceField(choices=ACTION_CHOICES)
     reason = serializers.CharField(required=False, allow_blank=True)
+
+
+class PendingOrderSerializer(serializers.ModelSerializer):
+    user = UserBasicSerializer(read_only=True)
+
+    class Meta:
+        model = GiftCardOrder
+        fields = ['id', 'type', 'card', 'image', 'e_code_pin', 'amount', 'status', 'user']
+
+
+class OrderStatusUpdateSerializer(serializers.Serializer):
+    STATUS_CHOICES = [
+        ('Processing', 'Processing'),
+        ('Approved', 'Approved'),
+        ('Rejected', 'Rejected'),
+    ]
+    status = serializers.ChoiceField(choices=STATUS_CHOICES)

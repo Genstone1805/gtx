@@ -19,6 +19,8 @@ from .serializers import (
     UserProfileSerializer, ProfilePictureSerializer, ChangePasswordSerializer,
     AddPhoneNumberSerializer
 )
+from order.models import GiftCardOrder
+from order.serializers import GiftCardOrderListSerializer
 
 
 def send_verification_email(user, code):
@@ -661,3 +663,15 @@ class AddPhoneNumberView(APIView):
             {'detail': 'Phone number added successfully.'},
             status=status.HTTP_201_CREATED
         )
+
+
+class UserOrdersView(APIView):
+    """Get all orders created by the authenticated user."""
+    permission_classes = [IsAuthenticated]
+    serializer_class = GiftCardOrderListSerializer
+
+    def get(self, request):
+        user = request.user
+        orders = GiftCardOrder.objects.filter(user=user)
+        serializer = self.serializer_class(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

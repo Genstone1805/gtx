@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Gift Card Order</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        select,
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        input[type="file"]:hover {
+            border-color: #007bff;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .image-preview {
+            margin-top: 10px;
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create Gift Card Order</h1>
+
+        <div id="alert" class="alert hidden"></div>
+
+        <form id="orderForm">
+            <div class="form-group">
+                <label for="type">Card Type *</label>
+                <select id="type" name="type" required>
+                    <option value="">Select Type</option>
+                    <option value="Physical">Physical</option>
+                    <option value="E-Code">E-Code</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="card">Gift Card *</label>
+                <select id="card" name="card" required>
+                    <option value="">Select Gift Card</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="imageGroup">
+                <label for="image">Card Image *</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <img id="imagePreview" class="image-preview" alt="Preview">
+            </div>
+
+            <div class="form-group hidden" id="pinGroup">
+                <label for="e_code_pin">E-Code PIN *</label>
+                <input type="text" id="e_code_pin" name="e_code_pin" placeholder="Enter E-Code PIN">
+            </div>
+
+            <div class="form-group">
+                <label for="amount">Amount *</label>
+                <input type="number" id="amount" name="amount" min="1" placeholder="Enter amount" required>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">Create Order</button>
+        </form>
+    </div>
+
+    <script>
+        const API_BASE_URL = '';
+        const CREATE_ORDER_URL = '/order/create/';
+        const LIST_CARDS_URL = '/admin/list-gift-cards/';
+
+        // Get token from localStorage (assumes JWT auth)
+        function getAuthToken() {
+            return localStorage.getItem('access_token');
+        }
+
+        // Show alert message
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.classList.remove('hidden');
+
+            setTimeout(() => {
+                alert.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Load gift cards for dropdown
+        async function loadGiftCards() {
+            try {
+                const response = await fetch(API_BASE_URL + LIST_CARDS_URL, {
+                    headers: {
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load gift cards');
+                }
+
+                const cards = await response.json();
+                const cardSelect = document.getElementById('card');
+
+                cards.forEach(card => {
+                    const option = document.createElement('option');
+                    option.value = card.id;
+                    option.textContent = `${card.name} - ${card.type} (Rate: ${card.rate})`;
+                    cardSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading gift cards:', error);
+                showAlert('Failed to load gift cards. Please refresh the page.', 'error');
+            }
+        }
+
+        // Handle type change - show/hide fields based on type
+        document.getElementById('type').addEventListener('change', function() {
+            const type = this.value;
+            const imageGroup = document.getElementById('imageGroup');
+            const pinGroup = document.getElementById('pinGroup');
+            const imageInput = document.getElementById('image');
+            const pinInput = document.getElementById('e_code_pin');
+
+            if (type === 'Physical') {
+                imageGroup.classList.remove('hidden');
+                pinGroup.classList.add('hidden');
+                imageInput.required = true;
+                pinInput.required = false;
+                pinInput.value = '';
+            } else if (type === 'E-Code') {
+                imageGroup.classList.add('hidden');
+                pinGroup.classList.remove('hidden');
+                imageInput.required = false;
+                pinInput.required = true;
+                // Clear image
+                imageInput.value = '';
+                document.getElementById('imagePreview').style.display = 'none';
+            } else {
+                imageGroup.classList.remove('hidden');
+                pinGroup.classList.add('hidden');
+                imageInput.required = false;
+                pinInput.required = false;
+            }
+        });
+
+        // Image preview
+        document.getElementById('image').addEventListener('change', function() {
+            const file = this.files[0];
+            const preview = document.getElementById('imagePreview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+
+        // Form submission
+        document.getElementById('orderForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
+
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span>Creating...';
+
+            const formData = new FormData();
+
+            const type = document.getElementById('type').value;
+            const card = document.getElementById('card').value;
+            const amount = document.getElementById('amount').value;
+            const image = document.getElementById('image').files[0];
+            const eCodePin = document.getElementById('e_code_pin').value;
+
+            formData.append('type', type);
+            formData.append('card', card);
+            formData.append('amount', amount);
+
+            if (type === 'Physical' && image) {
+                formData.append('image', image);
+            }
+
+            if (type === 'E-Code' && eCodePin) {
+                formData.append('e_code_pin', eCodePin);
+            }
+
+            try {
+                const response = await fetch(API_BASE_URL + CREATE_ORDER_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert(data.detail || 'Order created successfully!', 'success');
+                    // Reset form
+                    document.getElementById('orderForm').reset();
+                    document.getElementById('imagePreview').style.display = 'none';
+                    document.getElementById('pinGroup').classList.add('hidden');
+                    document.getElementById('imageGroup').classList.remove('hidden');
+                } else {
+                    // Handle validation errors
+                    let errorMessage = 'Failed to create order.';
+                    if (typeof data === 'object') {
+                        const errors = Object.entries(data)
+                            .map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`)
+                            .join('\n');
+                        errorMessage = errors || data.detail || errorMessage;
+                    }
+                    showAlert(errorMessage, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Network error. Please try again.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGiftCards();
+        });
+    </script>
+</body>
+</html>

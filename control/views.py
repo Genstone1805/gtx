@@ -9,6 +9,7 @@ from decimal import Decimal
 
 from cards.models import GiftCardStore, GiftCardNames
 from account.models import Level2Credentials, Level3Credentials, UserProfile
+from order.models import GiftCardOrder
 from .serializers import (
    CreateGiftStoreSerializer,
    CreateGiftCardSerializer,
@@ -17,7 +18,9 @@ from .serializers import (
    UpdateGiftStoreSerializer,
    Level2CredentialsPendingSerializer,
    Level3CredentialsPendingSerializer,
-   CredentialApprovalSerializer
+   CredentialApprovalSerializer,
+   PendingOrderSerializer,
+   OrderStatusUpdateSerializer
    )
 
 
@@ -218,3 +221,33 @@ class Level3CredentialApprovalView(APIView):
                 {'detail': f'Level 3 credentials rejected for {user.email}.'},
                 status=status.HTTP_200_OK
             )
+
+
+class PendingOrdersListView(ListAPIView):
+    """List all pending gift card orders."""
+    permission_classes = [IsAdminUser]
+    serializer_class = PendingOrderSerializer
+
+    def get_queryset(self):
+        return GiftCardOrder.objects.filter(status='Processing')
+
+
+class OrderStatusUpdateView(APIView):
+    """Update the status of an order."""
+    permission_classes = [IsAdminUser]
+    serializer_class = OrderStatusUpdateSerializer
+
+    def patch(self, request, order_id):
+        order = get_object_or_404(GiftCardOrder, id=order_id)
+
+        serializer = self.serializer_class(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        order.status = serializer.validated_data['status']
+        order.save()
+
+        return Response(
+            {'detail': f'Order status updated to {order.status}.'},
+            status=status.HTTP_200_OK
+        )
