@@ -7,7 +7,8 @@ from .views import (
     VerifyTransactionPinView, SubmitLevel2CredentialsView, SubmitLevel3CredentialsView,
     CurrentUserView, UploadProfilePictureView,
     UpdateProfilePictureView,
-    ChangePasswordView, AddPhoneNumberView
+    ChangePasswordView, AddPhoneNumberView,
+    UserOrdersView
 )
 
 urlpatterns = [
@@ -34,4 +35,7 @@ urlpatterns = [
     path('profile/picture/upload/', UploadProfilePictureView.as_view(), name='profile-picture-upload'),
     path('profile/picture/update/', UpdateProfilePictureView.as_view(), name='profile-picture-update'),
     path('phone/update/', AddPhoneNumberView.as_view(), name='add-phone-number'),
+    
+    # Orders
+    path('transactions/', UserOrdersView.as_view(), name='user-transactions'),
 ]
