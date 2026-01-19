@@ -24,7 +24,7 @@ class CreateGiftCardOrderView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        order = GiftCardOrder.objects.create(
+        GiftCardOrder.objects.create(
             user=request.user,
             type=serializer.validated_data['type'],
             card=serializer.validated_data['card'],
