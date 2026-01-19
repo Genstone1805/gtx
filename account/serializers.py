@@ -65,6 +65,15 @@ class UpdateTransactionPinSerializer(serializers.Serializer):
         return data
 
 
+class VerifyTransactionPinSerializer(serializers.Serializer):
+    pin = serializers.CharField(max_length=4, min_length=4)
+
+    def validate_pin(self, value):
+        if not value.isdigit():
+            raise serializers.ValidationError("PIN must contain only digits.")
+        return value
+
+
 class Level2CredentialsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Level2Credentials

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.hashers import make_password, check_password
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils import timezone
 from django.conf import settings
@@ -87,7 +88,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     level = models.CharField(choices=LEVEL_CHOICES, default="Level 1", max_length=12)
     level2_credentials = models.ForeignKey(Level2Credentials, on_delete=models.SET_NULL, null=True, blank=True)
     level3_credentials = models.ForeignKey(Level3Credentials, on_delete=models.SET_NULL, null=True, blank=True)
-    transaction_pin = models.CharField(max_length=4, blank=True)
+    transaction_pin = models.CharField(max_length=128, blank=True)
     has_pin = models.BooleanField(default=False)
     transaction_limit = models.DecimalField(decimal_places=2, max_digits=12, default=Decimal("250000.00"))
     status = models.CharField(choices=STATUS, default="Active", max_length=12)
@@ -100,6 +101,14 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+    
+    
+    def set_transaction_pin(self, raw_pin):
+        self.transaction_pin = make_password(raw_pin)
+        self.has_pin = True
+
+    def check_transaction_pin(self, raw_pin):
+        return check_password(raw_pin, self.transaction_pin)
 
     def __str__(self):
         return self.email

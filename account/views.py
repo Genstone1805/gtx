@@ -15,7 +15,7 @@ from .serializers import (
     SignupSerializer, VerifyCodeSerializer, ResendCodeSerializer,
     PasswordResetRequestSerializer, PasswordResetVerifySerializer,
     LoginSerializer, CreateTransactionPinSerializer, UpdateTransactionPinSerializer,
-    Level2CredentialsSerializer, Level3CredentialsSerializer,
+    VerifyTransactionPinSerializer, Level2CredentialsSerializer, Level3CredentialsSerializer,
     UserProfileSerializer, ProfilePictureSerializer, ChangePasswordSerializer,
     AddPhoneNumberSerializer
 )
@@ -387,6 +387,7 @@ class LoginView(APIView):
             'user': {
                 'full_name': user.full_name,
                 "has_pin": user.has_pin,
+                "level": user.level,
             }
         }, status=status.HTTP_200_OK)
 
@@ -409,8 +410,7 @@ class CreateTransactionPinView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        user.transaction_pin = serializer.validated_data['pin']
-        user.has_pin = True
+        user.set_transaction_pin(serializer.validated_data['pin'])
         user.save()
 
         return Response(
@@ -437,19 +437,43 @@ class UpdateTransactionPinView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if user.transaction_pin != serializer.validated_data['old_pin']:
+        if not user.check_transaction_pin(serializer.validated_data['old_pin']):
             return Response(
                 {'detail': 'Current PIN is incorrect.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        user.transaction_pin = serializer.validated_data['new_pin']
+        user.set_transaction_pin(serializer.validated_data['new_pin'])
         user.save()
 
         return Response(
             {'detail': 'Transaction PIN updated successfully.'},
             status=status.HTTP_200_OK
         )
+
+
+class VerifyTransactionPinView(APIView):
+    """Verify the transaction PIN for the authenticated user."""
+    serializer_class = VerifyTransactionPinSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+
+        if not user.has_pin:
+            return Response(
+                {'detail': 'No transaction PIN exists.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = self.serializer_class(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        if user.check_transaction_pin(serializer.validated_data['pin']):
+            return Response({'valid': True}, status=status.HTTP_200_OK)
+        else:
+            return Response({'valid': False}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SubmitLevel2CredentialsView(APIView):

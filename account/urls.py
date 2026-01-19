@@ -4,7 +4,7 @@ from .views import (
     SignupView, VerifyEmailView, ResendCodeView,
     PasswordResetRequestView, PasswordResetVerifyView,
     LoginView, CreateTransactionPinView, UpdateTransactionPinView,
-    SubmitLevel2CredentialsView, SubmitLevel3CredentialsView,
+    VerifyTransactionPinView, SubmitLevel2CredentialsView, SubmitLevel3CredentialsView,
     CurrentUserView, UploadProfilePictureView,
     UpdateProfilePictureView,
     ChangePasswordView, AddPhoneNumberView
@@ -23,6 +23,7 @@ urlpatterns = [
     # Transaction PIN
     path('pin/create/', CreateTransactionPinView.as_view(), name='pin-create'),
     path('pin/update/', UpdateTransactionPinView.as_view(), name='pin-update'),
+    path('pin/verify/', VerifyTransactionPinView.as_view(), name='pin-verify'),
 
     # Level credentials
     path('credentials/level2/', SubmitLevel2CredentialsView.as_view(), name='credentials-level2'),
