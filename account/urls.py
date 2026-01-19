@@ -8,7 +8,7 @@ from .views import (
     CurrentUserView, UploadProfilePictureView,
     UpdateProfilePictureView,
     ChangePasswordView, AddPhoneNumberView,
-    UserOrdersView
+    UserOrdersView, UserOrderDetailView
 )
 
 urlpatterns = [
@@ -38,4 +38,5 @@ urlpatterns = [
     
     # Orders
     path('transactions/', UserOrdersView.as_view(), name='user-transactions'),
+    path('transactions/<int:order_id>/', UserOrderDetailView.as_view(), name='user-transaction-detail'),
 ]

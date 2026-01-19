@@ -1,11 +1,37 @@
 from rest_framework import serializers
 from .models import GiftCardOrder
+from cards.models import GiftCardNames, GiftCardStore
 
 
-class GiftCardOrderListSerializer(serializers.ModelSerializer):
+class GiftCardStoreSerializer(serializers.ModelSerializer):
+  image = serializers.ImageField(use_url=True)
+  class Meta:
+    model = GiftCardStore
+    fields = ["name", "image"]
+
+
+class GiftCardNameListSerializer(serializers.ModelSerializer):
+  store = GiftCardStoreSerializer(read_only=True)
+  class Meta:
+    model = GiftCardNames
+    fields = ["name", "store"]
+
+class GiftCardNameSerializer(serializers.ModelSerializer):
+  store = GiftCardStoreSerializer(read_only=True)
+  class Meta:
+    model = GiftCardNames
+    fields = ["id", "name", "type", "rate", "store"]
+
+class GiftCardOrderSerializer(serializers.ModelSerializer):
+    card = GiftCardNameSerializer()
     class Meta:
         model = GiftCardOrder
         fields = ["id", 'type', 'card', 'image', 'amount', 'e_code_pin', 'status']
+class GiftCardOrderListSerializer(serializers.ModelSerializer):
+    card = GiftCardNameListSerializer()
+    class Meta:
+        model = GiftCardOrder
+        fields = ["id", 'card', 'amount', 'status']
 
 
 class GiftCardOrderCreateSerializer(serializers.ModelSerializer):

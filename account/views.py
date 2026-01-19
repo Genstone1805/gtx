@@ -20,7 +20,7 @@ from .serializers import (
     AddPhoneNumberSerializer
 )
 from order.models import GiftCardOrder
-from order.serializers import GiftCardOrderListSerializer
+from order.serializers import GiftCardOrderListSerializer, GiftCardOrderSerializer
 
 
 def send_verification_email(user, code):
@@ -698,4 +698,30 @@ class UserOrdersView(APIView):
         user = request.user
         orders = GiftCardOrder.objects.filter(user=user)
         serializer = self.serializer_class(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserOrderDetailView(APIView):
+    """Get a single order detail for the authenticated user."""
+    permission_classes = [IsAuthenticated]
+    serializer_class = GiftCardOrderSerializer
+
+    def get(self, request, order_id):
+        user = request.user
+
+        try:
+            order = GiftCardOrder.objects.get(id=order_id)
+        except GiftCardOrder.DoesNotExist:
+            return Response(
+                {'detail': 'Order not found.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if order.user != user:
+            return Response(
+                {'detail': 'You do not have permission to view this order.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        serializer = self.serializer_class(order)
         return Response(serializer.data, status=status.HTTP_200_OK)
