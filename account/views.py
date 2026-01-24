@@ -1,5 +1,10 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, cast
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -9,6 +14,9 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.utils import timezone
+
+if TYPE_CHECKING:
+    from uuid import UUID
 
 from .models import UserProfile, EmailVerificationCode, PasswordResetCode, Level2Credentials, Level3Credentials
 from .serializers import (
@@ -23,7 +31,7 @@ from order.models import GiftCardOrder
 from order.serializers import GiftCardOrderListSerializer, GiftCardOrderSerializer
 
 
-def send_verification_email(user, code):
+def send_verification_email(user: UserProfile, code: str) -> None:
     """Send verification code email to user."""
     subject = 'Your Verification Code'
     from_email = getattr(settings, 'EMAIL_FROM', settings.DEFAULT_FROM_EMAIL)
@@ -44,10 +52,11 @@ def send_verification_email(user, code):
 
 class SignupView(APIView):
     serializer_class = SignupSerializer
-    def post(self, request):
+
+    def post(self, request: Request) -> Response:
         serializer = self.serializer_class(data=request.data)
 
-        if not serializer.is_valid(raise_exception=True):
+        if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         email = serializer.validated_data['email']
@@ -86,7 +95,7 @@ class SignupView(APIView):
 class VerifyEmailView(APIView):
     serializer_class = VerifyCodeSerializer
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -142,7 +151,7 @@ class ResendCodeView(APIView):
     """Resend verification code."""
     serializer_class = ResendCodeSerializer
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -173,7 +182,7 @@ class ResendCodeView(APIView):
         )
 
 
-def send_password_reset_email(user, code):
+def send_password_reset_email(user: UserProfile, code: str) -> None:
     """Send password reset code email to user."""
     subject = 'Password Reset Code'
     from_email = getattr(settings, 'EMAIL_FROM', settings.DEFAULT_FROM_EMAIL)
@@ -192,7 +201,7 @@ def send_password_reset_email(user, code):
     email.send()
 
 
-def send_welcome_email(user):
+def send_welcome_email(user: UserProfile) -> None:
     """Send welcome email after successful registration."""
     subject = 'Welcome to GTX!'
     from_email = getattr(settings, 'EMAIL_FROM', settings.DEFAULT_FROM_EMAIL)
@@ -208,7 +217,7 @@ def send_welcome_email(user):
     email.send()
 
 
-def send_password_reset_success_email(user):
+def send_password_reset_success_email(user: UserProfile) -> None:
     """Send email after successful password reset."""
     subject = 'Password Reset Successful'
     from_email = getattr(settings, 'EMAIL_FROM', settings.DEFAULT_FROM_EMAIL)
@@ -227,7 +236,7 @@ def send_password_reset_success_email(user):
     email.send()
 
 
-def send_new_login_email(user, ip_address):
+def send_new_login_email(user: UserProfile, ip_address: str | None) -> None:
     """Send email when new login is detected."""
     subject = 'New Login Detected'
     from_email = getattr(settings, 'EMAIL_FROM', settings.DEFAULT_FROM_EMAIL)
@@ -247,7 +256,7 @@ def send_new_login_email(user, ip_address):
     email.send()
 
 
-def get_client_ip(request):
+def get_client_ip(request: Request) -> str | None:
     """Get client IP address from request."""
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -261,7 +270,7 @@ class PasswordResetRequestView(APIView):
     """Request password reset - sends 6-digit code to email."""
     serializer_class = PasswordResetRequestSerializer
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -291,7 +300,7 @@ class PasswordResetVerifyView(APIView):
     """Verify reset code and set new password."""
     serializer_class = PasswordResetVerifySerializer
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -341,7 +350,8 @@ class PasswordResetVerifyView(APIView):
 class LoginView(APIView):
     """Handle user login with new login notification."""
     serializer_class = LoginSerializer
-    def post(self, request):
+
+    def post(self, request: Request) -> Response:
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -349,7 +359,7 @@ class LoginView(APIView):
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
 
-        user = authenticate(request, username=email, password=password)
+        user = authenticate(request._request, username=email, password=password)
 
         if user is None:
             return Response(
@@ -371,6 +381,7 @@ class LoginView(APIView):
 
         # Generate JWT tokens
         refresh = RefreshToken.for_user(user)
+        user = cast(UserProfile, user)
 
         # Update last login and IP
         ip_address = get_client_ip(request)
@@ -397,7 +408,7 @@ class CreateTransactionPinView(APIView):
     serializer_class = CreateTransactionPinSerializer
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         user = request.user
 
         if user.transaction_pin:
@@ -420,11 +431,11 @@ class CreateTransactionPinView(APIView):
 
 
 class UpdateTransactionPinView(APIView):
-    serializer_class = UpdateTransactionPinSerializer
     """Update the transaction PIN for the authenticated user."""
+    serializer_class = UpdateTransactionPinSerializer
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         user = request.user
 
         if not user.transaction_pin:
@@ -457,7 +468,7 @@ class VerifyTransactionPinView(APIView):
     serializer_class = VerifyTransactionPinSerializer
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         user = request.user
 
         if not user.has_pin:
@@ -482,7 +493,7 @@ class SubmitLevel2CredentialsView(APIView):
     parser_classes = [MultiPartParser, FormParser]
     serializer_class = Level2CredentialsSerializer
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         user = request.user
 
         if user.level in ['Level 2', 'Level 3']:
@@ -522,7 +533,7 @@ class SubmitLevel3CredentialsView(APIView):
     parser_classes = [MultiPartParser, FormParser]
     serializer_class = Level3CredentialsSerializer
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         user = request.user
 
         if user.level == 'Level 3':
@@ -573,7 +584,7 @@ class CurrentUserView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserProfileSerializer
 
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         serializer = self.serializer_class(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -584,7 +595,7 @@ class UploadProfilePictureView(APIView):
     parser_classes = [MultiPartParser, FormParser]
     serializer_class = ProfilePictureSerializer
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         user = request.user
 
         if user.dp:
@@ -612,7 +623,7 @@ class UpdateProfilePictureView(APIView):
     parser_classes = [MultiPartParser, FormParser]
     serializer_class = ProfilePictureSerializer
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         user = request.user
 
         serializer = self.serializer_class(data=request.data)
@@ -637,7 +648,7 @@ class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ChangePasswordSerializer
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         user = request.user
 
         serializer = self.serializer_class(data=request.data)
@@ -667,7 +678,7 @@ class AddPhoneNumberView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = AddPhoneNumberSerializer
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         user = request.user
 
         if user.phone_number:
@@ -694,7 +705,7 @@ class UserOrdersView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = GiftCardOrderListSerializer
 
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         user = request.user
         orders = GiftCardOrder.objects.filter(user=user)
         serializer = self.serializer_class(orders, many=True)
@@ -706,7 +717,7 @@ class UserOrderDetailView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = GiftCardOrderSerializer
 
-    def get(self, request, order_id):
+    def get(self, request: Request, order_id: UUID) -> Response:
         user = request.user
 
         try:

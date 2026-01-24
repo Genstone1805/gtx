@@ -11,9 +11,10 @@ class GiftCardOrder(models.Model):
   ]
 
   STATUS_CHOICES = [
-    ("Processing", "Processing"),
-    ("Rejected", "Rejected"),
-    ("Approved", "Approved"),
+    ("Pending", "Pending"),
+    ("Assigned", "Assigned"),
+    ("Completed", "Completed"),
+    ("Cancelled", "Cancelled"),
   ]
 
   user = models.ForeignKey(user, on_delete=models.CASCADE)
@@ -22,4 +23,4 @@ class GiftCardOrder(models.Model):
   image = models.ImageField(upload_to="orders/", null=True, blank=True)
   e_code_pin = models.CharField(max_length=25, null=True, blank=True)
   amount = models.IntegerField()
-  status = models.CharField(choices=STATUS_CHOICES, max_length=50, default="Processing")
+  status = models.CharField(choices=STATUS_CHOICES, max_length=50, default="Pending")

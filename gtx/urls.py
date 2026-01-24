@@ -12,6 +12,9 @@ urlpatterns = [
     path('cards/', include('cards.urls')),
     path('order/', include('order.urls')),
 
+    # Frontend template URLs
+    path('template/', include('frontend.urls')),
+
     # DOcumentation Urls
     path('download-docs/', SpectacularAPIView.as_view(), name='schema'),
     path('docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
