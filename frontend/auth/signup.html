@@ -36,7 +36,7 @@
                 <button type="submit" class="btn btn-primary">Sign Up</button>
             </form>
             <p class="text-center mt-20">
-                Already have an account? <a href="login.html" class="link">Login</a>
+                Already have an account? <a href="login" class="link">Login</a>
             </p>
         </div>
     </div>
@@ -74,7 +74,7 @@
                     sessionStorage.setItem('verifyEmail', email);
                     UI.showAlert(form, 'Account created! Please check your email for verification code.', 'success');
                     setTimeout(() => {
-                        window.location.href = 'verify.html';
+                        window.location.href = 'verify';
                     }, 2000);
                 } else {
                     UI.showAlert(form, data.detail || 'Signup failed. Please try again.');

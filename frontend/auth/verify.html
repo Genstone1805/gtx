@@ -45,7 +45,7 @@
         const email = sessionStorage.getItem('verifyEmail');
 
         if (!email) {
-            window.location.href = 'signup.html';
+            window.location.href = 'signup';
         }
 
         document.getElementById('emailDisplay').textContent = email;
@@ -114,7 +114,7 @@
                     sessionStorage.removeItem('verifyEmail');
                     UI.showAlert(form, 'Email verified successfully! Redirecting to login...', 'success');
                     setTimeout(() => {
-                        window.location.href = 'login.html';
+                        window.location.href = 'login';
                     }, 2000);
                 } else {
                     UI.showAlert(form, data.detail || 'Verification failed. Please try again.');

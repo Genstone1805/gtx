@@ -24,12 +24,12 @@
                     <input type="password" id="password" name="password" placeholder="Enter your password" required>
                 </div>
                 <p class="text-right mb-20">
-                    <a href="forgot-password.html" class="link">Forgot Password?</a>
+                    <a href="forgot-password" class="link">Forgot Password?</a>
                 </p>
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>
             <p class="text-center mt-20">
-                Don't have an account? <a href="signup.html" class="link">Sign Up</a>
+                Don't have an account? <a href="signup" class="link">Sign Up</a>
             </p>
         </div>
     </div>
@@ -38,7 +38,7 @@
     <script>
         // Check if already logged in
         if (TokenManager.getAccessToken()) {
-            window.location.href = '../profile/dashboard.html';
+            window.location.href = '../profile/dashboard';
         }
 
         document.getElementById('loginForm').addEventListener('submit', async function (e) {
@@ -60,14 +60,14 @@
                     TokenManager.setUser(data.user);
                     UI.showAlert(form, 'Login successful! Redirecting...', 'success');
                     setTimeout(() => {
-                        window.location.href = '../profile/dashboard.html';
+                        window.location.href = '../profile/dashboard';
                     }, 1000);
                 } else {
                     if (response.status === 403 && data.detail.includes('verify')) {
                         sessionStorage.setItem('verifyEmail', email);
                         UI.showAlert(form, data.detail + ' Redirecting to verification...', 'info');
                         setTimeout(() => {
-                            window.location.href = 'verify.html';
+                            window.location.href = 'verify';
                         }, 2000);
                     } else {
                         UI.showAlert(form, data.detail || 'Login failed. Please try again.');
