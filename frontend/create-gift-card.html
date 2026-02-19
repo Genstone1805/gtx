@@ -197,7 +197,7 @@
     // Fetch stores from API
     async function fetchStores() {
       try {
-        const response = await fetch('http://localhost:8000/admin/list-gift-stores/');
+        const response = await fetch('http://92.113.29.160:8000/admin/list-gift-stores/');
         if (!response.ok) {
           throw new Error('Failed to fetch stores');
         }
@@ -349,7 +349,7 @@
       };
 
       try {
-        const response = await fetch('http://localhost:8000/admin/create-gift-card/', {
+        const response = await fetch('http://92.113.29.160:8000/admin/create-gift-card/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

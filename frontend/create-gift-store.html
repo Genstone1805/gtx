@@ -211,7 +211,7 @@
       formData.append('cards', JSON.stringify(cards));
 
       try {
-        const response = await fetch('http://localhost:8000/admin/create-gift-store/', {
+        const response = await fetch('http://92.113.29.160:8000/admin/create-gift-store/', {
           method: 'POST',
           body: formData
         });

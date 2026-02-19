@@ -1,10 +1,13 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - GTX</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
         .stats-grid {
             display: grid;
@@ -95,6 +98,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container card-wide">
         <nav class="nav">
@@ -149,7 +153,7 @@
         </div>
     </div>
 
-    <script src="../js/api.js"></script>
+    <script src="{% static 'js/api.js' %}"></script>
     <script>
         // Check admin access
         async function checkAdmin() {
@@ -200,4 +204,5 @@
         });
     </script>
 </body>
+
 </html>

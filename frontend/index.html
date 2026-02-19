@@ -1,10 +1,13 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GTX - Gift Card Trading Platform</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
         .hero {
             text-align: center;
@@ -101,6 +104,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container card-wide">
         <div class="card">
@@ -109,8 +113,8 @@
                 <p>Your trusted platform for gift card trading. Fast, secure, and reliable.</p>
 
                 <div class="cta-buttons">
-                    <a href="auth/signup.html" class="btn btn-primary">Get Started</a>
-                    <a href="auth/login.html" class="btn btn-secondary">Login</a>
+                    <a href="auth/signup" class="btn btn-primary">Get Started</a>
+                    <a href="auth/login" class="btn btn-secondary">Login</a>
                 </div>
             </div>
 
@@ -135,14 +139,14 @@
             <div class="quick-links">
                 <h3>Quick Links</h3>
                 <div class="links-grid">
-                    <a href="auth/signup.html">Sign Up</a>
-                    <a href="auth/login.html">Login</a>
-                    <a href="auth/forgot-password.html">Forgot Password</a>
-                    <a href="profile/dashboard.html">Dashboard</a>
-                    <a href="profile/transaction-pin.html">Transaction PIN</a>
-                    <a href="credentials/level2.html">Level 2 Verification</a>
-                    <a href="credentials/level3.html">Level 3 Verification</a>
-                    <a href="admin/dashboard.html">Admin Panel</a>
+                    <a href="auth/signup">Sign Up</a>
+                    <a href="auth/login">Login</a>
+                    <a href="auth/forgot-password">Forgot Password</a>
+                    <a href="profile/dashboard">Dashboard</a>
+                    <a href="profile/transaction-pin">Transaction PIN</a>
+                    <a href="credentials/level2">Level 2 Verification</a>
+                    <a href="credentials/level3">Level 3 Verification</a>
+                    <a href="admin/dashboard">Admin Panel</a>
                 </div>
             </div>
         </div>
@@ -155,10 +159,11 @@
             // User is logged in, redirect to dashboard
             const ctaButtons = document.querySelector('.cta-buttons');
             ctaButtons.innerHTML = `
-                <a href="profile/dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+                <a href="profile/dashboard" class="btn btn-primary">Go to Dashboard</a>
                 <a href="#" class="btn btn-secondary" onclick="logout()">Logout</a>
             `;
         }
     </script>
 </body>
+
 </html>

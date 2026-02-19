@@ -1,11 +1,15 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction PIN - GTX</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
+
 <body>
     <div class="container card-wide">
         <nav class="nav">
@@ -89,7 +93,7 @@
         </div>
     </div>
 
-    <script src="../js/api.js"></script>
+    <script src="{% static 'js/api.js' %}"></script>
     <script>
         if (!requireAuth()) {
             // Redirect handled in requireAuth
@@ -100,7 +104,7 @@
             const inputs = document.querySelectorAll(selector);
 
             inputs.forEach((input, index) => {
-                input.addEventListener('input', function(e) {
+                input.addEventListener('input', function (e) {
                     this.value = this.value.replace(/[^0-9]/g, '');
 
                     if (this.value && index < inputs.length - 1) {
@@ -108,7 +112,7 @@
                     }
                 });
 
-                input.addEventListener('keydown', function(e) {
+                input.addEventListener('keydown', function (e) {
                     if (e.key === 'Backspace' && !this.value && index > 0) {
                         inputs[index - 1].focus();
                     }
@@ -151,7 +155,7 @@
         }
 
         // Create PIN form
-        document.getElementById('createPinForm').addEventListener('submit', async function(e) {
+        document.getElementById('createPinForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const form = this;
@@ -193,7 +197,7 @@
         });
 
         // Update PIN form
-        document.getElementById('updatePinForm').addEventListener('submit', async function(e) {
+        document.getElementById('updatePinForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const form = this;
@@ -236,4 +240,5 @@
         checkPinStatus();
     </script>
 </body>
+
 </html>

@@ -1,11 +1,15 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify Email - GTX</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
+
 <body>
     <div class="container">
         <div class="card">
@@ -36,7 +40,7 @@
         </div>
     </div>
 
-    <script src="../js/api.js"></script>
+    <script src="{% static 'js/api.js' %}"></script>
     <script>
         const email = sessionStorage.getItem('verifyEmail');
 
@@ -50,7 +54,7 @@
         const pinInputs = document.querySelectorAll('.pin-input');
 
         pinInputs.forEach((input, index) => {
-            input.addEventListener('input', function(e) {
+            input.addEventListener('input', function (e) {
                 // Only allow digits
                 this.value = this.value.replace(/[^0-9]/g, '');
 
@@ -60,13 +64,13 @@
                 updateHiddenCode();
             });
 
-            input.addEventListener('keydown', function(e) {
+            input.addEventListener('keydown', function (e) {
                 if (e.key === 'Backspace' && !this.value && index > 0) {
                     pinInputs[index - 1].focus();
                 }
             });
 
-            input.addEventListener('paste', function(e) {
+            input.addEventListener('paste', function (e) {
                 e.preventDefault();
                 const paste = (e.clipboardData || window.clipboardData).getData('text');
                 const digits = paste.replace(/[^0-9]/g, '').slice(0, 6);
@@ -88,7 +92,7 @@
             document.getElementById('code').value = code;
         }
 
-        document.getElementById('verifyForm').addEventListener('submit', async function(e) {
+        document.getElementById('verifyForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const form = this;
@@ -122,7 +126,7 @@
             }
         });
 
-        document.getElementById('resendLink').addEventListener('click', async function(e) {
+        document.getElementById('resendLink').addEventListener('click', async function (e) {
             e.preventDefault();
 
             const form = document.getElementById('verifyForm');
@@ -142,4 +146,5 @@
         });
     </script>
 </body>
+
 </html>

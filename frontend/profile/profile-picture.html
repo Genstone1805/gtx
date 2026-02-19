@@ -1,10 +1,13 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Picture - GTX</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
         .image-preview {
             width: 200px;
@@ -46,6 +49,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container card-wide">
         <nav class="nav">
@@ -86,7 +90,7 @@
         </div>
     </div>
 
-    <script src="../js/api.js"></script>
+    <script src="{% static 'js/api.js' %}"></script>
     <script>
         if (!requireAuth()) {
             // Redirect handled in requireAuth
@@ -184,7 +188,7 @@
         }
 
         // Upload form submit
-        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+        document.getElementById('uploadForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             if (!selectedFile) {
@@ -223,4 +227,5 @@
         loadCurrentPicture();
     </script>
 </body>
+
 </html>

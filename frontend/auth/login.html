@@ -1,11 +1,15 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - GTX</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
+
 <body>
     <div class="container">
         <div class="card">
@@ -30,14 +34,14 @@
         </div>
     </div>
 
-    <script src="../js/api.js"></script>
+    <script src="{% static 'js/api.js' %}"></script>
     <script>
         // Check if already logged in
         if (TokenManager.getAccessToken()) {
             window.location.href = '../profile/dashboard.html';
         }
 
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const form = this;
@@ -77,4 +81,5 @@
         });
     </script>
 </body>
+
 </html>

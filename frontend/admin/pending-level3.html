@@ -1,10 +1,13 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Level 3 Approvals - GTX Admin</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
         .empty-state {
             text-align: center;
@@ -169,6 +172,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container card-wide">
         <nav class="nav">
@@ -202,7 +206,7 @@
         </div>
     </div>
 
-    <script src="../js/api.js"></script>
+    <script src="{% static 'js/api.js' %}"></script>
     <script>
         // Check admin access
         async function checkAdmin() {
@@ -393,14 +397,14 @@
         }
 
         // Close modal on click outside
-        document.getElementById('imageModal').addEventListener('click', function(e) {
+        document.getElementById('imageModal').addEventListener('click', function (e) {
             if (e.target === this) {
                 closeModal();
             }
         });
 
         // Close modal on escape key
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 closeModal();
             }
@@ -413,4 +417,5 @@
         });
     </script>
 </body>
+
 </html>
