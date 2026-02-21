@@ -91,6 +91,15 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     transaction_pin = models.CharField(max_length=128, blank=True)
     has_pin = models.BooleanField(default=False)
     transaction_limit = models.DecimalField(decimal_places=2, max_digits=12, default=Decimal("250000.00"))
+    
+    # Balance fields for gift card redemption system
+    pending_balance = models.DecimalField(decimal_places=2, max_digits=12, default=Decimal("0.00"),
+        help_text="Total amount from orders with 'Pending' status (awaiting admin approval)"
+    )
+    withdrawable_balance = models.DecimalField(decimal_places=2, max_digits=12, default=Decimal("0.00"),
+        help_text="Total amount from orders with 'Approved' status (available for withdrawal)"
+    )
+    
     status = models.CharField(choices=STATUS, default="Active", max_length=12)
     disabled = models.BooleanField(default=False)
     ip_address = models.GenericIPAddressField(null=True, blank=True)

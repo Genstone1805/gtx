@@ -98,5 +98,9 @@ class OrderStatusUpdateSerializer(serializers.Serializer):
         ('Processing', 'Processing'),
         ('Approved', 'Approved'),
         ('Rejected', 'Rejected'),
+        ('Assigned', 'Assigned'),
+        ('Completed', 'Completed'),
+        ('Cancelled', 'Cancelled'),
     ]
     status = serializers.ChoiceField(choices=STATUS_CHOICES)
+    admin_notes = serializers.CharField(required=False, allow_blank=True)

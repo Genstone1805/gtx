@@ -107,7 +107,7 @@
                 <a href="dashboard" class="active">Dashboard</a>
                 <a href="pending-level2">Level 2 Approvals</a>
                 <a href="pending-level3">Level 3 Approvals</a>
-                <a href="../create-gift-store">Gift Cards</a>
+                <a href="create-gift-store">Gift Cards</a>
                 <a href="#" onclick="logout()">Logout</a>
             </div>
         </nav>
@@ -142,7 +142,7 @@
                         <p>Review and approve address verifications</p>
                     </div>
                 </a>
-                <a href="../create-gift-store" class="quick-link">
+                <a href="create-gift-store" class="quick-link">
                     <div class="quick-link-icon gifts">🎁</div>
                     <div>
                         <h4>Manage Gift Cards</h4>
@@ -158,7 +158,7 @@
         // Check admin access
         async function checkAdmin() {
             if (!TokenManager.getAccessToken()) {
-                window.location.href = '../auth/login';
+                window.location.href = 'auth/login';
                 return;
             }
 
@@ -168,10 +168,10 @@
                     const user = await response.json();
                     if (!user.is_staff) {
                         alert('Access denied. Admin only.');
-                        window.location.href = '../profile/dashboard';
+                        window.location.href = 'profile/dashboard';
                     }
                 } else {
-                    window.location.href = '../auth/login';
+                    window.location.href = 'auth/login';
                 }
             } catch (error) {
                 console.error('Admin check failed:', error);

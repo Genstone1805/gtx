@@ -280,7 +280,7 @@ const UI = {
 // Check if user is logged in
 function requireAuth() {
   if (!TokenManager.getAccessToken()) {
-    window.location.href = "../auth/login.html";
+    window.location.href = "auth/login";
     return false;
   }
   return true;
@@ -295,7 +295,7 @@ async function requireAdmin() {
     if (response.ok) {
       const user = await response.json();
       if (!user.is_staff) {
-        window.location.href = "../profile/dashboard.html";
+        window.location.href = "profile/dashboard";
         return false;
       }
       return true;
@@ -309,5 +309,5 @@ async function requireAdmin() {
 // Logout function
 function logout() {
   TokenManager.clearTokens();
-  window.location.href = "../auth/login.html";
+  window.location.href = "auth/login";
 }

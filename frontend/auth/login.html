@@ -38,7 +38,7 @@
     <script>
         // Check if already logged in
         if (TokenManager.getAccessToken()) {
-            window.location.href = '../profile/dashboard';
+            window.location.href = 'profile/dashboard';
         }
 
         document.getElementById('loginForm').addEventListener('submit', async function (e) {
@@ -60,7 +60,7 @@
                     TokenManager.setUser(data.user);
                     UI.showAlert(form, 'Login successful! Redirecting...', 'success');
                     setTimeout(() => {
-                        window.location.href = '../profile/dashboard';
+                        window.location.href = 'profile/dashboard';
                     }, 1000);
                 } else {
                     if (response.status === 403 && data.detail.includes('verify')) {

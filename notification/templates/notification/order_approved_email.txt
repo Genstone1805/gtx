@@ -1,0 +1,24 @@
+Order {{ status }}
+
+Dear {{ user.full_name|default:"Valued Customer" }},
+
+Your gift card order status has been updated.
+
+Order Details:
+- Order ID: {{ order_id }}
+- Amount: ${{ amount }}
+- New Status: {{ status }}
+
+{% if status == 'Approved' %}
+Great news! Your order has been approved. The amount has been added to your withdrawable balance.
+You can now request a withdrawal from your dashboard.
+{% elif status == 'Rejected' %}
+We regret to inform you that your order has been rejected. Please contact our support team for more information.
+{% elif status == 'Completed' %}
+Your order has been completed successfully. Thank you for using GTX!
+{% endif %}
+
+Thank you for choosing GTX!
+
+Best regards,
+The GTX Team

@@ -10,6 +10,7 @@ from decimal import Decimal
 from cards.models import GiftCardStore, GiftCardNames
 from account.models import Level2Credentials, Level3Credentials, UserProfile
 from order.models import GiftCardOrder
+from withdrawal.models import Withdrawal
 from .serializers import (
    CreateGiftStoreSerializer,
    CreateGiftCardSerializer,
@@ -22,6 +23,8 @@ from .serializers import (
    PendingOrderSerializer,
    OrderStatusUpdateSerializer
    )
+from notification.services import notify_kyc_status_changed, notify_balance_updated
+from order.signals import recalculate_user_balances
 
 
 def parse_querydict(query_dict):
@@ -233,21 +236,36 @@ class PendingOrdersListView(ListAPIView):
 
 
 class OrderStatusUpdateView(APIView):
-    """Update the status of an order."""
+    """Update the status of an order. Balance updates are handled automatically by signals."""
     permission_classes = [IsAdminUser]
     serializer_class = OrderStatusUpdateSerializer
 
     def patch(self, request, order_id):
         order = get_object_or_404(GiftCardOrder, id=order_id)
+        old_status = order.status
 
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        order.status = serializer.validated_data['status']
+        new_status = serializer.validated_data['status']
+        admin_notes = serializer.validated_data.get('admin_notes', '')
+
+        order.status = new_status
+        if admin_notes:
+            # Store admin notes if you add the field to the model
+            pass
         order.save()
 
+        # Notify balance update
+        notify_balance_updated(
+            user=order.user,
+            balance_type='withdrawable' if new_status == 'Approved' else 'pending',
+            new_balance=float(order.user.withdrawable_balance),
+            change_amount=float(order.amount) if new_status == 'Approved' else None,
+        )
+
         return Response(
-            {'detail': f'Order status updated to {order.status}.'},
+            {'detail': f'Order status updated from {old_status} to {order.status}.'},
             status=status.HTTP_200_OK
         )

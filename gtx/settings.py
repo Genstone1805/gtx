@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'cards',
     'control',
     'order',
+    'withdrawal',
+    'notification',
 ]
 
 MIDDLEWARE = [

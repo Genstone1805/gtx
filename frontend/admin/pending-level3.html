@@ -181,7 +181,7 @@
                 <a href="dashboard">Dashboard</a>
                 <a href="pending-level2">Level 2 Approvals</a>
                 <a href="pending-level3" class="active">Level 3 Approvals</a>
-                <a href="../create-gift-store">Gift Cards</a>
+                <a href="create-gift-store">Gift Cards</a>
                 <a href="#" onclick="logout()">Logout</a>
             </div>
         </nav>
@@ -211,7 +211,7 @@
         // Check admin access
         async function checkAdmin() {
             if (!TokenManager.getAccessToken()) {
-                window.location.href = '../auth/login';
+                window.location.href = 'auth/login';
                 return false;
             }
 
@@ -221,12 +221,12 @@
                     const user = await response.json();
                     if (!user.is_staff) {
                         alert('Access denied. Admin only.');
-                        window.location.href = '../profile/dashboard';
+                        window.location.href = 'profile/dashboard';
                         return false;
                     }
                     return true;
                 } else {
-                    window.location.href = '../auth/login';
+                    window.location.href = 'auth/login';
                     return false;
                 }
             } catch (error) {

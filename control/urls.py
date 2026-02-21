@@ -9,7 +9,9 @@ from .views import (
   PendingLevel2CredentialsListView,
   PendingLevel3CredentialsListView,
   Level2CredentialApprovalView,
-  Level3CredentialApprovalView
+  Level3CredentialApprovalView,
+  PendingOrdersListView,
+  OrderStatusUpdateView,
   )
 
 urlpatterns = [
@@ -25,4 +27,8 @@ urlpatterns = [
     path('pending/level3/', PendingLevel3CredentialsListView.as_view(), name="pending_level3_list"),
     path('approve/level2/<int:credential_id>/', Level2CredentialApprovalView.as_view(), name="approve_level2"),
     path('approve/level3/<int:credential_id>/', Level3CredentialApprovalView.as_view(), name="approve_level3"),
+
+    # Order management
+    path('pending-orders/', PendingOrdersListView.as_view(), name="pending_orders_list"),
+    path('update-order-status/<int:order_id>/', OrderStatusUpdateView.as_view(), name="update_order_status"),
 ] 

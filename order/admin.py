@@ -1,4 +1,25 @@
 from django.contrib import admin
 from .models import GiftCardOrder
 
-admin.site.register(GiftCardOrder)
+
+@admin.register(GiftCardOrder)
+class GiftCardOrderAdmin(admin.ModelAdmin):
+    list_display = [
+        'id', 'user', 'card', 'type', 'amount', 'status'
+    ]
+    list_filter = ['status', 'type']
+    search_fields = ['user__email', 'user__full_name', 'card__name']
+    readonly_fields = [
+        'user', 'type', 'card', 'image', 'e_code_pin', 'amount', 'status'
+    ]
+    ordering = ['-id']
+    list_per_page = 50
+
+    fieldsets = (
+        ('Order Information', {
+            'fields': ('user', 'card', 'type', 'amount', 'status')
+        }),
+        ('Order Details', {
+            'fields': ('image', 'e_code_pin')
+        }),
+    )

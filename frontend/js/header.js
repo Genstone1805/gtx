@@ -45,33 +45,33 @@ const Header = {
     // Public/Auth pages - not logged in
     if (!isLoggedIn) {
       return [
-        { href: "../index.html", label: "Home", id: "index" },
-        { href: "../auth/login.html", label: "Login", id: "login" },
-        { href: "../auth/signup.html", label: "Sign Up", id: "signup" },
+        { href: "index", label: "Home", id: "index" },
+        { href: "auth/login", label: "Login", id: "login" },
+        { href: "auth/signup", label: "Sign Up", id: "signup" },
       ];
     }
 
     // Admin pages
     if (pageType === "admin") {
       return [
-        { href: "dashboard.html", label: "Dashboard", id: "dashboard" },
+        { href: "dashboard", label: "Dashboard", id: "dashboard" },
         {
-          href: "pending-level2.html",
+          href: "pending-level2",
           label: "Level 2 Approvals",
           id: "pending-level2",
         },
         {
-          href: "pending-level3.html",
+          href: "pending-level3",
           label: "Level 3 Approvals",
           id: "pending-level3",
         },
         {
-          href: "../create-gift-store.html",
+          href: "create-gift-store",
           label: "Gift Cards",
           id: "gift-cards",
         },
         {
-          href: "../profile/dashboard.html",
+          href: "profile/dashboard",
           label: "My Profile",
           id: "my-profile",
         },
@@ -82,22 +82,22 @@ const Header = {
     // User pages (profile, credentials)
     const userLinks = [
       {
-        href: "../profile/dashboard.html",
+        href: "profile/dashboard",
         label: "Dashboard",
         id: "dashboard",
       },
       {
-        href: "../profile/transaction-pin.html",
+        href: "profile/transaction-pin",
         label: "Transaction PIN",
         id: "transaction-pin",
       },
       {
-        href: "../profile/profile-picture.html",
+        href: "profile/profile-picture",
         label: "Profile Picture",
         id: "profile-picture",
       },
       {
-        href: "../credentials/level2.html",
+        href: "credentials/level2",
         label: "Upgrade Account",
         id: "level2",
       },
@@ -106,7 +106,7 @@ const Header = {
     // Add admin link if user is admin
     if (this.isAdmin()) {
       userLinks.push({
-        href: "../admin/dashboard.html",
+        href: "admin/dashboard",
         label: "Admin Panel",
         id: "admin",
       });
@@ -141,7 +141,7 @@ const Header = {
 
     const headerHtml = `
             <nav class="nav" id="mainNav">
-                <a href="${isLoggedIn ? "../profile/dashboard.html" : "../index.html"}" class="nav-brand">GTX</a>
+                <a href="${isLoggedIn ? "profile/dashboard" : "index"}" class="nav-brand">GTX</a>
                 <button class="nav-toggle" onclick="Header.toggleMobile()">☰</button>
                 <div class="nav-links" id="navLinks">
                     ${navLinksHtml}

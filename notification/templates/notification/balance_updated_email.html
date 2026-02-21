@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #4F46E5; color: white; padding: 20px; text-align: center; }
+        .content { background: #f9f9f9; padding: 30px; }
+        .balance-card { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; text-align: center; }
+        .balance-amount { font-size: 32px; font-weight: bold; color: #4F46E5; }
+        .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; }
+        .button { display: inline-block; background: #4F46E5; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>GTX</h1>
+            <p>Gift Card Trading Platform</p>
+        </div>
+        
+        <div class="content">
+            <h2>Balance Updated</h2>
+            
+            <p>Dear {{ user.full_name|default:"Valued Customer" }},</p>
+            
+            <p>Your {{ balance_type }} balance has been updated.</p>
+            
+            <div class="balance-card">
+                <p style="color: #666; margin-bottom: 10px;">New Balance</p>
+                <p class="balance-amount">${{ new_balance }}</p>
+                {% if change_amount %}
+                <p style="color: #10B981; margin-top: 10px;">▲ +${{ change_amount }}</p>
+                {% endif %}
+            </div>
+            
+            <p>You can view your full balance breakdown in your dashboard.</p>
+            
+            <a href="#" class="button">View Dashboard</a>
+        </div>
+        
+        <div class="footer">
+            <p>Thank you for choosing GTX!</p>
+            <p>&copy; 2024 GTX. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

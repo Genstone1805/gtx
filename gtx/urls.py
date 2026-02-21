@@ -11,6 +11,8 @@ urlpatterns = [
     path('api/account/', include('account.urls')),
     path('cards/', include('cards.urls')),
     path('order/', include('order.urls')),
+    path('withdrawal/', include('withdrawal.urls')),
+    path('notifications/', include('notification.urls')),
 
     # Frontend template URLs
     path('template/', include('frontend.urls')),
@@ -19,6 +21,6 @@ urlpatterns = [
     path('download-docs/', SpectacularAPIView.as_view(), name='schema'),
     path('docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('schema/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-] 
+]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
