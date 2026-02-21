@@ -1,16 +1,19 @@
 import json
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
+from rest_framework.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
+from django.db import transaction
 from decimal import Decimal
+from django.db.models import Sum
 
 from cards.models import GiftCardStore, GiftCardNames
 from account.models import Level2Credentials, Level3Credentials, UserProfile
 from order.models import GiftCardOrder
-from withdrawal.models import Withdrawal
+from withdrawal.models import Withdrawal, WithdrawalAuditLog
 from .serializers import (
    CreateGiftStoreSerializer,
    CreateGiftCardSerializer,
@@ -21,9 +24,13 @@ from .serializers import (
    Level3CredentialsPendingSerializer,
    CredentialApprovalSerializer,
    PendingOrderSerializer,
-   OrderStatusUpdateSerializer
+   OrderStatusUpdateSerializer,
+   WithdrawalListSerializer,
+   WithdrawalDetailSerializer,
+   WithdrawalApprovalSerializer,
+   WithdrawalAuditLogSerializer,
    )
-from notification.services import notify_kyc_status_changed, notify_balance_updated
+from notification.services import notify_kyc_status_changed, notify_balance_updated, notify_withdrawal_status_changed
 from order.signals import recalculate_user_balances
 
 
@@ -269,3 +276,153 @@ class OrderStatusUpdateView(APIView):
             {'detail': f'Order status updated from {old_status} to {order.status}.'},
             status=status.HTTP_200_OK
         )
+
+
+# Withdrawal Admin Views
+
+class AdminWithdrawalListView(ListAPIView):
+    """List all withdrawal requests (admin only)."""
+    permission_classes = [IsAdminUser]
+    serializer_class = WithdrawalListSerializer
+
+    def get_queryset(self):
+        queryset = Withdrawal.objects.all().order_by('-created_at')
+
+        # Filter by status if provided
+        status_param = self.request.query_params.get('status')
+        if status_param:
+            queryset = queryset.filter(status=status_param)
+
+        # Filter by user if provided
+        user_param = self.request.query_params.get('user_id')
+        if user_param:
+            queryset = queryset.filter(user_id=user_param)
+
+        return queryset
+
+
+class AdminWithdrawalDetailView(RetrieveAPIView):
+    """Get detailed view of a specific withdrawal (admin only)."""
+    permission_classes = [IsAdminUser]
+    serializer_class = WithdrawalDetailSerializer
+    queryset = Withdrawal.objects.all()
+
+
+class AdminWithdrawalProcessView(APIView):
+    """Approve or reject a withdrawal request (admin only)."""
+    permission_classes = [IsAdminUser]
+    serializer_class = WithdrawalApprovalSerializer
+
+    @transaction.atomic
+    def post(self, request, pk):
+        admin_user = request.user
+
+        try:
+            withdrawal = Withdrawal.objects.get(pk=pk)
+        except Withdrawal.DoesNotExist:
+            raise ValidationError({"detail": "Withdrawal not found."})
+
+        if withdrawal.status != 'Pending':
+            raise ValidationError({
+                "detail": f"Cannot process withdrawal with status: {withdrawal.status}. Only pending withdrawals can be processed."
+            })
+
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        action = serializer.validated_data['action']
+        reason = serializer.validated_data.get('reason', '')
+        transaction_reference = serializer.validated_data.get('transaction_reference', '')
+        admin_notes = serializer.validated_data.get('admin_notes', '')
+
+        previous_status = withdrawal.status
+
+        if action == 'approve':
+            withdrawal.approve(
+                admin_user=admin_user,
+                transaction_reference=transaction_reference
+            )
+            if admin_notes:
+                withdrawal.admin_notes = admin_notes
+                withdrawal.save()
+
+            # Create audit log
+            WithdrawalAuditLog.objects.create(
+                withdrawal=withdrawal,
+                action='approved',
+                performed_by=admin_user,
+                details=f"Withdrawal approved. Transaction ref: {transaction_reference}",
+                previous_status=previous_status,
+                new_status='Approved',
+            )
+
+            # Send notification
+            notify_withdrawal_status_changed(
+                user=withdrawal.user,
+                withdrawal=withdrawal,
+                new_status='Approved',
+                amount=float(withdrawal.amount),
+            )
+
+            return Response({
+                'detail': f'Withdrawal approved successfully. Amount ${withdrawal.amount} has been deducted from user\'s withdrawable balance.',
+                'status': withdrawal.status,
+                'transaction_reference': withdrawal.transaction_reference,
+            })
+
+        else:  # reject
+            withdrawal.reject(admin_user=admin_user, reason=reason)
+            if admin_notes:
+                withdrawal.admin_notes = admin_notes
+                withdrawal.save()
+
+            # Create audit log
+            WithdrawalAuditLog.objects.create(
+                withdrawal=withdrawal,
+                action='rejected',
+                performed_by=admin_user,
+                details=f"Withdrawal rejected. Reason: {reason}",
+                previous_status=previous_status,
+                new_status='Rejected',
+            )
+
+            # Send notification
+            notify_withdrawal_status_changed(
+                user=withdrawal.user,
+                withdrawal=withdrawal,
+                new_status='Rejected',
+                amount=float(withdrawal.amount),
+            )
+
+            return Response({
+                'detail': f'Withdrawal rejected. Reason: {reason}',
+                'status': withdrawal.status,
+            })
+
+
+class AdminWithdrawalAuditLogView(ListAPIView):
+    """List audit logs for a specific withdrawal (admin only)."""
+    permission_classes = [IsAdminUser]
+    serializer_class = WithdrawalAuditLogSerializer
+
+    def get_queryset(self):
+        withdrawal_id = self.kwargs.get('withdrawal_id')
+        return WithdrawalAuditLog.objects.filter(
+            withdrawal_id=withdrawal_id
+        ).order_by('-created_at')
+
+
+class AdminPendingWithdrawalsCountView(APIView):
+    """Get count of pending withdrawals (for admin dashboard)."""
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        pending_count = Withdrawal.objects.filter(status='Pending').count()
+        pending_total = Withdrawal.objects.filter(
+            status='Pending'
+        ).aggregate(total=Sum('amount'))['total'] or 0
+
+        return Response({
+            'pending_count': pending_count,
+            'pending_total': str(pending_total),
+        })

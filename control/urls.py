@@ -12,6 +12,11 @@ from .views import (
   Level3CredentialApprovalView,
   PendingOrdersListView,
   OrderStatusUpdateView,
+  AdminWithdrawalListView,
+  AdminWithdrawalDetailView,
+  AdminWithdrawalProcessView,
+  AdminWithdrawalAuditLogView,
+  AdminPendingWithdrawalsCountView,
   )
 
 urlpatterns = [
@@ -31,4 +36,11 @@ urlpatterns = [
     # Order management
     path('pending-orders/', PendingOrdersListView.as_view(), name="pending_orders_list"),
     path('update-order-status/<int:order_id>/', OrderStatusUpdateView.as_view(), name="update_order_status"),
+
+    # Withdrawal management
+    path('withdrawals/', AdminWithdrawalListView.as_view(), name="admin-withdrawal-list"),
+    path('withdrawals/<int:pk>/', AdminWithdrawalDetailView.as_view(), name="admin-withdrawal-detail"),
+    path('withdrawals/<int:pk>/process/', AdminWithdrawalProcessView.as_view(), name="admin-withdrawal-process"),
+    path('withdrawals/<int:withdrawal_id>/audit-log/', AdminWithdrawalAuditLogView.as_view(), name="admin-withdrawal-audit-log"),
+    path('withdrawals/pending-count/', AdminPendingWithdrawalsCountView.as_view(), name="admin-pending-withdrawals-count"),
 ] 

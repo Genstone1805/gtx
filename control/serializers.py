@@ -1,7 +1,9 @@
 from rest_framework import serializers
+from decimal import Decimal
 from cards.models import GiftCardNames, GiftCardStore
 from account.models import Level2Credentials, Level3Credentials, UserProfile
 from order.models import GiftCardOrder
+from withdrawal.models import Withdrawal, WithdrawalAuditLog
 
 class CreateGiftStoreSerializer(serializers.ModelSerializer):
   image = serializers.ImageField(use_url=False)
@@ -104,3 +106,79 @@ class OrderStatusUpdateSerializer(serializers.Serializer):
     ]
     status = serializers.ChoiceField(choices=STATUS_CHOICES)
     admin_notes = serializers.CharField(required=False, allow_blank=True)
+
+
+# Withdrawal Admin Serializers
+
+class WithdrawalListSerializer(serializers.ModelSerializer):
+    """Serializer for listing withdrawals."""
+    payment_method_display = serializers.CharField(source='get_payment_method_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+
+    class Meta:
+        model = Withdrawal
+        fields = [
+            'id', 'amount', 'payment_method', 'payment_method_display',
+            'status', 'status_display', 'created_at', 'updated_at'
+        ]
+
+
+class WithdrawalDetailSerializer(serializers.ModelSerializer):
+    """Serializer for detailed withdrawal view."""
+    user_email = serializers.EmailField(source='user.email', read_only=True)
+    user_full_name = serializers.CharField(source='user.full_name', read_only=True)
+    payment_method_display = serializers.CharField(source='get_payment_method_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    processed_by_email = serializers.EmailField(source='processed_by.email', read_only=True)
+
+    class Meta:
+        model = Withdrawal
+        fields = [
+            'id', 'user', 'user_email', 'user_full_name',
+            'amount', 'payment_method', 'payment_method_display',
+            'bank_name', 'account_name', 'account_number',
+            'mobile_money_number', 'mobile_money_provider',
+            'crypto_address', 'crypto_network',
+            'status', 'status_display',
+            'processed_by', 'processed_at', 'rejection_reason', 'admin_notes',
+            'transaction_reference', 'processed_by_email',
+            'created_at', 'updated_at'
+        ]
+
+
+class WithdrawalApprovalSerializer(serializers.Serializer):
+    """Serializer for admin to approve/reject withdrawal."""
+    ACTION_CHOICES = [
+        ('approve', 'Approve'),
+        ('reject', 'Reject'),
+    ]
+    action = serializers.ChoiceField(choices=ACTION_CHOICES, required=True)
+    reason = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    transaction_reference = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    admin_notes = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+
+    def validate(self, data):
+        action = data.get('action')
+        reason = data.get('reason')
+
+        if action == 'reject' and not reason:
+            raise serializers.ValidationError({
+                'reason': 'A rejection reason is required when rejecting a withdrawal.'
+            })
+
+        return data
+
+
+class WithdrawalAuditLogSerializer(serializers.ModelSerializer):
+    """Serializer for withdrawal audit logs."""
+    performed_by_email = serializers.EmailField(source='performed_by.email', read_only=True)
+    action_display = serializers.CharField(source='get_action_display', read_only=True)
+
+    class Meta:
+        model = WithdrawalAuditLog
+        fields = [
+            'id', 'withdrawal', 'action', 'action_display',
+            'performed_by', 'performed_by_email',
+            'details', 'previous_status', 'new_status',
+            'created_at'
+        ]
