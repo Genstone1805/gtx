@@ -5,16 +5,14 @@ from .models import Withdrawal, WithdrawalAuditLog
 @admin.register(Withdrawal)
 class WithdrawalAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'user', 'amount', 'payment_method', 'status',
+        'id', 'user', 'amount', 'status',
         'processed_by', 'processed_at', 'created_at'
     ]
-    list_filter = ['status', 'payment_method', 'created_at', 'processed_at']
+    list_filter = ['status', 'created_at', 'processed_at']
     search_fields = ['user__email', 'user__full_name', 'transaction_reference']
     readonly_fields = [
-        'user', 'amount', 'payment_method',
+        'user', 'amount',
         'bank_name', 'account_name', 'account_number',
-        'mobile_money_number', 'mobile_money_provider',
-        'crypto_address', 'crypto_network',
         'status', 'processed_by', 'processed_at', 'rejection_reason',
         'admin_notes', 'transaction_reference', 'created_at', 'updated_at'
     ]
@@ -23,19 +21,10 @@ class WithdrawalAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Withdrawal Information', {
-            'fields': ('user', 'amount', 'payment_method', 'status')
+            'fields': ('user', 'amount', 'status')
         }),
-        ('Bank Transfer Details', {
-            'fields': ('bank_name', 'account_name', 'account_number'),
-            'classes': ('collapse',)
-        }),
-        ('Mobile Money Details', {
-            'fields': ('mobile_money_number', 'mobile_money_provider'),
-            'classes': ('collapse',)
-        }),
-        ('Crypto Details', {
-            'fields': ('crypto_address', 'crypto_network'),
-            'classes': ('collapse',)
+        ('Bank Account Details', {
+            'fields': ('bank_name', 'account_name', 'account_number')
         }),
         ('Processing Information', {
             'fields': ('processed_by', 'processed_at', 'rejection_reason', 'admin_notes', 'transaction_reference')

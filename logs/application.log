@@ -1,0 +1,4 @@
+2026-02-22 04:20:00 | INFO     | gtx | Test log entry 1
+2026-02-22 04:20:01 | WARNING  | account | Failed login attempt
+2026-02-22 04:20:02 | ERROR    | withdrawal | Insufficient balance
+2026-02-22 04:20:03 | DEBUG    | gtx | REQUEST | GET /api/user/ | User: test@example.com

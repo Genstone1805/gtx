@@ -15,6 +15,7 @@ class GiftCardStore(models.Model):
   image = models.ImageField(upload_to="gift stores", null=True)
 
   user = models.ForeignKey(user, on_delete=models.CASCADE, related_name="gift_card_store_creator", null=True)
+  created_at = models.DateTimeField(auto_now_add=True, null=True)
 
   def __str__(self) -> str:
     return self.name
@@ -32,6 +33,7 @@ class GiftCardNames(models.Model):
   store = models.ForeignKey(GiftCardStore, on_delete=models.CASCADE)
   user = models.ForeignKey(user, on_delete=models.CASCADE, related_name="gift_card_name_creator", null=True)
   rate = models.DecimalField(decimal_places=2, max_digits=6, default=Decimal("0.00"))
+  created_at = models.DateTimeField(auto_now_add=True, null=True)
 
   def __str__(self) -> str:
     return self.name

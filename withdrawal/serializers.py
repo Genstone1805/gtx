@@ -10,10 +10,8 @@ class WithdrawalCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Withdrawal
         fields = [
-            'id', 'amount', 'payment_method',
+            'id', 'amount',
             'bank_name', 'account_name', 'account_number',
-            'mobile_money_number', 'mobile_money_provider',
-            'crypto_address', 'crypto_network',
         ]
 
     def validate_amount(self, value):
@@ -30,35 +28,14 @@ class WithdrawalCreateSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        payment_method = data.get('payment_method')
-
-        # Validate payment method specific fields
-        if payment_method == 'bank_transfer':
-            required_fields = ['bank_name', 'account_name', 'account_number']
-            missing_fields = [f for f in required_fields if not data.get(f)]
-            if missing_fields:
-                raise serializers.ValidationError({
-                    f: f"This field is required for bank transfer."
-                    for f in missing_fields
-                })
-
-        elif payment_method == 'mobile_money':
-            required_fields = ['mobile_money_number', 'mobile_money_provider']
-            missing_fields = [f for f in required_fields if not data.get(f)]
-            if missing_fields:
-                raise serializers.ValidationError({
-                    f: f"This field is required for mobile money."
-                    for f in missing_fields
-                })
-
-        elif payment_method == 'crypto':
-            required_fields = ['crypto_address', 'crypto_network']
-            missing_fields = [f for f in required_fields if not data.get(f)]
-            if missing_fields:
-                raise serializers.ValidationError({
-                    f: f"This field is required for cryptocurrency withdrawal."
-                    for f in missing_fields
-                })
+        # Validate required bank details
+        required_fields = ['bank_name', 'account_name', 'account_number']
+        missing_fields = [f for f in required_fields if not data.get(f)]
+        if missing_fields:
+            raise serializers.ValidationError({
+                f: f"This field is required."
+                for f in missing_fields
+            })
 
         return data
 
@@ -70,13 +47,12 @@ class WithdrawalCreateSerializer(serializers.ModelSerializer):
 
 class WithdrawalListSerializer(serializers.ModelSerializer):
     """Serializer for listing withdrawals."""
-    payment_method_display = serializers.CharField(source='get_payment_method_display', read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
 
     class Meta:
         model = Withdrawal
         fields = [
-            'id', 'amount', 'payment_method', 'payment_method_display',
+            'id', 'amount',
             'status', 'status_display', 'created_at', 'updated_at'
         ]
 
@@ -85,17 +61,14 @@ class WithdrawalDetailSerializer(serializers.ModelSerializer):
     """Serializer for detailed withdrawal view."""
     user_email = serializers.EmailField(source='user.email', read_only=True)
     user_full_name = serializers.CharField(source='user.full_name', read_only=True)
-    payment_method_display = serializers.CharField(source='get_payment_method_display', read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
 
     class Meta:
         model = Withdrawal
         fields = [
             'id', 'user', 'user_email', 'user_full_name',
-            'amount', 'payment_method', 'payment_method_display',
+            'amount',
             'bank_name', 'account_name', 'account_number',
-            'mobile_money_number', 'mobile_money_provider',
-            'crypto_address', 'crypto_network',
             'status', 'status_display',
             'processed_by', 'processed_at', 'rejection_reason', 'admin_notes',
             'transaction_reference',

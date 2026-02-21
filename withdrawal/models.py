@@ -17,12 +17,6 @@ class Withdrawal(models.Model):
         ('Failed', 'Failed'),
     ]
 
-    PAYMENT_METHOD_CHOICES = [
-        ('bank_transfer', 'Bank Transfer'),
-        ('mobile_money', 'Mobile Money'),
-        ('crypto', 'Cryptocurrency'),
-    ]
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -33,24 +27,11 @@ class Withdrawal(models.Model):
         max_digits=12,
         help_text="Amount to withdraw"
     )
-    payment_method = models.CharField(
-        max_length=20,
-        choices=PAYMENT_METHOD_CHOICES,
-        default='bank_transfer'
-    )
     
-    # Bank account details (for bank_transfer)
+    # Bank account details
     bank_name = models.CharField(max_length=100, blank=True, null=True)
     account_name = models.CharField(max_length=100, blank=True, null=True)
     account_number = models.CharField(max_length=20, blank=True, null=True)
-    
-    # Mobile money details (for mobile_money)
-    mobile_money_number = models.CharField(max_length=20, blank=True, null=True)
-    mobile_money_provider = models.CharField(max_length=50, blank=True, null=True)
-    
-    # Crypto details (for crypto)
-    crypto_address = models.CharField(max_length=255, blank=True, null=True)
-    crypto_network = models.CharField(max_length=50, blank=True, null=True)
     
     status = models.CharField(
         max_length=20,

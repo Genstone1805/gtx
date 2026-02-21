@@ -1,0 +1,25 @@
+[2026-02-22 04:30:42] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-22 04:30:42] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-22 04:31:02] INFO gtx REQUEST | GET /logs/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 04:31:02] INFO gtx RESPONSE | GET /logs/ | Status: 200 | Duration: 0.004s
+[2026-02-22 04:31:02] INFO django.server "GET /logs/ HTTP/1.1" 200 5493
+[2026-02-22 04:31:05] INFO gtx REQUEST | GET /docs/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 04:31:05] INFO gtx RESPONSE | GET /docs/ | Status: 200 | Duration: 0.144s
+[2026-02-22 04:31:05] INFO django.server "GET /docs/ HTTP/1.1" 200 4655
+[2026-02-22 04:31:06] INFO gtx REQUEST | GET /download-docs/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 04:31:06] INFO gtx RESPONSE | GET /download-docs/ | Status: 200 | Duration: 0.401s
+[2026-02-22 04:31:06] INFO django.server "GET /download-docs/ HTTP/1.1" 200 157806
+[2026-02-22 04:31:08] INFO gtx REQUEST | GET /logs/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 04:31:08] INFO gtx RESPONSE | GET /logs/ | Status: 200 | Duration: 0.003s
+[2026-02-22 04:31:08] INFO django.server "GET /logs/ HTTP/1.1" 200 6581
+[2026-02-22 04:31:52] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\logs\views.py changed, reloading.
+[2026-02-22 04:31:52] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\logs\views.py changed, reloading.
+[2026-02-22 04:31:54] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-22 04:31:54] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-22 04:32:08] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\logs\urls.py changed, reloading.
+[2026-02-22 04:32:08] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\logs\urls.py changed, reloading.
+[2026-02-22 04:32:10] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-22 04:32:11] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-22 04:32:16] INFO gtx REQUEST | GET /logs/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 04:32:16] INFO gtx RESPONSE | GET /logs/ | Status: 200 | Duration: 0.004s
+[2026-02-22 04:32:16] INFO django.server "GET /logs/ HTTP/1.1" 200 8104

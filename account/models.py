@@ -31,14 +31,17 @@ class Level2Credentials(models.Model):
     STATUS = [
         ("Pending", "Pending"),
         ("Approved", "Approved"),
-        ("Rejected", "Rejected"),    
+        ("Rejected", "Rejected"),
     ]
 
     nin = models.CharField(max_length=12, blank=True, unique=True)
     nin_image = models.ImageField()
     status = models.CharField(choices=STATUS, default="Level 1", max_length=12)
     approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
+    def __str__(self):
+        return f"NIN: {self.nin}"
 
 
 class Level3Credentials(models.Model):
@@ -47,7 +50,7 @@ class Level3Credentials(models.Model):
         ("Approved", "Approved"),
         ("Rejected", "Rejected"),
     ]
-    
+
     house_address_1 = models.CharField(max_length=100)
     house_address_2 = models.CharField(max_length=100, blank=True)
     nearest_bus_stop = models.TextField(max_length=60)
@@ -58,6 +61,10 @@ class Level3Credentials(models.Model):
     face_verification_image = models.ImageField()
     status = models.CharField(choices=STATUS, default="Level 1", max_length=12)
     approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return f"Address: {self.house_address_1}"
 
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):

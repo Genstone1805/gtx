@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'order',
     'withdrawal',
     'notification',
+    'logs',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +74,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Logging middleware (must be after CommonMiddleware)
+    'logs.middleware.RequestLoggingMiddleware',
+    'logs.middleware.ExceptionLoggingMiddleware',
 ]
 
 ROOT_URLCONF = 'gtx.urls'
@@ -208,3 +212,88 @@ EMAIL_USE_SSL = False
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = True  # For development only
+# Logging Configuration
+LOGS_DIR = BASE_DIR / 'logs'
+LOGS_DIR.mkdir(exist_ok=True)
+
+# Create log files if they don't exist
+for log_file in ['user_activity.log', 'requests.log', 'errors.log', 'all.log']:
+    log_path = LOGS_DIR / log_file
+    log_path.touch(exist_ok=True)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] {levelname} {name} {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+        'simple': {
+            'format': '[{asctime}] {levelname} {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'request_file': {
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': LOGS_DIR / 'requests.log',
+            'when': 'D',  # Rotate daily
+            'interval': 1,
+            'backupCount': 90,  # Keep 90 days (3 months)
+            'formatter': 'verbose',
+            'encoding': 'utf-8',
+        },
+        'error_file': {
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': LOGS_DIR / 'errors.log',
+            'when': 'D',  # Rotate daily
+            'interval': 1,
+            'backupCount': 90,  # Keep 90 days (3 months)
+            'formatter': 'verbose',
+            'encoding': 'utf-8',
+        },
+        'all_file': {
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': LOGS_DIR / 'all.log',
+            'when': 'D',  # Rotate daily
+            'interval': 1,
+            'backupCount': 90,  # Keep 90 days (3 months)
+            'formatter': 'verbose',
+            'encoding': 'utf-8',
+        },
+    },
+    'root': {
+        'handlers': ['console', 'all_file'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'all_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console', 'error_file', 'all_file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'request_logger': {
+            'handlers': ['console', 'request_file', 'all_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'print': {
+            'handlers': ['all_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+

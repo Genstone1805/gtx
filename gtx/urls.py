@@ -13,6 +13,7 @@ urlpatterns = [
     path('order/', include('order.urls')),
     path('withdrawal/', include('withdrawal.urls')),
     path('notifications/', include('notification.urls')),
+    path('logs/', include('logs.urls')),
 
     # Frontend template URLs
     path('template/', include('frontend.urls')),
