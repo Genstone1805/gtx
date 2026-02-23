@@ -112,7 +112,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     level2_credentials = Level2CredentialsSerializer(read_only=True)
     level3_credentials = Level3CredentialsSerializer(read_only=True)
     bank_details = BankAccountDetailsSerializer(read_only=True)
-    account_information = BankAccountDetailsSerializer(source='bank_details', read_only=True)
+    # account_information = BankAccountDetailsSerializer(source='bank_details', read_only=True)
 
     class Meta:
         model = UserProfile
@@ -120,7 +120,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'id', 'email', 'full_name', 'phone_number', 'dp', 'level', 'is_staff',
             'transaction_limit', 'status', 'is_verified', 'date_joined',
             'last_login', 'level2_credentials', 'level3_credentials', 'has_pin',
-            'pending_balance', 'withdrawable_balance', 'bank_details', 'account_information'
+            'pending_balance', 'withdrawable_balance', 'bank_details'
         ]
         read_only_fields = [
             'id', 'email', 'level', 'is_staff', 'transaction_limit', 'status',

@@ -14,10 +14,6 @@ class GiftCardOrder(models.Model):
     ("Pending", "Pending"),
     ("Approved", "Approved"),
     ("Rejected", "Rejected"),
-    ("Assigned", "Assigned"),
-    ("Processing", "Processing"),
-    ("Completed", "Completed"),
-    ("Cancelled", "Cancelled"),
   ]
 
   user = models.ForeignKey(user, on_delete=models.CASCADE)
