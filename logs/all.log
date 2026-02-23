@@ -452,3 +452,13 @@ django.db.utils.OperationalError: no such column: account_userprofile.bank_detai
 [2026-02-24 03:49:46] INFO gtx REQUEST | GET /backend-admin/ | User: admin@gmail.com | IP: 127.0.0.1
 [2026-02-24 03:49:46] INFO gtx RESPONSE | GET /backend-admin/ | Status: 200 | Duration: 0.015s
 [2026-02-24 03:49:46] INFO django.server "GET /backend-admin/ HTTP/1.1" 200 16979
+[2026-02-24 04:13:35] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\admin.py changed, reloading.
+[2026-02-24 04:13:37] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 04:13:45] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\cards\admin.py changed, reloading.
+[2026-02-24 04:13:46] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 04:13:53] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\order\admin.py changed, reloading.
+[2026-02-24 04:13:54] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 04:14:06] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\withdrawal\admin.py changed, reloading.
+[2026-02-24 04:14:07] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 04:14:15] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\notification\admin.py changed, reloading.
+[2026-02-24 04:14:17] INFO django.utils.autoreload Watching for file changes with StatReloader
