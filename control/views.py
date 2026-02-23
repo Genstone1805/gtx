@@ -381,6 +381,7 @@ class AdminWithdrawalProcessView(APIView):
                 withdrawal=withdrawal,
                 new_status='Approved',
                 amount=float(withdrawal.amount),
+                transaction_reference=transaction_reference,
             )
 
             return Response({
@@ -411,6 +412,7 @@ class AdminWithdrawalProcessView(APIView):
                 withdrawal=withdrawal,
                 new_status='Rejected',
                 amount=float(withdrawal.amount),
+                reason=reason,
             )
 
             return Response({

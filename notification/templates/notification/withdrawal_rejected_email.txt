@@ -1,0 +1,18 @@
+Withdrawal Rejected
+
+Dear {{ user.full_name|default:"Valued Customer" }},
+
+{{ message }}
+
+Withdrawal Details:
+- Withdrawal ID: {{ withdrawal_id }}
+- Amount: ${{ amount }}
+- Status: {{ status }}
+{% if reason %}
+- Reason: {{ reason }}
+{% endif %}
+
+Thank you for choosing GTX!
+
+Best regards,
+The GTX Team

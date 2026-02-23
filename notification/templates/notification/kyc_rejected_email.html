@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #EF4444; color: white; padding: 20px; text-align: center; }
+        .content { background: #f9f9f9; padding: 30px; }
+        .badge { display: inline-block; background: #FEE2E2; color: #991B1B; padding: 6px 12px; border-radius: 6px; font-weight: bold; }
+        .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>KYC Rejected</h1>
+        </div>
+        <div class="content">
+            <p>Dear {{ user.full_name|default:"Valued Customer" }},</p>
+            <p>Your KYC verification was not approved at this time.</p>
+            <p><span class="badge">Level {{ level }} Rejected</span></p>
+            <p>{{ message }}</p>
+        </div>
+        <div class="footer">
+            <p>Thank you for choosing GTX!</p>
+            <p>&copy; 2026 GTX. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

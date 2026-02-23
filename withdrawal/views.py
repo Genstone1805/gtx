@@ -14,6 +14,7 @@ from .serializers import (
     UserBalanceSerializer,
 )
 from order.signals import recalculate_user_balances
+from notification.services import notify_withdrawal_created
 
 
 class UserBalanceView(APIView):
@@ -69,6 +70,11 @@ class WithdrawalCreateView(APIView):
         serializer.is_valid(raise_exception=True)
         
         withdrawal = serializer.save()
+        notify_withdrawal_created(
+            user=user,
+            withdrawal=withdrawal,
+            amount=float(withdrawal.amount),
+        )
 
         # Create audit log
         WithdrawalAuditLog.objects.create(

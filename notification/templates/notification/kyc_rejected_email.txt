@@ -1,0 +1,11 @@
+Level {{ level }} KYC Rejected
+
+Dear {{ user.full_name|default:"Valued Customer" }},
+
+Your KYC verification was not approved at this time.
+{{ message }}
+
+Thank you for choosing GTX!
+
+Best regards,
+The GTX Team

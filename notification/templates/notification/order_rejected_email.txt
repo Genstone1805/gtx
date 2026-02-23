@@ -1,0 +1,15 @@
+Order Rejected
+
+Dear {{ user.full_name|default:"Valued Customer" }},
+
+{{ message }}
+
+Order Details:
+- Order ID: {{ order_id }}
+- Amount: ${{ amount }}
+- Status: {{ status }}
+
+Thank you for choosing GTX!
+
+Best regards,
+The GTX Team

@@ -1,0 +1,8 @@
+Dear {{ user.full_name|default:"Valued Customer" }},
+
+{{ message }}
+
+Thank you for choosing GTX!
+
+Best regards,
+The GTX Team

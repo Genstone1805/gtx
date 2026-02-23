@@ -702,37 +702,37 @@ class AddPhoneNumberView(APIView):
         )
 
 
-class SaveBankDetailsView(APIView):
-    """Create or update bank details for authenticated user."""
-    permission_classes = [IsAuthenticated]
-    serializer_class = SaveBankAccountDetailsSerializer
+# class SaveBankDetailsView(APIView):
+#     """Create or update bank details for authenticated user."""
+#     permission_classes = [IsAuthenticated]
+#     serializer_class = SaveBankAccountDetailsSerializer
 
-    def post(self, request: Request) -> Response:
-        user = request.user
-        serializer = self.serializer_class(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request: Request) -> Response:
+#         user = request.user
+#         serializer = self.serializer_class(data=request.data)
+#         if not serializer.is_valid():
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if user.bank_details:
-            bank_details = user.bank_details
-            bank_details.bank_name = serializer.validated_data['bank_name']
-            bank_details.account_number = serializer.validated_data['account_number']
-            bank_details.account_name = serializer.validated_data['account_name']
-            bank_details.save()
-            message = 'Bank details updated successfully.'
-        else:
-            bank_details = BankAccountDetails.objects.create(**serializer.validated_data)
-            user.bank_details = bank_details
-            user.save(update_fields=['bank_details'])
-            message = 'Bank details added successfully.'
+#         if user.bank_details:
+#             bank_details = user.bank_details
+#             bank_details.bank_name = serializer.validated_data['bank_name']
+#             bank_details.account_number = serializer.validated_data['account_number']
+#             bank_details.account_name = serializer.validated_data['account_name']
+#             bank_details.save()
+#             message = 'Bank details updated successfully.'
+#         else:
+#             bank_details = BankAccountDetails.objects.create(**serializer.validated_data)
+#             user.bank_details = bank_details
+#             user.save(update_fields=['bank_details'])
+#             message = 'Bank details added successfully.'
 
-        return Response(
-            {
-                'detail': message,
-                'bank_details': BankAccountDetailsSerializer(bank_details).data,
-            },
-            status=status.HTTP_200_OK
-        )
+#         return Response(
+#             {
+#                 'detail': message,
+#                 'bank_details': BankAccountDetailsSerializer(bank_details).data,
+#             },
+#             status=status.HTTP_200_OK
+#         )
 
 
 class AttachBankDetailsView(APIView):

@@ -6,7 +6,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Optional, Dict, Any
 from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
+from django.template import TemplateDoesNotExist
+from django.template.loader import render_to_string, get_template
 from django.conf import settings
 from django.utils import timezone
 from django.db import transaction
@@ -82,25 +83,29 @@ class NotificationService:
 
             # Send email asynchronously (outside atomic block)
             if send_email:
-                try:
-                    EmailNotificationSender.send(
-                        user=user,
-                        subject=title,
-                        template_name=f'notification/{notification_type}_email.html',
-                        context={
-                            'user': user,
-                            'message': message,
-                            'notification': notification,
-                            **(metadata or {}),
-                        }
-                    )
+                sent, error_message = EmailNotificationSender.send(
+                    user=user,
+                    subject=title,
+                    template_name=f'notification/{notification_type}_email.html',
+                    context={
+                        'user': user,
+                        'message': message,
+                        'notification': notification,
+                        **(metadata or {}),
+                    }
+                )
+                if sent:
                     event.status = 'sent'
                     event.sent_at = timezone.now()
-                    event.save()
-                except Exception as e:
+                    event.save(update_fields=['status', 'sent_at'])
+                else:
                     event.status = 'failed'
-                    event.error_message = str(e)
-                    event.save()
+                    event.error_message = error_message or 'Unknown email delivery error'
+                    event.save(update_fields=['status', 'error_message'])
+            else:
+                event.status = 'sent'
+                event.sent_at = timezone.now()
+                event.save(update_fields=['status', 'sent_at'])
 
             return notification, event
 
@@ -144,7 +149,7 @@ class EmailNotificationSender:
         subject: str,
         template_name: str,
         context: Dict[str, Any],
-    ) -> bool:
+    ) -> tuple[bool, Optional[str]]:
         """
         Send an email notification.
 
@@ -155,17 +160,19 @@ class EmailNotificationSender:
             context: Template context
 
         Returns:
-            True if sent successfully, False otherwise
+            Tuple of (success, error_message)
         """
         try:
             from_email = getattr(settings, 'EMAIL_FROM', settings.DEFAULT_FROM_EMAIL)
             to_email = user.email
 
-            text_content = render_to_string(
-                template_name.replace('.html', '.txt'),
-                context
-            )
-            html_content = render_to_string(template_name, context)
+            html_template, text_template = EmailNotificationSender.resolve_templates(template_name)
+
+            if not html_template or not text_template:
+                return False, f'No templates found for {template_name}'
+
+            text_content = render_to_string(text_template, context)
+            html_content = render_to_string(html_template, context)
 
             email = EmailMultiAlternatives(
                 subject=subject,
@@ -176,10 +183,28 @@ class EmailNotificationSender:
             email.attach_alternative(html_content, 'text/html')
             email.send()
 
-            return True
+            return True, None
         except Exception as e:
             print(f"Email send error: {e}")
-            return False
+            return False, str(e)
+
+    @staticmethod
+    def resolve_templates(template_name: str) -> tuple[Optional[str], Optional[str]]:
+        """
+        Resolve notification templates:
+        1) specific template for notification type
+        2) fallback generic notification template
+        """
+        candidates = [template_name, 'notification/general_email.html']
+        for html_template in candidates:
+            text_template = html_template.replace('.html', '.txt')
+            try:
+                get_template(html_template)
+                get_template(text_template)
+                return html_template, text_template
+            except TemplateDoesNotExist:
+                continue
+        return None, None
 
 
 # Convenience functions for common notification types
@@ -243,6 +268,8 @@ def notify_withdrawal_status_changed(
     withdrawal: Any,
     new_status: str,
     amount: float,
+    reason: Optional[str] = None,
+    transaction_reference: Optional[str] = None,
 ) -> None:
     """Send notification when withdrawal status changes."""
     if new_status == 'Approved':
@@ -262,7 +289,31 @@ def notify_withdrawal_status_changed(
         priority='urgent',
         object_id=withdrawal.id,
         content_type='withdrawal',
-        metadata={'withdrawal_id': withdrawal.id, 'amount': amount, 'status': new_status},
+        metadata={
+            'withdrawal_id': withdrawal.id,
+            'amount': amount,
+            'status': new_status,
+            'reason': reason,
+            'transaction_reference': transaction_reference,
+        },
+    )
+
+
+def notify_withdrawal_created(
+    user: 'UserProfile',
+    withdrawal: Any,
+    amount: float,
+) -> None:
+    """Send notification when a withdrawal request is created."""
+    NotificationService.send_notification(
+        user=user,
+        notification_type='withdrawal_created',
+        title='Withdrawal Requested',
+        message=f'Your withdrawal request for ${amount} has been received and is pending review.',
+        priority='medium',
+        object_id=withdrawal.id,
+        content_type='withdrawal',
+        metadata={'withdrawal_id': withdrawal.id, 'amount': amount, 'status': 'Pending'},
     )
 
 

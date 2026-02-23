@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #EF4444; color: white; padding: 20px; text-align: center; }
+        .content { background: #f9f9f9; padding: 30px; }
+        .details { background: white; padding: 20px; border-radius: 8px; margin-top: 15px; }
+        .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Withdrawal Rejected</h1>
+        </div>
+        <div class="content">
+            <p>Dear {{ user.full_name|default:"Valued Customer" }},</p>
+            <p>{{ message }}</p>
+            <div class="details">
+                <p><strong>Withdrawal ID:</strong> #{{ withdrawal_id }}</p>
+                <p><strong>Amount:</strong> ${{ amount }}</p>
+                <p><strong>Status:</strong> {{ status }}</p>
+                {% if reason %}
+                <p><strong>Reason:</strong> {{ reason }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="footer">
+            <p>Thank you for choosing GTX!</p>
+            <p>&copy; 2026 GTX. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
