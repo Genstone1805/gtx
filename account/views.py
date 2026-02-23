@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, cast
+from typing import cast
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,20 +15,19 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.utils import timezone
 
-if TYPE_CHECKING:
-    from uuid import UUID
-
-from .models import UserProfile, EmailVerificationCode, PasswordResetCode, Level2Credentials, Level3Credentials
+from .models import UserProfile, EmailVerificationCode, PasswordResetCode, Level2Credentials, Level3Credentials, BankAccountDetails
 from .serializers import (
     SignupSerializer, VerifyCodeSerializer, ResendCodeSerializer,
     PasswordResetRequestSerializer, PasswordResetVerifySerializer,
     LoginSerializer, CreateTransactionPinSerializer, UpdateTransactionPinSerializer,
     VerifyTransactionPinSerializer, Level2CredentialsSerializer, Level3CredentialsSerializer,
     UserProfileSerializer, ProfilePictureSerializer, ChangePasswordSerializer,
-    AddPhoneNumberSerializer
+    AddPhoneNumberSerializer, SaveBankAccountDetailsSerializer, EditBankAccountDetailsSerializer,
+    BankAccountDetailsSerializer
 )
 from order.models import GiftCardOrder
 from order.serializers import GiftCardOrderListSerializer, GiftCardOrderSerializer
+from order.signals import recalculate_user_balances
 
 
 def send_verification_email(user: UserProfile, code: str) -> None:
@@ -585,6 +584,9 @@ class CurrentUserView(APIView):
     serializer_class = UserProfileSerializer
 
     def get(self, request: Request) -> Response:
+        # Always reconcile balances from source transactions before returning profile.
+        recalculate_user_balances(request.user)
+        request.user.refresh_from_db(fields=['pending_balance', 'withdrawable_balance'])
         serializer = self.serializer_class(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -700,6 +702,143 @@ class AddPhoneNumberView(APIView):
         )
 
 
+class SaveBankDetailsView(APIView):
+    """Create or update bank details for authenticated user."""
+    permission_classes = [IsAuthenticated]
+    serializer_class = SaveBankAccountDetailsSerializer
+
+    def post(self, request: Request) -> Response:
+        user = request.user
+        serializer = self.serializer_class(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        if user.bank_details:
+            bank_details = user.bank_details
+            bank_details.bank_name = serializer.validated_data['bank_name']
+            bank_details.account_number = serializer.validated_data['account_number']
+            bank_details.account_name = serializer.validated_data['account_name']
+            bank_details.save()
+            message = 'Bank details updated successfully.'
+        else:
+            bank_details = BankAccountDetails.objects.create(**serializer.validated_data)
+            user.bank_details = bank_details
+            user.save(update_fields=['bank_details'])
+            message = 'Bank details added successfully.'
+
+        return Response(
+            {
+                'detail': message,
+                'bank_details': BankAccountDetailsSerializer(bank_details).data,
+            },
+            status=status.HTTP_200_OK
+        )
+
+
+class AttachBankDetailsView(APIView):
+    """Attach bank details to authenticated user (create only)."""
+    permission_classes = [IsAuthenticated]
+    serializer_class = SaveBankAccountDetailsSerializer
+
+    def post(self, request: Request) -> Response:
+        user = request.user
+        if user.bank_details:
+            return Response(
+                {'detail': 'Bank details already attached. Use edit endpoint to update it.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = self.serializer_class(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        bank_details = BankAccountDetails.objects.create(**serializer.validated_data)
+        user.bank_details = bank_details
+        user.save(update_fields=['bank_details'])
+
+        return Response(
+            {
+                'detail': 'Bank details attached successfully.',
+                'bank_details': BankAccountDetailsSerializer(bank_details).data,
+            },
+            status=status.HTTP_201_CREATED
+        )
+
+
+class EditBankDetailsView(APIView):
+    """Edit bank details attached to authenticated user (update only)."""
+    permission_classes = [IsAuthenticated]
+    serializer_class = EditBankAccountDetailsSerializer
+
+    def patch(self, request: Request) -> Response:
+        user = request.user
+        if not user.bank_details:
+            return Response(
+                {'detail': 'No bank details attached yet. Use attach endpoint first.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = self.serializer_class(user.bank_details, data=request.data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+        return Response(
+            {
+                'detail': 'Bank details updated successfully.',
+                'bank_details': BankAccountDetailsSerializer(user.bank_details).data,
+            },
+            status=status.HTTP_200_OK
+        )
+
+    def put(self, request: Request) -> Response:
+        user = request.user
+        if not user.bank_details:
+            return Response(
+                {'detail': 'No bank details attached yet. Use attach endpoint first.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = self.serializer_class(user.bank_details, data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+        return Response(
+            {
+                'detail': 'Bank details updated successfully.',
+                'bank_details': BankAccountDetailsSerializer(user.bank_details).data,
+            },
+            status=status.HTTP_200_OK
+        )
+
+
+class DeleteBankDetailsView(APIView):
+    """Delete bank details attached to authenticated user."""
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request: Request) -> Response:
+        user = request.user
+        if not user.bank_details:
+            return Response(
+                {'detail': 'No bank details attached to your account.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        bank_details = user.bank_details
+        user.bank_details = None
+        user.save(update_fields=['bank_details'])
+
+        # Remove orphaned bank detail records.
+        if not UserProfile.objects.filter(bank_details=bank_details).exists():
+            bank_details.delete()
+
+        return Response(
+            {'detail': 'Bank details deleted successfully.'},
+            status=status.HTTP_200_OK
+        )
+
+
 class UserOrdersView(APIView):
     """Get all orders created by the authenticated user."""
     permission_classes = [IsAuthenticated]
@@ -717,7 +856,7 @@ class UserOrderDetailView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = GiftCardOrderSerializer
 
-    def get(self, request: Request, order_id: UUID) -> Response:
+    def get(self, request: Request, order_id: int) -> Response:
         user = request.user
 
         try:

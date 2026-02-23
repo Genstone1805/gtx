@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from phonenumber_field.serializerfields import PhoneNumberField
-from .models import UserProfile, Level2Credentials, Level3Credentials
+from .models import UserProfile, Level2Credentials, Level3Credentials, BankAccountDetails
 
 
 class SignupSerializer(serializers.ModelSerializer):
@@ -90,20 +90,40 @@ class Level3CredentialsSerializer(serializers.ModelSerializer):
         ]
 
 
+class BankAccountDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BankAccountDetails
+        fields = ['bank_name', 'account_number', 'account_name']
+
+
+class SaveBankAccountDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BankAccountDetails
+        fields = ['bank_name', 'account_number', 'account_name']
+
+
+class EditBankAccountDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BankAccountDetails
+        fields = ['bank_name', 'account_number', 'account_name']
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     level2_credentials = Level2CredentialsSerializer(read_only=True)
     level3_credentials = Level3CredentialsSerializer(read_only=True)
+    bank_details = BankAccountDetailsSerializer(read_only=True)
+    account_information = BankAccountDetailsSerializer(source='bank_details', read_only=True)
 
     class Meta:
         model = UserProfile
         fields = [
-            'id', 'email', 'full_name', 'phone_number', 'dp', 'level',
+            'id', 'email', 'full_name', 'phone_number', 'dp', 'level', 'is_staff',
             'transaction_limit', 'status', 'is_verified', 'date_joined',
             'last_login', 'level2_credentials', 'level3_credentials', 'has_pin',
-            'pending_balance', 'withdrawable_balance'
+            'pending_balance', 'withdrawable_balance', 'bank_details', 'account_information'
         ]
         read_only_fields = [
-            'id', 'email', 'level', 'transaction_limit', 'status',
+            'id', 'email', 'level', 'is_staff', 'transaction_limit', 'status',
             'is_verified', 'date_joined', 'last_login',
             'pending_balance', 'withdrawable_balance'
         ]

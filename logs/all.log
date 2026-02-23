@@ -23,3 +23,256 @@
 [2026-02-22 04:32:16] INFO gtx REQUEST | GET /logs/ | User: Anonymous | IP: 127.0.0.1
 [2026-02-22 04:32:16] INFO gtx RESPONSE | GET /logs/ | Status: 200 | Duration: 0.004s
 [2026-02-22 04:32:16] INFO django.server "GET /logs/ HTTP/1.1" 200 8104
+[2026-02-22 22:39:25] INFO gtx REQUEST | GET /api/content/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:39:25] INFO gtx RESPONSE | GET /api/content/ | Status: 404 | Duration: 0.114s
+[2026-02-22 22:39:25] WARNING gtx ERROR | GET /api/content/ | Status: 404 | User: Anonymous | Duration: 0.114s
+[2026-02-22 22:39:25] WARNING django.request Not Found: /api/content/
+[2026-02-22 22:39:25] WARNING django.server "GET /api/content/ HTTP/1.1" 404 4252
+[2026-02-22 22:39:49] INFO gtx REQUEST | GET /api/content/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:39:49] INFO gtx RESPONSE | GET /api/content/ | Status: 404 | Duration: 0.040s
+[2026-02-22 22:39:49] WARNING gtx ERROR | GET /api/content/ | Status: 404 | User: Anonymous | Duration: 0.040s
+[2026-02-22 22:39:49] WARNING django.request Not Found: /api/content/
+[2026-02-22 22:39:49] WARNING django.server "GET /api/content/ HTTP/1.1" 404 4252
+[2026-02-22 22:40:07] INFO gtx REQUEST | GET /api/content/movie?page=1 | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:40:07] INFO gtx RESPONSE | GET /api/content/movie?page=1 | Status: 404 | Duration: 0.028s
+[2026-02-22 22:40:07] WARNING gtx ERROR | GET /api/content/movie?page=1 | Status: 404 | User: Anonymous | Duration: 0.028s
+[2026-02-22 22:40:07] WARNING django.request Not Found: /api/content/movie
+[2026-02-22 22:40:07] WARNING django.server "GET /api/content/movie?page=1 HTTP/1.1" 404 4274
+[2026-02-22 22:40:07] INFO gtx REQUEST | GET /api/content/music?page=1 | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:40:07] INFO gtx RESPONSE | GET /api/content/music?page=1 | Status: 404 | Duration: 0.022s
+[2026-02-22 22:40:07] WARNING gtx ERROR | GET /api/content/music?page=1 | Status: 404 | User: Anonymous | Duration: 0.022s
+[2026-02-22 22:40:07] WARNING django.request Not Found: /api/content/music
+[2026-02-22 22:40:07] WARNING django.server "GET /api/content/music?page=1 HTTP/1.1" 404 4274
+[2026-02-22 22:40:10] INFO gtx REQUEST | GET /api/content/artist?page=1 | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:40:10] INFO gtx RESPONSE | GET /api/content/artist?page=1 | Status: 404 | Duration: 0.023s
+[2026-02-22 22:40:10] WARNING gtx ERROR | GET /api/content/artist?page=1 | Status: 404 | User: Anonymous | Duration: 0.023s
+[2026-02-22 22:40:10] WARNING django.request Not Found: /api/content/artist
+[2026-02-22 22:40:10] WARNING django.server "GET /api/content/artist?page=1 HTTP/1.1" 404 4277
+[2026-02-22 22:40:12] INFO gtx REQUEST | GET /api/content/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:40:12] INFO gtx RESPONSE | GET /api/content/ | Status: 404 | Duration: 0.043s
+[2026-02-22 22:40:12] WARNING gtx ERROR | GET /api/content/ | Status: 404 | User: Anonymous | Duration: 0.043s
+[2026-02-22 22:40:12] WARNING django.request Not Found: /api/content/
+[2026-02-22 22:40:12] WARNING django.server "GET /api/content/ HTTP/1.1" 404 4252
+[2026-02-22 22:40:58] INFO gtx REQUEST | GET /api/news?page=1 | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:40:58] INFO gtx RESPONSE | GET /api/news?page=1 | Status: 404 | Duration: 0.017s
+[2026-02-22 22:40:58] WARNING gtx ERROR | GET /api/news?page=1 | Status: 404 | User: Anonymous | Duration: 0.017s
+[2026-02-22 22:40:58] WARNING django.request Not Found: /api/news
+[2026-02-22 22:40:58] WARNING django.server "GET /api/news?page=1 HTTP/1.1" 404 4247
+[2026-02-22 22:40:59] INFO gtx REQUEST | GET /api/content/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:40:59] INFO gtx RESPONSE | GET /api/content/ | Status: 404 | Duration: 0.017s
+[2026-02-22 22:40:59] WARNING gtx ERROR | GET /api/content/ | Status: 404 | User: Anonymous | Duration: 0.017s
+[2026-02-22 22:40:59] WARNING django.request Not Found: /api/content/
+[2026-02-22 22:40:59] WARNING django.server "GET /api/content/ HTTP/1.1" 404 4252
+[2026-02-22 22:41:09] INFO gtx REQUEST | GET /api/content/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:41:09] INFO gtx RESPONSE | GET /api/content/ | Status: 404 | Duration: 0.009s
+[2026-02-22 22:41:09] WARNING gtx ERROR | GET /api/content/ | Status: 404 | User: Anonymous | Duration: 0.009s
+[2026-02-22 22:41:09] WARNING django.request Not Found: /api/content/
+[2026-02-22 22:41:10] WARNING django.server "GET /api/content/ HTTP/1.1" 404 4252
+[2026-02-22 22:42:28] INFO gtx REQUEST | GET /api/content/movie?page=1 | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:42:28] INFO gtx RESPONSE | GET /api/content/movie?page=1 | Status: 404 | Duration: 0.013s
+[2026-02-22 22:42:28] WARNING gtx ERROR | GET /api/content/movie?page=1 | Status: 404 | User: Anonymous | Duration: 0.013s
+[2026-02-22 22:42:28] WARNING django.request Not Found: /api/content/movie
+[2026-02-22 22:42:28] WARNING django.server "GET /api/content/movie?page=1 HTTP/1.1" 404 4274
+[2026-02-22 22:42:29] INFO gtx REQUEST | GET /api/content/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:42:29] INFO gtx RESPONSE | GET /api/content/ | Status: 404 | Duration: 0.010s
+[2026-02-22 22:42:29] WARNING gtx ERROR | GET /api/content/ | Status: 404 | User: Anonymous | Duration: 0.010s
+[2026-02-22 22:42:29] WARNING django.request Not Found: /api/content/
+[2026-02-22 22:42:29] WARNING django.server "GET /api/content/ HTTP/1.1" 404 4252
+[2026-02-22 22:42:36] INFO gtx REQUEST | GET /api/content/artist?page=1 | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:42:36] INFO gtx RESPONSE | GET /api/content/artist?page=1 | Status: 404 | Duration: 0.014s
+[2026-02-22 22:42:36] WARNING gtx ERROR | GET /api/content/artist?page=1 | Status: 404 | User: Anonymous | Duration: 0.014s
+[2026-02-22 22:42:36] WARNING django.request Not Found: /api/content/artist
+[2026-02-22 22:42:36] WARNING django.server "GET /api/content/artist?page=1 HTTP/1.1" 404 4277
+[2026-02-22 22:43:58] INFO gtx REQUEST | GET /api/content/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:43:58] INFO gtx RESPONSE | GET /api/content/ | Status: 404 | Duration: 0.004s
+[2026-02-22 22:43:58] WARNING gtx ERROR | GET /api/content/ | Status: 404 | User: Anonymous | Duration: 0.004s
+[2026-02-22 22:43:58] WARNING django.request Not Found: /api/content/
+[2026-02-22 22:43:58] WARNING django.server "GET /api/content/ HTTP/1.1" 404 4252
+[2026-02-22 22:44:11] INFO gtx REQUEST | GET /api/content/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:44:11] INFO gtx RESPONSE | GET /api/content/ | Status: 404 | Duration: 0.004s
+[2026-02-22 22:44:11] WARNING gtx ERROR | GET /api/content/ | Status: 404 | User: Anonymous | Duration: 0.004s
+[2026-02-22 22:44:11] WARNING django.request Not Found: /api/content/
+[2026-02-22 22:44:11] WARNING django.server "GET /api/content/ HTTP/1.1" 404 4252
+[2026-02-22 22:45:04] INFO gtx REQUEST | GET /api/content/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:45:04] INFO gtx REQUEST | GET /api/content/artist?page=1 | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:45:04] INFO gtx RESPONSE | GET /api/content/ | Status: 404 | Duration: 0.014s
+[2026-02-22 22:45:04] WARNING gtx ERROR | GET /api/content/ | Status: 404 | User: Anonymous | Duration: 0.014s
+[2026-02-22 22:45:04] INFO gtx RESPONSE | GET /api/content/artist?page=1 | Status: 404 | Duration: 0.030s
+[2026-02-22 22:45:04] WARNING django.request Not Found: /api/content/
+[2026-02-22 22:45:04] WARNING gtx ERROR | GET /api/content/artist?page=1 | Status: 404 | User: Anonymous | Duration: 0.030s
+[2026-02-22 22:45:04] WARNING django.request Not Found: /api/content/artist
+[2026-02-22 22:45:04] WARNING django.server "GET /api/content/ HTTP/1.1" 404 4252
+[2026-02-22 22:45:04] WARNING django.server "GET /api/content/artist?page=1 HTTP/1.1" 404 4277
+[2026-02-22 22:45:37] INFO gtx REQUEST | GET /api/content/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:45:37] INFO gtx RESPONSE | GET /api/content/ | Status: 404 | Duration: 0.015s
+[2026-02-22 22:45:37] WARNING gtx ERROR | GET /api/content/ | Status: 404 | User: Anonymous | Duration: 0.015s
+[2026-02-22 22:45:37] WARNING django.request Not Found: /api/content/
+[2026-02-22 22:45:37] WARNING django.server "GET /api/content/ HTTP/1.1" 404 4252
+[2026-02-22 22:45:42] INFO gtx REQUEST | GET /api/news?page=1 | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:45:42] INFO gtx RESPONSE | GET /api/news?page=1 | Status: 404 | Duration: 0.006s
+[2026-02-22 22:45:42] WARNING gtx ERROR | GET /api/news?page=1 | Status: 404 | User: Anonymous | Duration: 0.006s
+[2026-02-22 22:45:42] WARNING django.request Not Found: /api/news
+[2026-02-22 22:45:42] WARNING django.server "GET /api/news?page=1 HTTP/1.1" 404 4247
+[2026-02-22 22:45:47] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:45:47] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.006s
+[2026-02-22 22:45:47] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.006s
+[2026-02-22 22:45:47] WARNING django.request Not Found: /
+[2026-02-22 22:45:47] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-22 22:45:47] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:45:47] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.010s
+[2026-02-22 22:45:47] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.010s
+[2026-02-22 22:45:47] WARNING django.request Not Found: /
+[2026-02-22 22:45:47] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-22 22:45:57] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:45:57] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.015s
+[2026-02-22 22:45:57] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.015s
+[2026-02-22 22:45:57] WARNING django.request Not Found: /
+[2026-02-22 22:45:57] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-22 22:45:57] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:45:57] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.009s
+[2026-02-22 22:45:57] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.009s
+[2026-02-22 22:45:57] WARNING django.request Not Found: /
+[2026-02-22 22:45:57] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-22 22:45:57] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:45:57] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.006s
+[2026-02-22 22:45:57] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.006s
+[2026-02-22 22:45:57] WARNING django.request Not Found: /
+[2026-02-22 22:45:57] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-22 22:45:57] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:45:57] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.010s
+[2026-02-22 22:45:57] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.010s
+[2026-02-22 22:45:57] WARNING django.request Not Found: /
+[2026-02-22 22:45:57] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-22 22:45:57] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:45:57] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.005s
+[2026-02-22 22:45:57] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.005s
+[2026-02-22 22:45:57] WARNING django.request Not Found: /
+[2026-02-22 22:45:57] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-22 22:45:58] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:45:58] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.008s
+[2026-02-22 22:45:58] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.008s
+[2026-02-22 22:45:58] WARNING django.request Not Found: /
+[2026-02-22 22:45:58] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-22 22:45:58] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:45:58] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.169s
+[2026-02-22 22:45:58] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.169s
+[2026-02-22 22:45:58] WARNING django.request Not Found: /
+[2026-02-22 22:45:58] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-22 22:46:35] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:46:35] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.011s
+[2026-02-22 22:46:35] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.011s
+[2026-02-22 22:46:35] WARNING django.request Not Found: /
+[2026-02-22 22:46:35] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-22 22:46:36] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:46:36] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.009s
+[2026-02-22 22:46:36] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.009s
+[2026-02-22 22:46:36] WARNING django.request Not Found: /
+[2026-02-22 22:46:36] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-22 22:46:38] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:46:38] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.006s
+[2026-02-22 22:46:38] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.006s
+[2026-02-22 22:46:38] WARNING django.request Not Found: /
+[2026-02-22 22:46:38] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-22 22:46:49] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-22 22:46:49] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.009s
+[2026-02-22 22:46:49] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.009s
+[2026-02-22 22:46:49] WARNING django.request Not Found: /
+[2026-02-22 22:46:49] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-23 22:59:09] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-23 23:43:59] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-23 23:43:59] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.010s
+[2026-02-23 23:43:59] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.010s
+[2026-02-23 23:43:59] WARNING django.request Not Found: /
+[2026-02-23 23:43:59] WARNING django.server "GET / HTTP/1.1" 404 4198
+[2026-02-23 23:43:59] INFO gtx REQUEST | GET /favicon.ico | User: Anonymous | IP: 127.0.0.1
+[2026-02-23 23:43:59] INFO gtx RESPONSE | GET /favicon.ico | Status: 404 | Duration: 0.007s
+[2026-02-23 23:43:59] WARNING gtx ERROR | GET /favicon.ico | Status: 404 | User: Anonymous | Duration: 0.007s
+[2026-02-23 23:43:59] WARNING django.request Not Found: /favicon.ico
+[2026-02-23 23:43:59] WARNING django.server "GET /favicon.ico HTTP/1.1" 404 4249
+[2026-02-23 23:55:27] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\order\signals.py changed, reloading.
+[2026-02-23 23:55:28] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-23 23:55:40] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\notification\services.py changed, reloading.
+[2026-02-23 23:55:41] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-23 23:55:44] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\control\serializers.py changed, reloading.
+[2026-02-23 23:55:45] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-23 23:56:05] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\control\views.py changed, reloading.
+[2026-02-23 23:56:06] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-23 23:56:10] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\logs\views.py changed, reloading.
+[2026-02-23 23:56:12] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-23 23:56:18] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\notification\serializers.py changed, reloading.
+[2026-02-23 23:56:19] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-23 23:56:28] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\models.py changed, reloading.
+[2026-02-23 23:56:33] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-23 23:56:38] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\withdrawal\models.py changed, reloading.
+[2026-02-23 23:56:40] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-23 23:56:54] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\views.py changed, reloading.
+[2026-02-23 23:56:55] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-23 23:57:03] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\serializers.py changed, reloading.
+[2026-02-23 23:57:04] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-23 23:57:09] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\gtx\urls.py changed, reloading.
+[2026-02-23 23:57:11] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-23 23:58:28] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\control\views.py changed, reloading.
+[2026-02-23 23:58:29] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-23 23:59:38] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-02-23 23:59:38] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.015s
+[2026-02-23 23:59:38] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.015s
+[2026-02-23 23:59:38] WARNING django.request Not Found: /
+[2026-02-23 23:59:38] WARNING django.server "GET / HTTP/1.1" 404 4351
+[2026-02-24 00:20:35] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\models.py changed, reloading.
+[2026-02-24 00:20:36] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:20:44] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\serializers.py changed, reloading.
+[2026-02-24 00:20:46] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:20:55] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\views.py changed, reloading.
+[2026-02-24 00:20:56] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:21:03] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\urls.py changed, reloading.
+[2026-02-24 00:21:04] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:21:10] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\admin.py changed, reloading.
+[2026-02-24 00:21:11] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:21:17] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\withdrawal\serializers.py changed, reloading.
+[2026-02-24 00:21:19] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:24:52] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\models.py changed, reloading.
+[2026-02-24 00:24:53] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:33:10] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\order\models.py changed, reloading.
+[2026-02-24 00:33:11] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:33:30] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\order\signals.py changed, reloading.
+[2026-02-24 00:33:31] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:33:35] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\control\serializers.py changed, reloading.
+[2026-02-24 00:33:36] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:33:41] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\control\views.py changed, reloading.
+[2026-02-24 00:33:42] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:33:53] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\notification\services.py changed, reloading.
+[2026-02-24 00:33:54] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:34:00] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\views.py changed, reloading.
+[2026-02-24 00:34:01] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:34:08] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\withdrawal\views.py changed, reloading.
+[2026-02-24 00:34:09] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:34:16] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\withdrawal\models.py changed, reloading.
+[2026-02-24 00:34:17] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:34:30] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\withdrawal\models.py changed, reloading.
+[2026-02-24 00:34:31] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:34:35] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\withdrawal\views.py changed, reloading.
+[2026-02-24 00:34:36] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:34:46] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\order\models.py changed, reloading.
+[2026-02-24 00:34:47] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 00:37:03] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\order\signals.py changed, reloading.
+[2026-02-24 00:37:04] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 01:38:49] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\serializers.py changed, reloading.
+[2026-02-24 01:38:50] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 01:39:07] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\views.py changed, reloading.
+[2026-02-24 01:39:08] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 01:39:19] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\urls.py changed, reloading.
+[2026-02-24 01:39:20] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 01:39:50] INFO gtx REQUEST | GET /docs | User: Anonymous | IP: 127.0.0.1
+[2026-02-24 01:39:50] INFO gtx RESPONSE | GET /docs | Status: 404 | Duration: 0.018s
+[2026-02-24 01:39:50] WARNING gtx ERROR | GET /docs | Status: 404 | User: Anonymous | Duration: 0.018s
+[2026-02-24 01:39:50] INFO django.server "GET /docs HTTP/1.1" 301 0
+[2026-02-24 01:39:50] INFO gtx REQUEST | GET /docs/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-24 01:39:50] INFO gtx RESPONSE | GET /docs/ | Status: 200 | Duration: 0.091s
+[2026-02-24 01:39:50] INFO django.server "GET /docs/ HTTP/1.1" 200 4655
+[2026-02-24 01:40:06] INFO gtx REQUEST | GET /download-docs/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-24 01:40:06] INFO gtx RESPONSE | GET /download-docs/ | Status: 200 | Duration: 0.187s
+[2026-02-24 01:40:06] INFO django.server "GET /download-docs/ HTTP/1.1" 200 204712
+[2026-02-24 01:43:03] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\views.py changed, reloading.
+[2026-02-24 01:43:04] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 01:43:15] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\urls.py changed, reloading.
+[2026-02-24 01:43:16] INFO django.utils.autoreload Watching for file changes with StatReloader

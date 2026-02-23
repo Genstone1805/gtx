@@ -33,7 +33,7 @@ class NotificationMarkAsReadSerializer(serializers.Serializer):
 
 class NotificationEventSerializer(serializers.ModelSerializer):
     """Serializer for notification event model (admin only)."""
-    event_type_display = serializers.CharField(source='get_event_type_display', read_only=True)
+    event_type_display = serializers.SerializerMethodField()
     channel_display = serializers.CharField(source='get_channel_display', read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
     user_email = serializers.EmailField(source='user.email', read_only=True)
@@ -47,3 +47,6 @@ class NotificationEventSerializer(serializers.ModelSerializer):
             'created_at', 'sent_at', 'metadata',
         ]
         read_only_fields = fields
+
+    def get_event_type_display(self, obj):
+        return obj.event_type.replace('_', ' ').title()

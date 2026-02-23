@@ -8,6 +8,7 @@ from .views import (
     CurrentUserView, UploadProfilePictureView,
     UpdateProfilePictureView,
     ChangePasswordView, AddPhoneNumberView,
+    SaveBankDetailsView, AttachBankDetailsView, EditBankDetailsView, DeleteBankDetailsView,
     UserOrdersView, UserOrderDetailView
 )
 
@@ -35,6 +36,10 @@ urlpatterns = [
     path('profile/picture/upload/', UploadProfilePictureView.as_view(), name='profile-picture-upload'),
     path('profile/picture/update/', UpdateProfilePictureView.as_view(), name='profile-picture-update'),
     path('phone/update/', AddPhoneNumberView.as_view(), name='add-phone-number'),
+    path('bank-details/attach/', AttachBankDetailsView.as_view(), name='attach-bank-details'),
+    path('bank-details/edit/', EditBankDetailsView.as_view(), name='edit-bank-details'),
+    path('bank-details/delete/', DeleteBankDetailsView.as_view(), name='delete-bank-details'),
+    path('bank-details/save/', SaveBankDetailsView.as_view(), name='save-bank-details'),
     
     # Orders
     path('transactions/', UserOrdersView.as_view(), name='user-transactions'),

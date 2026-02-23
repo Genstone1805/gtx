@@ -1,7 +1,6 @@
 from django.db import models
 from cards.models import GiftCardNames
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 
 user = get_user_model()
 
@@ -13,7 +12,10 @@ class GiftCardOrder(models.Model):
 
   STATUS_CHOICES = [
     ("Pending", "Pending"),
+    ("Approved", "Approved"),
+    ("Rejected", "Rejected"),
     ("Assigned", "Assigned"),
+    ("Processing", "Processing"),
     ("Completed", "Completed"),
     ("Cancelled", "Cancelled"),
   ]

@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from decimal import Decimal
 
 
 class Withdrawal(models.Model):
@@ -12,6 +11,7 @@ class Withdrawal(models.Model):
         ('Pending', 'Pending'),
         ('Approved', 'Approved'),
         ('Rejected', 'Rejected'),
+        ('Cancelled', 'Cancelled'),
         ('Processing', 'Processing'),
         ('Completed', 'Completed'),
         ('Failed', 'Failed'),
@@ -79,7 +79,7 @@ class Withdrawal(models.Model):
         Approve the withdrawal request.
         This should be called within a transaction.
         """
-        from account.models import UserProfile
+        from order.signals import recalculate_user_balances
         
         if self.status != 'Pending':
             raise ValueError(f"Cannot approve withdrawal with status: {self.status}")
@@ -89,14 +89,9 @@ class Withdrawal(models.Model):
         self.processed_at = timezone.now()
         self.transaction_reference = transaction_reference
         self.save()
-        
-        # Deduct from user's withdrawable balance
-        user_profile = UserProfile.objects.get(pk=self.user.pk)
-        user_profile.withdrawable_balance = max(
-            Decimal('0.00'),
-            user_profile.withdrawable_balance - self.amount
-        )
-        user_profile.save()
+
+        # Recalculate to keep balances consistent with source transactions.
+        recalculate_user_balances(self.user)
 
     def reject(self, admin_user: settings.AUTH_USER_MODEL, reason: str):
         """

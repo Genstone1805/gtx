@@ -36,7 +36,7 @@ class Level2Credentials(models.Model):
 
     nin = models.CharField(max_length=12, blank=True, unique=True)
     nin_image = models.ImageField()
-    status = models.CharField(choices=STATUS, default="Level 1", max_length=12)
+    status = models.CharField(choices=STATUS, default="Pending", max_length=12)
     approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
 
@@ -59,12 +59,23 @@ class Level3Credentials(models.Model):
     country = models.CharField(max_length=50)
     proof_of_address_image = models.ImageField()
     face_verification_image = models.ImageField()
-    status = models.CharField(choices=STATUS, default="Level 1", max_length=12)
+    status = models.CharField(choices=STATUS, default="Pending", max_length=12)
     approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return f"Address: {self.house_address_1}"
+
+
+class BankAccountDetails(models.Model):
+    bank_name = models.CharField(max_length=100)
+    account_number = models.CharField(max_length=20)
+    account_name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return f"{self.bank_name} - {self.account_number}"
 
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):
@@ -92,6 +103,13 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     dp = models.ImageField(blank=True)
     full_name = models.CharField(max_length=80, blank=True)
     phone_number = PhoneNumberField(unique=True, blank=True, null=True)
+    bank_details = models.ForeignKey(
+        BankAccountDetails,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='users_bank_details'
+    )
     level = models.CharField(choices=LEVEL_CHOICES, default="Level 1", max_length=12)
     level2_credentials = models.ForeignKey(Level2Credentials, on_delete=models.SET_NULL, null=True, blank=True)
     level3_credentials = models.ForeignKey(Level3Credentials, on_delete=models.SET_NULL, null=True, blank=True)

@@ -97,10 +97,11 @@ class PendingOrderSerializer(serializers.ModelSerializer):
 
 class OrderStatusUpdateSerializer(serializers.Serializer):
     STATUS_CHOICES = [
-        ('Processing', 'Processing'),
+        ('Pending', 'Pending'),
         ('Approved', 'Approved'),
         ('Rejected', 'Rejected'),
         ('Assigned', 'Assigned'),
+        ('Processing', 'Processing'),
         ('Completed', 'Completed'),
         ('Cancelled', 'Cancelled'),
     ]

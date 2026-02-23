@@ -5,6 +5,8 @@ import os
 from django.conf import settings
 from django.http import HttpResponse
 from django.views import View
+from django.utils.decorators import method_decorator
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 LOG_FILES = {
@@ -19,6 +21,9 @@ class LogViewerView(View):
     View to display log files in the browser.
     Only accessible by staff members.
     """
+    @method_decorator(staff_member_required(login_url='/backend-admin/login/'))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
     def get(self, request, log_type='all'):
         # Validate log type
@@ -263,4 +268,3 @@ class LogViewerView(View):
             colorized_lines.append(f'<div class="log-line {css_class}">{escaped_line}</div>')
 
         return '\n'.join(colorized_lines)
-

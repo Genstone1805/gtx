@@ -205,19 +205,25 @@ def notify_order_status_changed(
 ) -> None:
     """Send notification when order status changes."""
     status_messages = {
-        'Approved': ('Order Approved', f'Your gift card order for ${amount} has been approved. The amount has been added to your withdrawable balance.'),
+        'Pending': ('Order Received', f'Your gift card order for ${amount} is pending review.'),
+        'Approved': ('Order Approved', f'Your gift card order for ${amount} has been approved. The amount is now available in your withdrawable balance.'),
         'Rejected': ('Order Rejected', f'Your gift card order for ${amount} has been rejected. Please contact support for more information.'),
+        'Processing': ('Order Being Processed', f'Your gift card order for ${amount} is being processed by our team.'),
         'Assigned': ('Order Being Processed', f'Your gift card order for ${amount} is being processed by our team.'),
-        'Completed': ('Order Completed', f'Your gift card order for ${amount} has been completed successfully.'),
+        'Completed': ('Order Completed', f'Your gift card order for ${amount} has been completed. The amount is now available in your withdrawable balance.'),
+        'Cancelled': ('Order Cancelled', f'Your gift card order for ${amount} has been cancelled.'),
     }
 
     title, message = status_messages.get(new_status, ('Order Update', f'Your order status has been updated to {new_status}.'))
 
     notification_type_map = {
+        'Pending': 'order_created',
         'Approved': 'order_approved',
         'Rejected': 'order_rejected',
+        'Processing': 'order_assigned',
         'Assigned': 'order_assigned',
         'Completed': 'order_completed',
+        'Cancelled': 'general',
     }
 
     NotificationService.send_notification(
@@ -225,7 +231,7 @@ def notify_order_status_changed(
         notification_type=notification_type_map.get(new_status, 'general'),
         title=title,
         message=message,
-        priority='high' if new_status in ['Approved', 'Rejected'] else 'medium',
+        priority='high' if new_status in ['Approved', 'Rejected', 'Completed'] else 'medium',
         object_id=order.id,
         content_type='order',
         metadata={'order_id': order.id, 'amount': amount, 'status': new_status},

@@ -13,7 +13,7 @@ from .serializers import (
     WithdrawalDetailSerializer,
     UserBalanceSerializer,
 )
-from account.models import UserProfile
+from order.signals import recalculate_user_balances
 
 
 class UserBalanceView(APIView):
@@ -22,6 +22,8 @@ class UserBalanceView(APIView):
 
     def get(self, request):
         user = request.user
+        recalculate_user_balances(user)
+        user.refresh_from_db(fields=['pending_balance', 'withdrawable_balance'])
         serializer = UserBalanceSerializer(user)
         return Response(serializer.data)
 
@@ -43,6 +45,10 @@ class WithdrawalCreateView(APIView):
     @transaction.atomic
     def post(self, request):
         user = request.user
+
+        # Reconcile before validation so available amount is never stale.
+        recalculate_user_balances(user)
+        user.refresh_from_db(fields=['withdrawable_balance'])
 
         # Check if user has a transaction PIN set
         if not user.has_pin:

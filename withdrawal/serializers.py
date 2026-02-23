@@ -28,6 +28,14 @@ class WithdrawalCreateSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
+        # Auto-fill missing bank details from user's saved bank details.
+        user = self.context['request'].user
+        saved_bank_details = getattr(user, 'bank_details', None)
+        if saved_bank_details:
+            data.setdefault('bank_name', saved_bank_details.bank_name)
+            data.setdefault('account_name', saved_bank_details.account_name)
+            data.setdefault('account_number', saved_bank_details.account_number)
+
         # Validate required bank details
         required_fields = ['bank_name', 'account_name', 'account_number']
         missing_fields = [f for f in required_fields if not data.get(f)]

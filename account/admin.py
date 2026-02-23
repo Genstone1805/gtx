@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import UserProfile, Level2Credentials, Level3Credentials, EmailVerificationCode, PasswordResetCode
+from .models import UserProfile, Level2Credentials, Level3Credentials, EmailVerificationCode, PasswordResetCode, BankAccountDetails
 
 
 class CustomUserAdmin(UserAdmin):
@@ -12,7 +12,7 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal Info', {'fields': ('full_name', 'phone_number', 'dp', 'has_pin', 'transaction_pin')}),
+        ('Personal Info', {'fields': ('full_name', 'phone_number', 'bank_details', 'dp', 'has_pin', 'transaction_pin')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'is_verified', 'groups', 'user_permissions')}),
         ('Account Status', {'fields': ('level', 'status', 'disabled')}),
         ('Balances', {'fields': ('pending_balance', 'withdrawable_balance', 'transaction_limit')}),
@@ -98,3 +98,10 @@ class PasswordResetCodeAdmin(admin.ModelAdmin):
         return obj.is_expired()
     is_expired.boolean = True
     is_expired.short_description = 'Expired'
+
+
+@admin.register(BankAccountDetails)
+class BankAccountDetailsAdmin(admin.ModelAdmin):
+    list_display = ['id', 'bank_name', 'account_number', 'account_name', 'created_at']
+    search_fields = ['bank_name', 'account_number', 'account_name']
+    ordering = ['-created_at']

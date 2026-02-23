@@ -31,7 +31,6 @@ from .serializers import (
    WithdrawalAuditLogSerializer,
    )
 from notification.services import notify_kyc_status_changed, notify_balance_updated, notify_withdrawal_status_changed
-from order.signals import recalculate_user_balances
 
 
 def parse_querydict(query_dict):
@@ -61,6 +60,7 @@ def parse_querydict(query_dict):
     return data
 
 class CreateGiftStoreView(APIView):
+  permission_classes = [IsAdminUser]
   serializer_class = CreateGiftStoreSerializer
 
   def post(self, request, *args, **kwargs):
@@ -79,14 +79,17 @@ class CreateGiftStoreView(APIView):
       return Response(str(e), status=400)
 
 class GiftCardListView(ListAPIView):
+  permission_classes = [IsAdminUser]
   serializer_class = GiftCardListSerializer
   queryset = GiftCardNames.objects.all()
 
 class GiftStoreListView(ListAPIView):
+  permission_classes = [IsAdminUser]
   serializer_class = GiftStoreListSerializer
   queryset = GiftCardStore.objects.all()
 
 class CreateGiftCardView(APIView):
+  permission_classes = [IsAdminUser]
   serializer_class = CreateGiftCardSerializer
 
   def post(self, request, *args, **kwargs):
@@ -101,11 +104,13 @@ class CreateGiftCardView(APIView):
       return Response(str(e), status=400)
     
 class GiftCardRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+  permission_classes = [IsAdminUser]
   serializer_class = CreateGiftCardSerializer
   lookup_field = "pk"
   queryset = GiftCardNames.objects.all()
     
 class GiftStoreRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+  permission_classes = [IsAdminUser]
   serializer_class = UpdateGiftStoreSerializer
   lookup_field = "pk"
   queryset = GiftCardStore.objects.all()
@@ -165,6 +170,7 @@ class Level2CredentialApprovalView(APIView):
             user.level = 'Level 2'
             user.transaction_limit = Decimal('5000000.00')
             user.save()
+            notify_kyc_status_changed(user=user, level='2', new_status='Approved')
 
             return Response(
                 {'detail': f'Level 2 credentials approved for {user.email}. Transaction limit increased to 5,000,000.'},
@@ -174,6 +180,7 @@ class Level2CredentialApprovalView(APIView):
             credentials.status = 'Rejected'
             credentials.approved = False
             credentials.save()
+            notify_kyc_status_changed(user=user, level='2', new_status='Rejected')
 
             return Response(
                 {'detail': f'Level 2 credentials rejected for {user.email}.'},
@@ -217,6 +224,7 @@ class Level3CredentialApprovalView(APIView):
             user.level = 'Level 3'
             user.transaction_limit = Decimal('50000000.00')
             user.save()
+            notify_kyc_status_changed(user=user, level='3', new_status='Approved')
 
             return Response(
                 {'detail': f'Level 3 credentials approved for {user.email}. Transaction limit increased to 50,000,000.'},
@@ -226,6 +234,7 @@ class Level3CredentialApprovalView(APIView):
             credentials.status = 'Rejected'
             credentials.approved = False
             credentials.save()
+            notify_kyc_status_changed(user=user, level='3', new_status='Rejected')
 
             return Response(
                 {'detail': f'Level 3 credentials rejected for {user.email}.'},
@@ -239,7 +248,7 @@ class PendingOrdersListView(ListAPIView):
     serializer_class = PendingOrderSerializer
 
     def get_queryset(self):
-        return GiftCardOrder.objects.filter(status='Processing')
+        return GiftCardOrder.objects.filter(status='Pending')
 
 
 class OrderStatusUpdateView(APIView):
@@ -263,13 +272,23 @@ class OrderStatusUpdateView(APIView):
             # Store admin notes if you add the field to the model
             pass
         order.save()
+        order.user.refresh_from_db(fields=['pending_balance', 'withdrawable_balance'])
 
         # Notify balance update
+        if new_status in ['Approved', 'Completed']:
+            balance_type = 'withdrawable'
+            new_balance = float(order.user.withdrawable_balance)
+            change_amount = float(order.amount)
+        else:
+            balance_type = 'pending'
+            new_balance = float(order.user.pending_balance)
+            change_amount = None
+
         notify_balance_updated(
             user=order.user,
-            balance_type='withdrawable' if new_status == 'Approved' else 'pending',
-            new_balance=float(order.user.withdrawable_balance),
-            change_amount=float(order.amount) if new_status == 'Approved' else None,
+            balance_type=balance_type,
+            new_balance=new_balance,
+            change_amount=change_amount,
         )
 
         return Response(
