@@ -276,3 +276,179 @@
 [2026-02-24 01:43:04] INFO django.utils.autoreload Watching for file changes with StatReloader
 [2026-02-24 01:43:15] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\urls.py changed, reloading.
 [2026-02-24 01:43:16] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 03:36:37] INFO gtx REQUEST | GET /backend-admin | User: Anonymous | IP: 127.0.0.1
+[2026-02-24 03:36:37] INFO gtx RESPONSE | GET /backend-admin | Status: 404 | Duration: 0.018s
+[2026-02-24 03:36:37] WARNING gtx ERROR | GET /backend-admin | Status: 404 | User: Anonymous | Duration: 0.018s
+[2026-02-24 03:36:37] INFO django.server "GET /backend-admin HTTP/1.1" 301 0
+[2026-02-24 03:36:37] INFO gtx REQUEST | GET /backend-admin/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-24 03:36:37] INFO gtx RESPONSE | GET /backend-admin/ | Status: 302 | Duration: 0.060s
+[2026-02-24 03:36:37] INFO django.server "GET /backend-admin/ HTTP/1.1" 302 0
+[2026-02-24 03:36:37] INFO gtx REQUEST | GET /backend-admin/login/?next=/backend-admin/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-24 03:36:37] INFO gtx RESPONSE | GET /backend-admin/login/?next=/backend-admin/ | Status: 200 | Duration: 0.070s
+[2026-02-24 03:36:37] INFO django.server "GET /backend-admin/login/?next=/backend-admin/ HTTP/1.1" 200 4109
+[2026-02-24 03:36:37] INFO django.server "GET /static/admin/css/base.css HTTP/1.1" 200 23100
+[2026-02-24 03:36:37] INFO django.server "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 3538
+[2026-02-24 03:36:37] INFO django.server "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+[2026-02-24 03:36:37] INFO django.server "GET /static/admin/css/login.css HTTP/1.1" 200 951
+[2026-02-24 03:36:37] INFO django.server "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+[2026-02-24 03:36:37] INFO django.server "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+[2026-02-24 03:36:37] INFO django.server "GET /static/admin/css/responsive.css HTTP/1.1" 200 16194
+[2026-02-24 03:39:34] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\gtx\urls.py changed, reloading.
+[2026-02-24 03:39:35] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-24 03:39:52] INFO gtx REQUEST | GET /backend-admin/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-24 03:39:52] INFO gtx RESPONSE | GET /backend-admin/ | Status: 200 | Duration: 0.337s
+[2026-02-24 03:39:52] INFO gtx REQUEST | GET /backend-admin | User: Anonymous | IP: 127.0.0.1
+[2026-02-24 03:39:52] INFO gtx RESPONSE | GET /backend-admin | Status: 200 | Duration: 0.004s
+[2026-02-24 03:44:42] INFO gtx REQUEST | GET /backend-admin/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-24 03:44:42] INFO gtx RESPONSE | GET /backend-admin/ | Status: 200 | Duration: 0.119s
+[2026-02-24 03:44:42] INFO django.server "GET /backend-admin/ HTTP/1.1" 200 4082
+[2026-02-24 03:44:50] INFO gtx REQUEST | POST /backend-admin/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-24 03:44:50] ERROR django.request Internal Server Error: /backend-admin/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: account_userprofile.bank_details_id
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\gtx\urls.py", line 17, in backend_admin_entry
+    return admin.site.login(request)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\contrib\admin\sites.py", line 450, in login
+    return LoginView.as_view(**defaults)(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\debug.py", line 143, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\contrib\auth\views.py", line 89, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 145, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\edit.py", line 150, in post
+    if form.is_valid():
+       ~~~~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\forms\forms.py", line 206, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\forms\forms.py", line 201, in errors
+    self.full_clean()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\forms\forms.py", line 338, in full_clean
+    self._clean_form()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\forms\forms.py", line 354, in _clean_form
+    cleaned_data = self.clean()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\debug.py", line 75, in sensitive_variables_wrapper
+    return func(*func_args, **func_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\contrib\auth\forms.py", line 349, in clean
+    self.user_cache = authenticate(
+                      ~~~~~~~~~~~~^
+        self.request, username=username, password=password
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\debug.py", line 75, in sensitive_variables_wrapper
+    return func(*func_args, **func_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\contrib\auth\__init__.py", line 114, in authenticate
+    user = backend.authenticate(request, **credentials)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\contrib\auth\backends.py", line 65, in authenticate
+    user = UserModel._default_manager.get_by_natural_key(username)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\contrib\auth\base_user.py", line 37, in get_by_natural_key
+    return self.get(**{self.model.USERNAME_FIELD: username})
+           ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\models\query.py", line 635, in get
+    num = len(clone)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\models\query.py", line 372, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such column: account_userprofile.bank_details_id
+[2026-02-24 03:44:50] INFO gtx RESPONSE | POST /backend-admin/ | Status: 500 | Duration: 0.083s
+[2026-02-24 03:44:50] ERROR gtx ERROR | POST /backend-admin/ | Status: 500 | User: Anonymous | Duration: 0.083s
+[2026-02-24 03:44:50] ERROR django.server "POST /backend-admin/ HTTP/1.1" 500 260073
+[2026-02-24 03:45:17] INFO gtx REQUEST | GET /backend-admin/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-24 03:45:17] INFO gtx RESPONSE | GET /backend-admin/ | Status: 200 | Duration: 0.007s
+[2026-02-24 03:45:17] INFO django.server "GET /backend-admin/ HTTP/1.1" 200 4082
+[2026-02-24 03:45:22] INFO gtx REQUEST | POST /backend-admin/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-24 03:45:23] INFO gtx REQUEST | POST /backend-admin/ | User: Anonymous | IP: 127.0.0.1
+[2026-02-24 03:45:24] INFO gtx RESPONSE | POST /backend-admin/ | Status: 302 | Duration: 1.406s
+[2026-02-24 03:45:24] INFO django.server - Broken pipe from ('127.0.0.1', 60165)
+[2026-02-24 03:45:24] INFO gtx RESPONSE | POST /backend-admin/ | Status: 302 | Duration: 1.349s
+[2026-02-24 03:45:24] INFO django.server "POST /backend-admin/ HTTP/1.1" 302 0
+[2026-02-24 03:45:24] INFO gtx REQUEST | GET /backend-admin/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-02-24 03:45:24] INFO gtx RESPONSE | GET /backend-admin/ | Status: 200 | Duration: 0.019s
+[2026-02-24 03:45:24] INFO django.server "GET /backend-admin/ HTTP/1.1" 200 16979
+[2026-02-24 03:45:25] INFO django.server "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+[2026-02-24 03:45:25] INFO django.server "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 978
+[2026-02-24 03:45:25] INFO django.server "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 593
+[2026-02-24 03:48:00] INFO gtx REQUEST | GET /backend-admin/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-02-24 03:48:00] INFO gtx RESPONSE | GET /backend-admin/ | Status: 200 | Duration: 0.020s
+[2026-02-24 03:48:00] INFO django.server "GET /backend-admin/ HTTP/1.1" 200 16979
+[2026-02-24 03:49:42] INFO gtx REQUEST | GET /backend-admin/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-02-24 03:49:42] INFO gtx RESPONSE | GET /backend-admin/ | Status: 200 | Duration: 0.017s
+[2026-02-24 03:49:42] INFO django.server "GET /backend-admin/ HTTP/1.1" 200 16979
+[2026-02-24 03:49:44] INFO gtx REQUEST | GET /backend-admin/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-02-24 03:49:44] INFO gtx RESPONSE | GET /backend-admin/ | Status: 200 | Duration: 0.013s
+[2026-02-24 03:49:44] INFO django.server "GET /backend-admin/ HTTP/1.1" 200 16979
+[2026-02-24 03:49:46] INFO gtx REQUEST | GET /backend-admin/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-02-24 03:49:46] INFO gtx RESPONSE | GET /backend-admin/ | Status: 200 | Duration: 0.015s
+[2026-02-24 03:49:46] INFO django.server "GET /backend-admin/ HTTP/1.1" 200 16979

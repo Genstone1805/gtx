@@ -4,7 +4,22 @@ from django.conf import settings
 from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
+
+def backend_admin_entry(request):
+    """
+    Standalone entrypoint for Django admin:
+    - anonymous users get admin login directly (no extra redirect hop)
+    - authenticated staff/superusers get admin index directly
+    """
+    request.current_app = admin.site.name
+    if admin.site.has_permission(request):
+        return admin.site.index(request)
+    return admin.site.login(request)
+
+
 urlpatterns = [
+    path('backend-admin', backend_admin_entry, name='backend-admin-entry-no-slash'),
+    path('backend-admin/', backend_admin_entry, name='backend-admin-entry'),
     path('backend-admin/', admin.site.urls),
     path('admin/', include('control.urls')),
     path('api/admin/', include('control.urls')),
