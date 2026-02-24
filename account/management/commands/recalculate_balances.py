@@ -14,6 +14,7 @@ from django.db import transaction
 from django.db.models import Sum
 from decimal import Decimal
 from order.models import GiftCardOrder
+from withdrawal.models import Withdrawal
 
 User = get_user_model()
 
@@ -62,12 +63,24 @@ class Command(BaseCommand):
             ).aggregate(total=Sum('amount'))
             pending_balance = pending_result['total'] or Decimal('0.00')
 
-            # Calculate withdrawable balance (orders with status 'Approved')
+            # Calculate gross withdrawable balance from approved/completed orders
             withdrawable_result = GiftCardOrder.objects.filter(
                 user=user,
-                status='Approved'
+                status__in=['Approved', 'Completed']
             ).aggregate(total=Sum('amount'))
-            withdrawable_balance = withdrawable_result['total'] or Decimal('0.00')
+            gross_withdrawable_balance = withdrawable_result['total'] or Decimal('0.00')
+
+            # Reserve funds for active/completed withdrawals.
+            reserved_withdrawals_result = Withdrawal.objects.filter(
+                user=user,
+                status__in=['Pending', 'Processing', 'Approved', 'Completed'],
+            ).aggregate(total=Sum('amount'))
+            reserved_withdrawals_total = reserved_withdrawals_result['total'] or Decimal('0.00')
+
+            withdrawable_balance = max(
+                Decimal('0.00'),
+                gross_withdrawable_balance - reserved_withdrawals_total
+            )
 
             # Check if balances have changed
             old_pending = user.pending_balance

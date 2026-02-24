@@ -70,6 +70,9 @@ class WithdrawalCreateView(APIView):
         serializer.is_valid(raise_exception=True)
         
         withdrawal = serializer.save()
+        recalculate_user_balances(user)
+        user.refresh_from_db(fields=['withdrawable_balance'])
+
         notify_withdrawal_created(
             user=user,
             withdrawal=withdrawal,
@@ -90,6 +93,7 @@ class WithdrawalCreateView(APIView):
             'withdrawal_id': withdrawal.id,
             'amount': str(withdrawal.amount),
             'status': withdrawal.status,
+            'withdrawable_balance': str(user.withdrawable_balance),
         }, status=status.HTTP_201_CREATED)
 
 

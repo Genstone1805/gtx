@@ -383,11 +383,13 @@ class AdminWithdrawalProcessView(APIView):
                 amount=float(withdrawal.amount),
                 transaction_reference=transaction_reference,
             )
+            withdrawal.user.refresh_from_db(fields=['withdrawable_balance'])
 
             return Response({
-                'detail': f'Withdrawal approved successfully. Amount ${withdrawal.amount} has been deducted from user\'s withdrawable balance.',
+                'detail': f'Withdrawal approved successfully. The requested amount ${withdrawal.amount} remains deducted from user\'s withdrawable balance.',
                 'status': withdrawal.status,
                 'transaction_reference': withdrawal.transaction_reference,
+                'withdrawable_balance': str(withdrawal.user.withdrawable_balance),
             })
 
         else:  # reject
@@ -414,10 +416,12 @@ class AdminWithdrawalProcessView(APIView):
                 amount=float(withdrawal.amount),
                 reason=reason,
             )
+            withdrawal.user.refresh_from_db(fields=['withdrawable_balance'])
 
             return Response({
-                'detail': f'Withdrawal rejected. Reason: {reason}',
+                'detail': f'Withdrawal rejected. Amount ${withdrawal.amount} has been returned to user withdrawable balance. Reason: {reason}',
                 'status': withdrawal.status,
+                'withdrawable_balance': str(withdrawal.user.withdrawable_balance),
             })
 
 

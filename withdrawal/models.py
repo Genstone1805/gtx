@@ -97,6 +97,8 @@ class Withdrawal(models.Model):
         """
         Reject the withdrawal request.
         """
+        from order.signals import recalculate_user_balances
+
         if self.status != 'Pending':
             raise ValueError(f"Cannot reject withdrawal with status: {self.status}")
         
@@ -106,17 +108,25 @@ class Withdrawal(models.Model):
         self.rejection_reason = reason
         self.save()
 
+        # Recalculate so rejected amount is returned to withdrawable balance.
+        recalculate_user_balances(self.user)
+
     def can_cancel(self) -> bool:
         """Check if the withdrawal can be cancelled by the user."""
         return self.status == 'Pending'
 
     def cancel(self):
         """Cancel the withdrawal request."""
+        from order.signals import recalculate_user_balances
+
         if not self.can_cancel():
             raise ValueError(f"Cannot cancel withdrawal with status: {self.status}")
         
         self.status = 'Cancelled'
         self.save()
+
+        # Recalculate so cancelled amount is returned to withdrawable balance.
+        recalculate_user_balances(self.user)
 
 
 class WithdrawalAuditLog(models.Model):

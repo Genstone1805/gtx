@@ -34,6 +34,14 @@ class GiftCardOrderListSerializer(serializers.ModelSerializer):
         fields = ["id", 'card', 'amount', 'status']
 
 
+class GiftCardOrderHistorySerializer(serializers.ModelSerializer):
+    card = GiftCardNameListSerializer()
+
+    class Meta:
+        model = GiftCardOrder
+        fields = ["id", "type", "card", "amount", "status", "created_at"]
+
+
 class GiftCardOrderCreateSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False, allow_null=True)
     e_code_pin = serializers.CharField(required=False, allow_blank=True, allow_null=True)

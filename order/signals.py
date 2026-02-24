@@ -18,6 +18,7 @@ from notification.services import (
 
 PENDING_STATUSES = {'Pending'}
 WITHDRAWABLE_STATUSES = {'Approved', 'Completed'}
+WITHDRAWAL_RESERVED_STATUSES = {'Pending', 'Processing', 'Approved', 'Completed'}
 
 
 def _as_decimal(amount: int | float | Decimal) -> Decimal:
@@ -107,16 +108,20 @@ def recalculate_user_balances(user: UserProfile) -> tuple[Decimal, Decimal]:
         ).aggregate(total=Sum('amount'))
         gross_withdrawable = _as_decimal(gross_withdrawable_result['total'] or 0)
 
-        # Deduct approved withdrawals to get net withdrawable.
-        approved_withdrawals_result = Withdrawal.objects.filter(
+        # Reserve funds for all active or completed withdrawals.
+        # This ensures:
+        # - Pending withdrawals are deducted immediately
+        # - Approved/Completed withdrawals stay deducted
+        # - Rejected/Cancelled/Failed withdrawals are returned automatically
+        reserved_withdrawals_result = Withdrawal.objects.filter(
             user_id=locked_user.pk,
-            status='Approved'
+            status__in=WITHDRAWAL_RESERVED_STATUSES,
         ).aggregate(total=Sum('amount'))
-        approved_withdrawals_total = _as_decimal(approved_withdrawals_result['total'] or 0)
+        reserved_withdrawals_total = _as_decimal(reserved_withdrawals_result['total'] or 0)
 
         withdrawable_balance = max(
             Decimal('0.00'),
-            gross_withdrawable - approved_withdrawals_total
+            gross_withdrawable - reserved_withdrawals_total
         )
 
         locked_user.pending_balance = pending_balance

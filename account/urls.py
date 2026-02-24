@@ -9,7 +9,7 @@ from .views import (
     UpdateProfilePictureView,
     ChangePasswordView, AddPhoneNumberView,
     AttachBankDetailsView, EditBankDetailsView, DeleteBankDetailsView,
-    UserOrdersView, UserOrderDetailView
+    UserOrdersView, UserOrderDetailView, UserTransactionHistoryView
 )
 
 urlpatterns = [
@@ -44,6 +44,7 @@ urlpatterns = [
     # path('bank-details/save/', SaveBankDetailsView.as_view(), name='save-bank-details'),
     
     # Orders
+    path('transactions/history/', UserTransactionHistoryView.as_view(), name='user-transaction-history'),
     path('transactions/', UserOrdersView.as_view(), name='user-transactions'),
     path('transactions/<int:order_id>/', UserOrderDetailView.as_view(), name='user-transaction-detail'),
 ]

@@ -26,7 +26,11 @@ from .serializers import (
     BankAccountDetailsSerializer
 )
 from order.models import GiftCardOrder
-from order.serializers import GiftCardOrderListSerializer, GiftCardOrderSerializer
+from order.serializers import (
+    GiftCardOrderListSerializer,
+    GiftCardOrderSerializer,
+    GiftCardOrderHistorySerializer,
+)
 from order.signals import recalculate_user_balances
 
 
@@ -836,6 +840,36 @@ class DeleteBankDetailsView(APIView):
         return Response(
             {'detail': 'Bank details deleted successfully.'},
             status=status.HTTP_200_OK
+        )
+
+
+class UserTransactionHistoryView(APIView):
+    """Get grouped transaction history for the authenticated user."""
+    permission_classes = [IsAuthenticated]
+    serializer_class = GiftCardOrderHistorySerializer
+
+    pending_statuses = ("Pending", "Processing")
+    approved_statuses = ("Approved", "Completed")
+    rejected_statuses = ("Rejected",)
+
+    def get(self, request: Request) -> Response:
+        user = request.user
+        user_orders = GiftCardOrder.objects.filter(user=user).select_related(
+            "card",
+            "card__store",
+        ).order_by("-created_at", "-id")
+
+        pending_orders = user_orders.filter(status__in=self.pending_statuses)
+        approved_orders = user_orders.filter(status__in=self.approved_statuses)
+        rejected_orders = user_orders.filter(status__in=self.rejected_statuses)
+
+        return Response(
+            {
+                "pending": self.serializer_class(pending_orders, many=True).data,
+                "approved": self.serializer_class(approved_orders, many=True).data,
+                "rejected": self.serializer_class(rejected_orders, many=True).data,
+            },
+            status=status.HTTP_200_OK,
         )
 
 
