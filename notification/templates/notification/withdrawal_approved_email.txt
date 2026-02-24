@@ -6,7 +6,7 @@ Your withdrawal request status has been updated.
 
 Withdrawal Details:
 - Withdrawal ID: {{ withdrawal_id }}
-- Amount: ${{ amount }}
+- Amount: ₦{{ amount }}
 - Status: {{ status }}
 
 {% if status == 'Approved' %}

@@ -214,7 +214,7 @@ def notify_order_created(user: 'UserProfile', order: Any, amount: float) -> None
         user=user,
         notification_type='order_created',
         title='Order Received',
-        message=f'Your gift card order for ${amount} has been received and is being processed.',
+        message=f'Your gift card order for ₦{amount} has been received and is being processed.',
         priority='medium',
         object_id=order.id,
         content_type='order',
@@ -230,13 +230,13 @@ def notify_order_status_changed(
 ) -> None:
     """Send notification when order status changes."""
     status_messages = {
-        'Pending': ('Order Received', f'Your gift card order for ${amount} is pending review.'),
-        'Approved': ('Order Approved', f'Your gift card order for ${amount} has been approved. The amount is now available in your withdrawable balance.'),
-        'Rejected': ('Order Rejected', f'Your gift card order for ${amount} has been rejected. Please contact support for more information.'),
-        'Processing': ('Order Being Processed', f'Your gift card order for ${amount} is being processed by our team.'),
-        'Assigned': ('Order Being Processed', f'Your gift card order for ${amount} is being processed by our team.'),
-        'Completed': ('Order Completed', f'Your gift card order for ${amount} has been completed. The amount is now available in your withdrawable balance.'),
-        'Cancelled': ('Order Cancelled', f'Your gift card order for ${amount} has been cancelled.'),
+        'Pending': ('Order Received', f'Your gift card order for ₦{amount} is pending review.'),
+        'Approved': ('Order Approved', f'Your gift card order for ₦{amount} has been approved. The amount is now available in your withdrawable balance.'),
+        'Rejected': ('Order Rejected', f'Your gift card order for ₦{amount} has been rejected. Please contact support for more information.'),
+        'Processing': ('Order Being Processed', f'Your gift card order for ₦{amount} is being processed by our team.'),
+        'Assigned': ('Order Being Processed', f'Your gift card order for ₦{amount} is being processed by our team.'),
+        'Completed': ('Order Completed', f'Your gift card order for ₦{amount} has been completed. The amount is now available in your withdrawable balance.'),
+        'Cancelled': ('Order Cancelled', f'Your gift card order for ₦{amount} has been cancelled.'),
     }
 
     title, message = status_messages.get(new_status, ('Order Update', f'Your order status has been updated to {new_status}.'))
@@ -274,10 +274,10 @@ def notify_withdrawal_status_changed(
     """Send notification when withdrawal status changes."""
     if new_status == 'Approved':
         title = 'Withdrawal Approved'
-        message = f'Your withdrawal request for ${amount} has been approved and processed.'
+        message = f'Your withdrawal request for ₦{amount} has been approved and processed.'
     elif new_status == 'Rejected':
         title = 'Withdrawal Rejected'
-        message = f'Your withdrawal request for ${amount} has been rejected. Please contact support for more information.'
+        message = f'Your withdrawal request for ₦{amount} has been rejected. Please contact support for more information.'
     else:
         return
 
@@ -309,7 +309,7 @@ def notify_withdrawal_created(
         user=user,
         notification_type='withdrawal_created',
         title='Withdrawal Requested',
-        message=f'Your withdrawal request for ${amount} has been received and is pending review.',
+        message=f'Your withdrawal request for ₦{amount} has been received and is pending review.',
         priority='medium',
         object_id=withdrawal.id,
         content_type='withdrawal',
@@ -354,9 +354,9 @@ def notify_balance_updated(
     }
 
     if change_amount:
-        message = f'Your {balance_names.get(balance_type, balance_type)} has been updated. New balance: ${new_balance:,.2f} (Change: ${change_amount:,.2f})'
+        message = f'Your {balance_names.get(balance_type, balance_type)} has been updated. New balance: ₦{new_balance:,.2f} (Change: ₦{change_amount:,.2f})'
     else:
-        message = f'Your {balance_names.get(balance_type, balance_type)} has been updated. New balance: ${new_balance:,.2f}'
+        message = f'Your {balance_names.get(balance_type, balance_type)} has been updated. New balance: ₦{new_balance:,.2f}'
 
     NotificationService.send_notification(
         user=user,

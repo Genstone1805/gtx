@@ -66,7 +66,7 @@ class Withdrawal(models.Model):
         ]
 
     def __str__(self):
-        return f"Withdrawal #{self.id} - {self.user.email} - ${self.amount} - {self.status}"
+        return f"Withdrawal #{self.id} - {self.user.email} - ₦{self.amount} - {self.status}"
 
     def save(self, *args, **kwargs):
         # Ensure amount is always positive

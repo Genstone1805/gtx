@@ -5,7 +5,7 @@ Dear {{ user.full_name|default:"Valued Customer" }},
 Your gift card order has been received and is being processed.
 
 Order Details:
-- Amount: ${{ amount }}
+- Amount: ₦{{ amount }}
 - Order ID: {{ order_id }}
 - Date: {{ notification.created_at|date:"F d, Y H:i" }}
 

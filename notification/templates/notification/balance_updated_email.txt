@@ -5,9 +5,9 @@ Dear {{ user.full_name|default:"Valued Customer" }},
 Your {{ balance_type }} balance has been updated.
 
 Balance Details:
-- New Balance: ${{ new_balance }}
+- New Balance: ₦{{ new_balance }}
 {% if change_amount %}
-- Change: ${{ change_amount }}
+- Change: ₦{{ change_amount }}
 {% endif %}
 - Date: {{ notification.created_at|date:"F d, Y H:i" }}
 

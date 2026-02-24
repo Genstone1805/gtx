@@ -7,6 +7,7 @@ from .views import (
   GiftCardRetrieveUpdateDestroyView,
   GiftStoreRetrieveUpdateDestroyView,
   PendingLevel2CredentialsListView,
+  AdminUsersListView,
   PendingLevel3CredentialsListView,
   Level2CredentialApprovalView,
   Level3CredentialApprovalView,
@@ -28,6 +29,7 @@ urlpatterns = [
     path('get-gift-store/<int:pk>/', GiftStoreRetrieveUpdateDestroyView.as_view(), name="get_gift_store_view"),
 
     # Credential approvals
+    path('users/', AdminUsersListView.as_view(), name="admin_users_list"),
     path('pending/level2/', PendingLevel2CredentialsListView.as_view(), name="pending_level2_list"),
     path('pending/level3/', PendingLevel3CredentialsListView.as_view(), name="pending_level3_list"),
     path('approve/level2/<int:credential_id>/', Level2CredentialApprovalView.as_view(), name="approve_level2"),

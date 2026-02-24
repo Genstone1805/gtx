@@ -153,7 +153,7 @@ Authorization: Bearer <token>
     "notification_type": "order_approved",
     "notification_type_display": "Order Approved",
     "title": "Order Approved",
-    "message": "Your gift card order for $50000 has been approved...",
+    "message": "Your gift card order for ₦50000 has been approved...",
     "priority": "high",
     "priority_display": "High",
     "is_read": false,
@@ -275,7 +275,7 @@ Content-Type: application/json
 **Response (Approve):**
 ```json
 {
-  "detail": "Withdrawal approved successfully. Amount $50000.00 has been deducted from user's withdrawable balance.",
+  "detail": "Withdrawal approved successfully. Amount ₦50000.00 has been deducted from user's withdrawable balance.",
   "status": "Approved",
   "transaction_reference": "TXN123456"
 }
@@ -369,34 +369,34 @@ Authorization: Bearer <admin_token>
 ## Balance Flow Diagram
 
 ```
-User Creates Order (Amount: $1000)
+User Creates Order (Amount: ₦1000)
          │
          ▼
    Order Status: Processing
-   pending_balance: +$1000
-   withdrawable_balance: $0
+   pending_balance: +₦1000
+   withdrawable_balance: ₦0
          │
          ▼
    Admin Approves Order
          │
          ▼
    Order Status: Approved
-   pending_balance: $0
-   withdrawable_balance: +$1000
+   pending_balance: ₦0
+   withdrawable_balance: +₦1000
          │
          ▼
-   User Requests Withdrawal ($500)
+   User Requests Withdrawal (₦500)
          │
          ▼
    Withdrawal Status: Pending
-   withdrawable_balance: $1000 (unchanged)
+   withdrawable_balance: ₦1000 (unchanged)
          │
          ▼
    Admin Approves Withdrawal
          │
          ▼
    Withdrawal Status: Approved
-   withdrawable_balance: $500 (deducted)
+   withdrawable_balance: ₦500 (deducted)
 ```
 
 ---
@@ -444,7 +444,7 @@ python manage.py recalculate_balances --dry-run
 ```json
 {
   "amount": [
-    "Insufficient withdrawable balance. Your current withdrawable balance is $100000.00."
+    "Insufficient withdrawable balance. Your current withdrawable balance is ₦100000.00."
   ]
 }
 ```

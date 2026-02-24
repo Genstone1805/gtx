@@ -135,5 +135,5 @@ class Command(BaseCommand):
         total_withdrawable = User.objects.aggregate(total=Sum('withdrawable_balance'))['total'] or Decimal('0.00')
         
         self.stdout.write(f'\nTotal System Balances:')
-        self.stdout.write(f'  Total Pending: ${total_pending:,.2f}')
-        self.stdout.write(f'  Total Withdrawable: ${total_withdrawable:,.2f}')
+        self.stdout.write(f'  Total Pending: ₦{total_pending:,.2f}')
+        self.stdout.write(f'  Total Withdrawable: ₦{total_withdrawable:,.2f}')

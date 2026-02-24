@@ -22,7 +22,7 @@ class WithdrawalCreateSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         if value > user.withdrawable_balance:
             raise serializers.ValidationError(
-                f"Insufficient withdrawable balance. Your current withdrawable balance is ${user.withdrawable_balance:,.2f}."
+                f"Insufficient withdrawable balance. Your current withdrawable balance is ₦{user.withdrawable_balance:,.2f}."
             )
 
         return value

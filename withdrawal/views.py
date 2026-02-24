@@ -84,7 +84,7 @@ class WithdrawalCreateView(APIView):
             withdrawal=withdrawal,
             action='created',
             performed_by=user,
-            details=f"Withdrawal request created for ${withdrawal.amount}",
+            details=f"Withdrawal request created for ₦{withdrawal.amount}",
             new_status='Pending',
         )
 

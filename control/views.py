@@ -8,7 +8,7 @@ from rest_framework.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from django.db import transaction
 from decimal import Decimal
-from django.db.models import Sum
+from django.db.models import Q, Sum
 
 from cards.models import GiftCardStore, GiftCardNames
 from account.models import Level2Credentials, Level3Credentials, UserProfile
@@ -20,6 +20,7 @@ from .serializers import (
    GiftStoreListSerializer,
    GiftCardListSerializer,
    UpdateGiftStoreSerializer,
+   UserBasicSerializer,
    Level2CredentialsPendingSerializer,
    Level3CredentialsPendingSerializer,
    CredentialApprovalSerializer,
@@ -123,6 +124,24 @@ class PendingLevel2CredentialsListView(ListAPIView):
 
     def get_queryset(self):
         return Level2Credentials.objects.filter(status='Pending')
+
+
+class AdminUsersListView(ListAPIView):
+    """List all users in the app (admin only)."""
+    permission_classes = [IsAdminUser]
+    serializer_class = UserBasicSerializer
+
+    def get_queryset(self):
+        queryset = UserProfile.objects.all().order_by('-date_joined')
+
+        # Optional search by name/email
+        search = self.request.query_params.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(full_name__icontains=search) | Q(email__icontains=search)
+            )
+
+        return queryset
 
 
 class PendingLevel3CredentialsListView(ListAPIView):
@@ -386,7 +405,7 @@ class AdminWithdrawalProcessView(APIView):
             withdrawal.user.refresh_from_db(fields=['withdrawable_balance'])
 
             return Response({
-                'detail': f'Withdrawal approved successfully. The requested amount ${withdrawal.amount} remains deducted from user\'s withdrawable balance.',
+                'detail': f'Withdrawal approved successfully. The requested amount ₦{withdrawal.amount} remains deducted from user\'s withdrawable balance.',
                 'status': withdrawal.status,
                 'transaction_reference': withdrawal.transaction_reference,
                 'withdrawable_balance': str(withdrawal.user.withdrawable_balance),
@@ -419,7 +438,7 @@ class AdminWithdrawalProcessView(APIView):
             withdrawal.user.refresh_from_db(fields=['withdrawable_balance'])
 
             return Response({
-                'detail': f'Withdrawal rejected. Amount ${withdrawal.amount} has been returned to user withdrawable balance. Reason: {reason}',
+                'detail': f'Withdrawal rejected. Amount ₦{withdrawal.amount} has been returned to user withdrawable balance. Reason: {reason}',
                 'status': withdrawal.status,
                 'withdrawable_balance': str(withdrawal.user.withdrawable_balance),
             })

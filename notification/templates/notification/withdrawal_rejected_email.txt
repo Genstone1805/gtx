@@ -6,7 +6,7 @@ Dear {{ user.full_name|default:"Valued Customer" }},
 
 Withdrawal Details:
 - Withdrawal ID: {{ withdrawal_id }}
-- Amount: ${{ amount }}
+- Amount: ₦{{ amount }}
 - Status: {{ status }}
 {% if reason %}
 - Reason: {{ reason }}

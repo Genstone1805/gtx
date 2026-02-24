@@ -6,7 +6,7 @@ Your gift card order status has been updated.
 
 Order Details:
 - Order ID: {{ order_id }}
-- Amount: ${{ amount }}
+- Amount: ₦{{ amount }}
 - New Status: {{ status }}
 
 {% if status == 'Approved' %}

@@ -490,3 +490,19 @@ django.db.utils.OperationalError: no such column: account_userprofile.bank_detai
 [2026-02-24 19:20:22] INFO django.utils.autoreload Watching for file changes with StatReloader
 [2026-02-24 19:20:29] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\control\views.py changed, reloading.
 [2026-02-24 19:20:30] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-25 09:24:25] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\control\views.py changed, reloading.
+[2026-02-25 09:24:27] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-25 09:24:36] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\withdrawal\serializers.py changed, reloading.
+[2026-02-25 09:24:37] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-25 09:24:41] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\withdrawal\models.py changed, reloading.
+[2026-02-25 09:24:42] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-25 09:24:44] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\order\models.py changed, reloading.
+[2026-02-25 09:24:45] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-25 09:25:06] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\notification\services.py changed, reloading.
+[2026-02-25 09:25:07] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-25 09:28:41] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\control\views.py changed, reloading.
+[2026-02-25 09:28:42] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-25 09:28:47] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\control\views.py changed, reloading.
+[2026-02-25 09:28:48] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-25 09:28:52] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\control\urls.py changed, reloading.
+[2026-02-25 09:28:54] INFO django.utils.autoreload Watching for file changes with StatReloader
