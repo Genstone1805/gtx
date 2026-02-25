@@ -506,3 +506,5 @@ django.db.utils.OperationalError: no such column: account_userprofile.bank_detai
 [2026-02-25 09:28:48] INFO django.utils.autoreload Watching for file changes with StatReloader
 [2026-02-25 09:28:52] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\control\urls.py changed, reloading.
 [2026-02-25 09:28:54] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-26 03:09:13] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\control\serializers.py changed, reloading.
+[2026-02-26 03:09:17] INFO django.utils.autoreload Watching for file changes with StatReloader

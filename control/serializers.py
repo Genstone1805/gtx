@@ -26,7 +26,7 @@ class UpdateGiftStoreSerializer(serializers.ModelSerializer):
 class GiftStoreListSerializer(serializers.ModelSerializer):
   class Meta:
     model = GiftCardStore
-    fields = ["id", "name"]
+    fields = ["id", "name", "category"]
 
 class GiftCardListSerializer(serializers.ModelSerializer):
   store = GiftStoreListSerializer(read_only=True)
