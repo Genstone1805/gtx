@@ -523,3 +523,18 @@ django.db.utils.OperationalError: no such column: account_userprofile.bank_detai
 [2026-04-08 04:36:55] INFO gtx RESPONSE | POST /api/account/phone/resend-code/ | Status: 200 | Duration: 0.002s
 [2026-04-08 04:36:56] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
 [2026-04-08 04:36:56] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 200 | Duration: 0.003s
+[2026-04-08 04:46:29] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-08 04:46:29] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.004s
+[2026-04-08 04:46:29] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.004s
+[2026-04-08 04:46:29] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-04-08 04:46:31] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-08 04:46:31] WARNING account.views Termii send token request failed: status=404 payload={'message': 'ApplicationSenderId not found for applicationId: 37677 and senderName: TestSender'}
+[2026-04-08 04:46:31] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.002s
+[2026-04-08 04:46:31] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.002s
+[2026-04-08 04:46:31] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-04-08 04:46:33] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-08 04:46:33] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 201 | Duration: 0.003s
+[2026-04-08 04:46:34] INFO gtx REQUEST | POST /api/account/phone/resend-code/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-08 04:46:34] INFO gtx RESPONSE | POST /api/account/phone/resend-code/ | Status: 200 | Duration: 0.002s
+[2026-04-08 04:46:36] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-08 04:46:36] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 200 | Duration: 0.003s
