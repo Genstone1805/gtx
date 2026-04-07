@@ -43,19 +43,44 @@ from order.signals import recalculate_user_balances
 
 
 logger = logging.getLogger(__name__)
-TERMII_API_KEY = getattr(settings, 'TERMII_API_KEY', 'TLPlVvPYstukdbJXHylgeDADwRVkYOQmptbCdZWzYQbmiqJMszigizEjzgFcoC')
-TERMII_BASE_URL = getattr(settings, 'TERMII_BASE_URL', 'https://v3.api.termii.com').rstrip('/')
-TERMII_PHONE_OTP_SENDER_ID = getattr(settings, 'TERMII_PHONE_OTP_SENDER_ID', 'GTX')
-TERMII_PHONE_OTP_CHANNEL = getattr(settings, 'TERMII_PHONE_OTP_CHANNEL', 'generic')
-TERMII_PHONE_OTP_ATTEMPTS = int(getattr(settings, 'TERMII_PHONE_OTP_ATTEMPTS', 3))
-TERMII_PHONE_OTP_TTL_MINUTES = int(getattr(settings, 'TERMII_PHONE_OTP_TTL_MINUTES', 10))
-TERMII_PHONE_OTP_LENGTH = int(getattr(settings, 'TERMII_PHONE_OTP_LENGTH', 6))
-TERMII_PHONE_OTP_PLACEHOLDER = getattr(settings, 'TERMII_PHONE_OTP_PLACEHOLDER', '<123456>')
-TERMII_REQUEST_TIMEOUT_SECONDS = int(getattr(settings, 'TERMII_REQUEST_TIMEOUT_SECONDS', 15))
 
 
 class PhoneVerificationError(Exception):
     """Raised when the phone verification provider cannot complete the request."""
+
+
+def get_termii_phone_verification_config() -> dict[str, Any]:
+    """Read Termii phone verification settings at runtime for easier overrides and safer defaults."""
+    sender_id = str(getattr(settings, 'TERMII_PHONE_OTP_SENDER_ID', '') or '').strip()
+    return {
+        'api_key': str(getattr(settings, 'TERMII_API_KEY', '') or '').strip(),
+        'base_url': str(
+            getattr(settings, 'TERMII_BASE_URL', 'https://v3.api.termii.com') or 'https://v3.api.termii.com'
+        ).strip().rstrip('/'),
+        'sender_id': sender_id,
+        'brand_name': str(getattr(settings, 'TERMII_PHONE_OTP_BRAND_NAME', sender_id or 'GTX') or '').strip()
+        or sender_id
+        or 'GTX',
+        'channel': str(getattr(settings, 'TERMII_PHONE_OTP_CHANNEL', 'generic') or 'generic').strip(),
+        'attempts': int(getattr(settings, 'TERMII_PHONE_OTP_ATTEMPTS', 3)),
+        'ttl_minutes': int(getattr(settings, 'TERMII_PHONE_OTP_TTL_MINUTES', 10)),
+        'length': int(getattr(settings, 'TERMII_PHONE_OTP_LENGTH', 6)),
+        'placeholder': str(getattr(settings, 'TERMII_PHONE_OTP_PLACEHOLDER', '<123456>') or '<123456>').strip(),
+        'timeout_seconds': int(getattr(settings, 'TERMII_REQUEST_TIMEOUT_SECONDS', 15)),
+    }
+
+
+def validate_termii_phone_verification_config(*, require_sender_id: bool) -> dict[str, Any]:
+    """Ensure the minimum Termii configuration required for the current operation exists."""
+    config = get_termii_phone_verification_config()
+    if not config['api_key']:
+        raise PhoneVerificationError('Phone verification is not configured. Set TERMII_API_KEY.')
+    if require_sender_id and not config['sender_id']:
+        raise PhoneVerificationError(
+            'Phone verification is not configured. '
+            'Set TERMII_PHONE_OTP_SENDER_ID to an active Termii sender ID.'
+        )
+    return config
 
 
 def normalize_phone_number_for_termii(phone_number: Any) -> str:
@@ -74,27 +99,47 @@ def parse_termii_response(response: requests.Response) -> dict[str, Any]:
         return {}
 
 
+def normalize_termii_error_detail(detail: Any) -> str | None:
+    """Translate common provider failures into actionable messages."""
+    if detail is None:
+        return None
+
+    normalized_detail = str(detail).strip()
+    if not normalized_detail:
+        return None
+
+    if 'ApplicationSenderId not found' in normalized_detail or 'Invalid Sender Id' in normalized_detail:
+        sender_id = get_termii_phone_verification_config()['sender_id'] or 'the configured sender ID'
+        return (
+            f"Termii sender ID '{sender_id}' is not active for this account. "
+            'Set TERMII_PHONE_OTP_SENDER_ID to an approved sender ID from your Termii dashboard.'
+        )
+
+    return normalized_detail
+
+
 def send_phone_verification_token(phone_number: Any) -> str:
     """Send an OTP to the supplied phone number via Termii."""
-    endpoint = f'{TERMII_BASE_URL}/api/sms/otp/send'
+    config = validate_termii_phone_verification_config(require_sender_id=True)
+    endpoint = f"{config['base_url']}/api/sms/otp/send"
     payload = {
-        'api_key': TERMII_API_KEY,
+        'api_key': config['api_key'],
         'pin_type': 'NUMERIC',
         'to': normalize_phone_number_for_termii(phone_number),
-        'from': TERMII_PHONE_OTP_SENDER_ID,
-        'channel': TERMII_PHONE_OTP_CHANNEL,
-        'pin_attempts': TERMII_PHONE_OTP_ATTEMPTS,
-        'pin_time_to_live': TERMII_PHONE_OTP_TTL_MINUTES,
-        'pin_length': TERMII_PHONE_OTP_LENGTH,
-        'pin_placeholder': TERMII_PHONE_OTP_PLACEHOLDER,
+        'from': config['sender_id'],
+        'channel': config['channel'],
+        'pin_attempts': config['attempts'],
+        'pin_time_to_live': config['ttl_minutes'],
+        'pin_length': config['length'],
+        'pin_placeholder': config['placeholder'],
         'message_text': (
-            f'Your GTX verification code is {TERMII_PHONE_OTP_PLACEHOLDER}. '
-            f'It expires in {TERMII_PHONE_OTP_TTL_MINUTES} minutes.'
+            f"Your {config['brand_name']} verification code is {config['placeholder']}. "
+            f"It expires in {config['ttl_minutes']} minutes."
         ),
     }
 
     try:
-        response = requests.post(endpoint, json=payload, timeout=TERMII_REQUEST_TIMEOUT_SECONDS)
+        response = requests.post(endpoint, json=payload, timeout=config['timeout_seconds'])
     except RequestException as exc:
         logger.exception("Failed to send phone verification OTP via Termii.")
         raise PhoneVerificationError('Unable to send verification code right now. Please try again.') from exc
@@ -103,7 +148,9 @@ def send_phone_verification_token(phone_number: Any) -> str:
     pin_id = data.get('pin_id') or data.get('pinId')
 
     if not response.ok or not pin_id:
-        detail = data.get('message') or data.get('detail') or data.get('smsStatus')
+        detail = normalize_termii_error_detail(
+            data.get('message') or data.get('detail') or data.get('smsStatus')
+        )
         logger.warning("Termii send token request failed: status=%s payload=%s", response.status_code, data)
         raise PhoneVerificationError(
             str(detail) if detail else 'Unable to send verification code right now. Please try again.'
@@ -114,22 +161,23 @@ def send_phone_verification_token(phone_number: Any) -> str:
 
 def verify_phone_verification_token(pin_id: str, code: str) -> bool:
     """Verify a previously-sent OTP via Termii."""
-    endpoint = f'{TERMII_BASE_URL}/api/sms/otp/verify'
+    config = validate_termii_phone_verification_config(require_sender_id=False)
+    endpoint = f"{config['base_url']}/api/sms/otp/verify"
     payload = {
-        'api_key': TERMII_API_KEY,
+        'api_key': config['api_key'],
         'pin_id': pin_id,
         'pin': code,
     }
 
     try:
-        response = requests.post(endpoint, json=payload, timeout=TERMII_REQUEST_TIMEOUT_SECONDS)
+        response = requests.post(endpoint, json=payload, timeout=config['timeout_seconds'])
     except RequestException as exc:
         logger.exception("Failed to verify phone OTP via Termii.")
         raise PhoneVerificationError('Unable to verify the code right now. Please try again.') from exc
 
     data = parse_termii_response(response)
     if not response.ok:
-        detail = data.get('message') or data.get('detail')
+        detail = normalize_termii_error_detail(data.get('message') or data.get('detail'))
         logger.warning("Termii verify token request failed: status=%s payload=%s", response.status_code, data)
         raise PhoneVerificationError(
             str(detail) if detail else 'Unable to verify the code right now. Please try again.'

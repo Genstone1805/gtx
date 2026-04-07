@@ -508,3 +508,18 @@ django.db.utils.OperationalError: no such column: account_userprofile.bank_detai
 [2026-02-25 09:28:54] INFO django.utils.autoreload Watching for file changes with StatReloader
 [2026-02-26 03:09:13] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\control\serializers.py changed, reloading.
 [2026-02-26 03:09:17] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-04-08 04:36:52] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-08 04:36:52] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.007s
+[2026-04-08 04:36:52] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.007s
+[2026-04-08 04:36:52] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-04-08 04:36:53] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-08 04:36:53] WARNING account.views Termii send token request failed: status=404 payload={'message': 'ApplicationSenderId not found for applicationId: 37677 and senderName: TestSender'}
+[2026-04-08 04:36:53] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.002s
+[2026-04-08 04:36:53] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.002s
+[2026-04-08 04:36:53] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-04-08 04:36:54] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-08 04:36:54] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 201 | Duration: 0.004s
+[2026-04-08 04:36:55] INFO gtx REQUEST | POST /api/account/phone/resend-code/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-08 04:36:55] INFO gtx RESPONSE | POST /api/account/phone/resend-code/ | Status: 200 | Duration: 0.002s
+[2026-04-08 04:36:56] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-08 04:36:56] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 200 | Duration: 0.003s

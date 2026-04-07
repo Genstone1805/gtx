@@ -210,6 +210,20 @@ EMAIL_HOST_PASSWORD = os.environ.get('AUTHEMAIL_EMAIL_HOST_PASSWORD') or 'gelm u
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
+TERMII_API_KEY = os.environ.get('TERMII_API_KEY', '').strip()
+TERMII_BASE_URL = os.environ.get('TERMII_BASE_URL', 'https://v3.api.termii.com').strip().rstrip('/')
+TERMII_PHONE_OTP_SENDER_ID = os.environ.get('TERMII_PHONE_OTP_SENDER_ID', '').strip()
+TERMII_PHONE_OTP_BRAND_NAME = os.environ.get(
+    'TERMII_PHONE_OTP_BRAND_NAME',
+    TERMII_PHONE_OTP_SENDER_ID or 'GTX',
+).strip()
+TERMII_PHONE_OTP_CHANNEL = os.environ.get('TERMII_PHONE_OTP_CHANNEL', 'generic').strip()
+TERMII_PHONE_OTP_ATTEMPTS = int(os.environ.get('TERMII_PHONE_OTP_ATTEMPTS', '3'))
+TERMII_PHONE_OTP_TTL_MINUTES = int(os.environ.get('TERMII_PHONE_OTP_TTL_MINUTES', '10'))
+TERMII_PHONE_OTP_LENGTH = int(os.environ.get('TERMII_PHONE_OTP_LENGTH', '6'))
+TERMII_PHONE_OTP_PLACEHOLDER = os.environ.get('TERMII_PHONE_OTP_PLACEHOLDER', '<123456>').strip()
+TERMII_REQUEST_TIMEOUT_SECONDS = int(os.environ.get('TERMII_REQUEST_TIMEOUT_SECONDS', '15'))
+
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = True  # For development only
 # Logging Configuration
@@ -296,4 +310,3 @@ LOGGING = {
         },
     },
 }
-

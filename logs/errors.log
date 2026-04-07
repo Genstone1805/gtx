@@ -151,3 +151,5 @@ Traceback (most recent call last):
     return super().execute(query, params)
            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
 django.db.utils.OperationalError: no such column: account_userprofile.bank_details_id
+[2026-04-08 04:36:52] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-04-08 04:36:53] ERROR django.request Bad Gateway: /api/account/phone/update/

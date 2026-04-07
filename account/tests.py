@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+from django.test import override_settings
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -17,6 +18,11 @@ class MockTermiiResponse:
         return self._payload
 
 
+@override_settings(
+    TERMII_API_KEY='test-termii-key',
+    TERMII_PHONE_OTP_SENDER_ID='TestSender',
+    TERMII_PHONE_OTP_BRAND_NAME='GTX',
+)
 class PhoneVerificationFlowTests(APITestCase):
     def setUp(self):
         self.user = UserProfile.objects.create_user(
@@ -54,6 +60,7 @@ class PhoneVerificationFlowTests(APITestCase):
         call_args, call_kwargs = mock_post.call_args
         self.assertTrue(call_args[0].endswith('/api/sms/otp/send'))
         self.assertEqual(call_kwargs['json']['to'], '2348109477743')
+        self.assertEqual(call_kwargs['json']['from'], 'TestSender')
 
     @patch('account.views.requests.post')
     def test_verify_phone_number_saves_phone_after_successful_token_check(self, mock_post):
@@ -96,3 +103,45 @@ class PhoneVerificationFlowTests(APITestCase):
 
         verification_request = PhoneVerificationRequest.objects.get(user=self.user)
         self.assertEqual(verification_request.pin_id, 'pin-new')
+
+    @override_settings(TERMII_PHONE_OTP_SENDER_ID='')
+    @patch('account.views.requests.post')
+    def test_add_phone_number_requires_configured_sender_id(self, mock_post):
+        response = self.client.post(
+            reverse('add-phone-number'),
+            {'phone_number': '+2348109477743'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_502_BAD_GATEWAY)
+        self.assertEqual(
+            response.data['detail'],
+            'Phone verification is not configured. '
+            'Set TERMII_PHONE_OTP_SENDER_ID to an active Termii sender ID.',
+        )
+        mock_post.assert_not_called()
+
+    @patch('account.views.requests.post')
+    def test_add_phone_number_returns_actionable_error_for_unregistered_sender_id(self, mock_post):
+        mock_post.return_value = MockTermiiResponse(
+            {
+                'message': (
+                    'ApplicationSenderId not found for applicationId: 37677 '
+                    'and senderName: TestSender'
+                ),
+            },
+            status_code=404,
+        )
+
+        response = self.client.post(
+            reverse('add-phone-number'),
+            {'phone_number': '+2348109477743'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_502_BAD_GATEWAY)
+        self.assertEqual(
+            response.data['detail'],
+            "Termii sender ID 'TestSender' is not active for this account. "
+            'Set TERMII_PHONE_OTP_SENDER_ID to an approved sender ID from your Termii dashboard.',
+        )
