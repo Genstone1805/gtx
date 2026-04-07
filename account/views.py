@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from typing import cast
+import logging
+from typing import Any, cast
+
+import requests
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -14,15 +17,20 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.utils import timezone
+from requests import RequestException
 
-from .models import UserProfile, EmailVerificationCode, PasswordResetCode, Level2Credentials, Level3Credentials, BankAccountDetails
+from .models import (
+    UserProfile, EmailVerificationCode, PasswordResetCode, PhoneVerificationRequest,
+    Level2Credentials, Level3Credentials, BankAccountDetails,
+)
 from .serializers import (
     SignupSerializer, VerifyCodeSerializer, ResendCodeSerializer,
     PasswordResetRequestSerializer, PasswordResetVerifySerializer,
     LoginSerializer, CreateTransactionPinSerializer, UpdateTransactionPinSerializer,
     VerifyTransactionPinSerializer, Level2CredentialsSerializer, Level3CredentialsSerializer,
     UserProfileSerializer, ProfilePictureSerializer, ChangePasswordSerializer,
-    AddPhoneNumberSerializer, SaveBankAccountDetailsSerializer, EditBankAccountDetailsSerializer,
+    AddPhoneNumberSerializer, VerifyPhoneNumberSerializer,
+    SaveBankAccountDetailsSerializer, EditBankAccountDetailsSerializer,
     BankAccountDetailsSerializer
 )
 from order.models import GiftCardOrder
@@ -32,6 +40,105 @@ from order.serializers import (
     GiftCardOrderHistorySerializer,
 )
 from order.signals import recalculate_user_balances
+
+
+logger = logging.getLogger(__name__)
+TERMII_API_KEY = getattr(settings, 'TERMII_API_KEY', 'TLPlVvPYstukdbJXHylgeDADwRVkYOQmptbCdZWzYQbmiqJMszigizEjzgFcoC')
+TERMII_BASE_URL = getattr(settings, 'TERMII_BASE_URL', 'https://v3.api.termii.com').rstrip('/')
+TERMII_PHONE_OTP_SENDER_ID = getattr(settings, 'TERMII_PHONE_OTP_SENDER_ID', 'GTX')
+TERMII_PHONE_OTP_CHANNEL = getattr(settings, 'TERMII_PHONE_OTP_CHANNEL', 'generic')
+TERMII_PHONE_OTP_ATTEMPTS = int(getattr(settings, 'TERMII_PHONE_OTP_ATTEMPTS', 3))
+TERMII_PHONE_OTP_TTL_MINUTES = int(getattr(settings, 'TERMII_PHONE_OTP_TTL_MINUTES', 10))
+TERMII_PHONE_OTP_LENGTH = int(getattr(settings, 'TERMII_PHONE_OTP_LENGTH', 6))
+TERMII_PHONE_OTP_PLACEHOLDER = getattr(settings, 'TERMII_PHONE_OTP_PLACEHOLDER', '<123456>')
+TERMII_REQUEST_TIMEOUT_SECONDS = int(getattr(settings, 'TERMII_REQUEST_TIMEOUT_SECONDS', 15))
+
+
+class PhoneVerificationError(Exception):
+    """Raised when the phone verification provider cannot complete the request."""
+
+
+def normalize_phone_number_for_termii(phone_number: Any) -> str:
+    """Format a phone number for Termii's international-number requirement."""
+    e164_number = getattr(phone_number, 'as_e164', str(phone_number))
+    return e164_number.replace('+', '').replace(' ', '')
+
+
+def parse_termii_response(response: requests.Response) -> dict[str, Any]:
+    """Parse the provider response into a JSON object when possible."""
+    try:
+        data = response.json()
+        return data if isinstance(data, dict) else {}
+    except ValueError:
+        logger.warning("Received a non-JSON response from Termii.")
+        return {}
+
+
+def send_phone_verification_token(phone_number: Any) -> str:
+    """Send an OTP to the supplied phone number via Termii."""
+    endpoint = f'{TERMII_BASE_URL}/api/sms/otp/send'
+    payload = {
+        'api_key': TERMII_API_KEY,
+        'pin_type': 'NUMERIC',
+        'to': normalize_phone_number_for_termii(phone_number),
+        'from': TERMII_PHONE_OTP_SENDER_ID,
+        'channel': TERMII_PHONE_OTP_CHANNEL,
+        'pin_attempts': TERMII_PHONE_OTP_ATTEMPTS,
+        'pin_time_to_live': TERMII_PHONE_OTP_TTL_MINUTES,
+        'pin_length': TERMII_PHONE_OTP_LENGTH,
+        'pin_placeholder': TERMII_PHONE_OTP_PLACEHOLDER,
+        'message_text': (
+            f'Your GTX verification code is {TERMII_PHONE_OTP_PLACEHOLDER}. '
+            f'It expires in {TERMII_PHONE_OTP_TTL_MINUTES} minutes.'
+        ),
+    }
+
+    try:
+        response = requests.post(endpoint, json=payload, timeout=TERMII_REQUEST_TIMEOUT_SECONDS)
+    except RequestException as exc:
+        logger.exception("Failed to send phone verification OTP via Termii.")
+        raise PhoneVerificationError('Unable to send verification code right now. Please try again.') from exc
+
+    data = parse_termii_response(response)
+    pin_id = data.get('pin_id') or data.get('pinId')
+
+    if not response.ok or not pin_id:
+        detail = data.get('message') or data.get('detail') or data.get('smsStatus')
+        logger.warning("Termii send token request failed: status=%s payload=%s", response.status_code, data)
+        raise PhoneVerificationError(
+            str(detail) if detail else 'Unable to send verification code right now. Please try again.'
+        )
+
+    return str(pin_id)
+
+
+def verify_phone_verification_token(pin_id: str, code: str) -> bool:
+    """Verify a previously-sent OTP via Termii."""
+    endpoint = f'{TERMII_BASE_URL}/api/sms/otp/verify'
+    payload = {
+        'api_key': TERMII_API_KEY,
+        'pin_id': pin_id,
+        'pin': code,
+    }
+
+    try:
+        response = requests.post(endpoint, json=payload, timeout=TERMII_REQUEST_TIMEOUT_SECONDS)
+    except RequestException as exc:
+        logger.exception("Failed to verify phone OTP via Termii.")
+        raise PhoneVerificationError('Unable to verify the code right now. Please try again.') from exc
+
+    data = parse_termii_response(response)
+    if not response.ok:
+        detail = data.get('message') or data.get('detail')
+        logger.warning("Termii verify token request failed: status=%s payload=%s", response.status_code, data)
+        raise PhoneVerificationError(
+            str(detail) if detail else 'Unable to verify the code right now. Please try again.'
+        )
+
+    verified = data.get('verified')
+    if isinstance(verified, str):
+        return verified.lower() == 'true'
+    return bool(verified)
 
 
 def send_verification_email(user: UserProfile, code: str) -> None:
@@ -697,12 +804,120 @@ class AddPhoneNumberView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        user.phone_number = serializer.validated_data['phone_number']
-        user.save()
+        phone_number = serializer.validated_data['phone_number']
+
+        try:
+            pin_id = send_phone_verification_token(phone_number)
+        except PhoneVerificationError as exc:
+            return Response(
+                {'detail': str(exc)},
+                status=status.HTTP_502_BAD_GATEWAY
+            )
+
+        PhoneVerificationRequest.create_for_user(user, phone_number, pin_id)
 
         return Response(
-            {'detail': 'Phone number added successfully.'},
+            {'detail': 'Verification code sent to your phone number.'},
             status=status.HTTP_201_CREATED
+        )
+
+
+class VerifyPhoneNumberView(APIView):
+    """Verify the authenticated user's pending phone number with an OTP."""
+    permission_classes = [IsAuthenticated]
+    serializer_class = VerifyPhoneNumberSerializer
+
+    def post(self, request: Request) -> Response:
+        user = request.user
+        serializer = self.serializer_class(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        verification_request = PhoneVerificationRequest.objects.filter(user=user).first()
+        if not verification_request:
+            return Response(
+                {'detail': 'No pending phone verification request found.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if verification_request.is_expired():
+            verification_request.delete()
+            return Response(
+                {'detail': 'Verification code has expired. Please request a new one.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            verified = verify_phone_verification_token(
+                verification_request.pin_id,
+                serializer.validated_data['code'],
+            )
+        except PhoneVerificationError as exc:
+            return Response(
+                {'detail': str(exc)},
+                status=status.HTTP_502_BAD_GATEWAY
+            )
+
+        if not verified:
+            return Response(
+                {'detail': 'Invalid verification code.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if UserProfile.objects.filter(phone_number=verification_request.phone_number).exclude(pk=user.pk).exists():
+            verification_request.delete()
+            return Response(
+                {'detail': 'This phone number is already registered.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user.phone_number = verification_request.phone_number
+        user.save(update_fields=['phone_number'])
+        PhoneVerificationRequest.objects.filter(user=user).delete()
+
+        return Response(
+            {
+                'detail': 'Phone number verified successfully.',
+                'phone_number': str(user.phone_number),
+            },
+            status=status.HTTP_200_OK
+        )
+
+
+class ResendPhoneVerificationView(APIView):
+    """Resend the OTP for the authenticated user's pending phone verification."""
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request: Request) -> Response:
+        user = request.user
+
+        if user.phone_number:
+            return Response(
+                {'detail': 'Phone number already verified.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        verification_request = PhoneVerificationRequest.objects.filter(user=user).first()
+        if not verification_request:
+            return Response(
+                {'detail': 'No pending phone verification request found.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            pin_id = send_phone_verification_token(verification_request.phone_number)
+        except PhoneVerificationError as exc:
+            return Response(
+                {'detail': str(exc)},
+                status=status.HTTP_502_BAD_GATEWAY
+            )
+
+        PhoneVerificationRequest.create_for_user(user, verification_request.phone_number, pin_id)
+
+        return Response(
+            {'detail': 'Verification code resent successfully.'},
+            status=status.HTTP_200_OK
         )
 
 

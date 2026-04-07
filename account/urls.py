@@ -7,7 +7,7 @@ from .views import (
     VerifyTransactionPinView, SubmitLevel2CredentialsView, SubmitLevel3CredentialsView,
     CurrentUserView, UploadProfilePictureView,
     UpdateProfilePictureView,
-    ChangePasswordView, AddPhoneNumberView,
+    ChangePasswordView, AddPhoneNumberView, VerifyPhoneNumberView, ResendPhoneVerificationView,
     AttachBankDetailsView, EditBankDetailsView, DeleteBankDetailsView,
     UserOrdersView, UserOrderDetailView, UserTransactionHistoryView
 )
@@ -36,6 +36,8 @@ urlpatterns = [
     path('profile/picture/upload/', UploadProfilePictureView.as_view(), name='profile-picture-upload'),
     path('profile/picture/update/', UpdateProfilePictureView.as_view(), name='profile-picture-update'),
     path('phone/update/', AddPhoneNumberView.as_view(), name='add-phone-number'),
+    path('phone/verify/', VerifyPhoneNumberView.as_view(), name='verify-phone-number'),
+    path('phone/resend-code/', ResendPhoneVerificationView.as_view(), name='resend-phone-verification'),
     
     # bank details logic
     path('bank-details/attach/', AttachBankDetailsView.as_view(), name='attach-bank-details'),

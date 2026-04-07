@@ -151,3 +151,7 @@ class AddPhoneNumberSerializer(serializers.Serializer):
         if UserProfile.objects.filter(phone_number=value).exists():
             raise serializers.ValidationError("This phone number is already registered.")
         return value
+
+
+class VerifyPhoneNumberSerializer(serializers.Serializer):
+    code = serializers.CharField(max_length=8, min_length=4)

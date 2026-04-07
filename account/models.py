@@ -216,3 +216,34 @@ class PasswordResetCode(models.Model):
 
     def __str__(self):
         return f"Password reset code for {self.user.email}"
+
+
+class PhoneVerificationRequest(models.Model):
+    """Stores pending phone number verification requests for authenticated users."""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='phone_verification_requests'
+    )
+    phone_number = PhoneNumberField()
+    pin_id = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    @classmethod
+    def create_for_user(cls, user, phone_number, pin_id):
+        """Create a new pending phone verification, removing any existing ones."""
+        cls.objects.filter(user=user).delete()
+        return cls.objects.create(user=user, phone_number=phone_number, pin_id=pin_id)
+
+    def is_expired(self):
+        """Check if the pending verification request is expired (valid for 10 minutes)."""
+        from datetime import timedelta
+
+        expiry_time = self.created_at + timedelta(minutes=10)
+        return timezone.now() > expiry_time
+
+    def __str__(self):
+        return f"Phone verification for {self.user.email} ({self.phone_number})"
