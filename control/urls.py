@@ -12,7 +12,7 @@ from .views import (
   Level2CredentialApprovalView,
   Level3CredentialApprovalView,
   TransactionListView,
-  OrderStatusUpdateView,
+  TransactionStatusUpdateView,
   AdminWithdrawalListView,
   AdminWithdrawalDetailView,
   AdminWithdrawalProcessView,
@@ -37,7 +37,7 @@ urlpatterns = [
 
     # transactions management
     path('transactions/', TransactionListView.as_view(), name="transaction_list"),
-    path('update-transactions-status/<int:order_id>/', OrderStatusUpdateView.as_view(), name="update_order_status"),
+    path('update-transactions-status/<int:transaction_id>/', TransactionStatusUpdateView.as_view(), name="update_order_status"),
 
     # Withdrawal management
     path('withdrawals/', AdminWithdrawalListView.as_view(), name="admin-withdrawal-list"),

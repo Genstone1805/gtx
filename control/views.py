@@ -270,13 +270,13 @@ class TransactionListView(ListAPIView):
         return GiftCardOrder.objects.all()
 
 
-class OrderStatusUpdateView(APIView):
+class TransactionStatusUpdateView(APIView):
     """Update the status of an order. Balance updates are handled automatically by signals."""
     permission_classes = [IsAdminUser]
     serializer_class = OrderStatusUpdateSerializer
 
-    def patch(self, request, order_id):
-        order = get_object_or_404(GiftCardOrder, id=order_id)
+    def patch(self, request, transaction_id):
+        order = get_object_or_404(GiftCardOrder, id=transaction_id)
         old_status = order.status
 
         serializer = self.serializer_class(data=request.data)
