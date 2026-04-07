@@ -11,7 +11,7 @@ from .views import (
   PendingLevel3CredentialsListView,
   Level2CredentialApprovalView,
   Level3CredentialApprovalView,
-  PendingOrdersListView,
+  TransactionListView,
   OrderStatusUpdateView,
   AdminWithdrawalListView,
   AdminWithdrawalDetailView,
@@ -35,9 +35,9 @@ urlpatterns = [
     path('approve/level2/<int:credential_id>/', Level2CredentialApprovalView.as_view(), name="approve_level2"),
     path('approve/level3/<int:credential_id>/', Level3CredentialApprovalView.as_view(), name="approve_level3"),
 
-    # Order management
-    path('pending-orders/', PendingOrdersListView.as_view(), name="pending_orders_list"),
-    path('update-order-status/<int:order_id>/', OrderStatusUpdateView.as_view(), name="update_order_status"),
+    # transactions management
+    path('transactions/', TransactionListView.as_view(), name="transaction_list"),
+    path('update-transactions-status/<int:order_id>/', OrderStatusUpdateView.as_view(), name="update_order_status"),
 
     # Withdrawal management
     path('withdrawals/', AdminWithdrawalListView.as_view(), name="admin-withdrawal-list"),

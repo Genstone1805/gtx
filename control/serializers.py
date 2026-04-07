@@ -87,7 +87,7 @@ class CredentialApprovalSerializer(serializers.Serializer):
     reason = serializers.CharField(required=False, allow_blank=True)
 
 
-class PendingOrderSerializer(serializers.ModelSerializer):
+class TransactionSerializer(serializers.ModelSerializer):
     user = UserBasicSerializer(read_only=True)
 
     class Meta:

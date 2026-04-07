@@ -24,7 +24,7 @@ from .serializers import (
    Level2CredentialsPendingSerializer,
    Level3CredentialsPendingSerializer,
    CredentialApprovalSerializer,
-   PendingOrderSerializer,
+   TransactionSerializer,
    OrderStatusUpdateSerializer,
    WithdrawalListSerializer,
    WithdrawalDetailSerializer,
@@ -261,13 +261,13 @@ class Level3CredentialApprovalView(APIView):
             )
 
 
-class PendingOrdersListView(ListAPIView):
+class TransactionListView(ListAPIView):
     """List all pending gift card orders."""
     permission_classes = [IsAdminUser]
-    serializer_class = PendingOrderSerializer
+    serializer_class = TransactionSerializer
 
     def get_queryset(self):
-        return GiftCardOrder.objects.filter(status='Pending')
+        return GiftCardOrder.objects.all()
 
 
 class OrderStatusUpdateView(APIView):
