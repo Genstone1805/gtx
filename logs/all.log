@@ -538,3 +538,38 @@ django.db.utils.OperationalError: no such column: account_userprofile.bank_detai
 [2026-04-08 04:46:34] INFO gtx RESPONSE | POST /api/account/phone/resend-code/ | Status: 200 | Duration: 0.002s
 [2026-04-08 04:46:36] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
 [2026-04-08 04:46:36] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 200 | Duration: 0.003s
+[2026-04-09 05:11:42] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-09 05:11:42] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.012s
+[2026-04-09 05:11:42] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.012s
+[2026-04-09 05:11:42] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-04-09 05:11:43] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-09 05:11:43] WARNING account.views Termii send token request failed: status=404 payload={'message': 'ApplicationSenderId not found for applicationId: 37677 and senderName: TestSender'}
+[2026-04-09 05:11:43] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.002s
+[2026-04-09 05:11:43] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.002s
+[2026-04-09 05:11:43] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-04-09 05:11:45] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-09 05:11:45] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 201 | Duration: 0.002s
+[2026-04-09 05:11:46] INFO gtx REQUEST | POST /api/account/phone/resend-code/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-09 05:11:46] INFO gtx RESPONSE | POST /api/account/phone/resend-code/ | Status: 200 | Duration: 0.003s
+[2026-04-09 05:11:47] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-09 05:11:47] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 200 | Duration: 0.004s
+[2026-04-09 05:15:42] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-09 05:15:42] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.004s
+[2026-04-09 05:15:42] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.004s
+[2026-04-09 05:15:42] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-04-09 05:15:44] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-09 05:15:44] WARNING account.views Termii send token request failed: status=404 payload={'message': 'ApplicationSenderId not found for applicationId: 37677 and senderName: TestSender'}
+[2026-04-09 05:15:44] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.003s
+[2026-04-09 05:15:44] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.003s
+[2026-04-09 05:15:44] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-04-09 05:15:46] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-09 05:15:46] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 201 | Duration: 0.010s
+[2026-04-09 05:15:48] INFO gtx REQUEST | POST /api/account/phone/resend-code/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-09 05:15:48] INFO gtx RESPONSE | POST /api/account/phone/resend-code/ | Status: 200 | Duration: 0.003s
+[2026-04-09 05:15:51] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-09 05:15:51] WARNING account.views Termii verified a different phone number than expected: expected=2348109477743 actual=2348109077743
+[2026-04-09 05:15:51] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 400 | Duration: 0.006s
+[2026-04-09 05:15:51] WARNING gtx ERROR | POST /api/account/phone/verify/ | Status: 400 | User: Anonymous | Duration: 0.006s
+[2026-04-09 05:15:51] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-04-09 05:15:54] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-04-09 05:15:54] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 200 | Duration: 0.009s

@@ -62,6 +62,7 @@ def get_termii_phone_verification_config() -> dict[str, Any]:
         or sender_id
         or 'GTX',
         'channel': str(getattr(settings, 'TERMII_PHONE_OTP_CHANNEL', 'generic') or 'generic').strip(),
+        'message_type': str(getattr(settings, 'TERMII_PHONE_OTP_MESSAGE_TYPE', 'NUMERIC') or 'NUMERIC').strip(),
         'attempts': int(getattr(settings, 'TERMII_PHONE_OTP_ATTEMPTS', 3)),
         'ttl_minutes': int(getattr(settings, 'TERMII_PHONE_OTP_TTL_MINUTES', 10)),
         'length': int(getattr(settings, 'TERMII_PHONE_OTP_LENGTH', 6)),
@@ -124,6 +125,7 @@ def send_phone_verification_token(phone_number: Any) -> str:
     endpoint = f"{config['base_url']}/api/sms/otp/send"
     payload = {
         'api_key': config['api_key'],
+        'message_type': config['message_type'],
         'pin_type': 'NUMERIC',
         'to': normalize_phone_number_for_termii(phone_number),
         'from': config['sender_id'],
@@ -137,9 +139,17 @@ def send_phone_verification_token(phone_number: Any) -> str:
             f"It expires in {config['ttl_minutes']} minutes."
         ),
     }
+    headers = {
+        'Content-Type': 'application/json',
+    }
 
     try:
-        response = requests.post(endpoint, json=payload, timeout=config['timeout_seconds'])
+        response = requests.post(
+            endpoint,
+            headers=headers,
+            json=payload,
+            timeout=config['timeout_seconds'],
+        )
     except RequestException as exc:
         logger.exception("Failed to send phone verification OTP via Termii.")
         raise PhoneVerificationError('Unable to send verification code right now. Please try again.') from exc
@@ -159,8 +169,8 @@ def send_phone_verification_token(phone_number: Any) -> str:
     return str(pin_id)
 
 
-def verify_phone_verification_token(pin_id: str, code: str) -> bool:
-    """Verify a previously-sent OTP via Termii."""
+def verify_phone_verification_token(pin_id: str, code: str) -> dict[str, Any]:
+    """Verify a previously-sent OTP via Termii and return the provider payload."""
     config = validate_termii_phone_verification_config(require_sender_id=False)
     endpoint = f"{config['base_url']}/api/sms/otp/verify"
     payload = {
@@ -168,9 +178,17 @@ def verify_phone_verification_token(pin_id: str, code: str) -> bool:
         'pin_id': pin_id,
         'pin': code,
     }
+    headers = {
+        'Content-Type': 'application/json',
+    }
 
     try:
-        response = requests.post(endpoint, json=payload, timeout=config['timeout_seconds'])
+        response = requests.post(
+            endpoint,
+            headers=headers,
+            json=payload,
+            timeout=config['timeout_seconds'],
+        )
     except RequestException as exc:
         logger.exception("Failed to verify phone OTP via Termii.")
         raise PhoneVerificationError('Unable to verify the code right now. Please try again.') from exc
@@ -185,8 +203,11 @@ def verify_phone_verification_token(pin_id: str, code: str) -> bool:
 
     verified = data.get('verified')
     if isinstance(verified, str):
-        return verified.lower() == 'true'
-    return bool(verified)
+        data['verified'] = verified.lower() == 'true'
+    else:
+        data['verified'] = bool(verified)
+
+    return data
 
 
 def send_verification_email(user: UserProfile, code: str) -> None:
@@ -897,7 +918,7 @@ class VerifyPhoneNumberView(APIView):
             )
 
         try:
-            verified = verify_phone_verification_token(
+            verification_result = verify_phone_verification_token(
                 verification_request.pin_id,
                 serializer.validated_data['code'],
             )
@@ -907,9 +928,21 @@ class VerifyPhoneNumberView(APIView):
                 status=status.HTTP_502_BAD_GATEWAY
             )
 
-        if not verified:
+        if not verification_result.get('verified'):
             return Response(
                 {'detail': 'Invalid verification code.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        verified_msisdn = verification_result.get('msisdn')
+        if verified_msisdn and verified_msisdn != normalize_phone_number_for_termii(verification_request.phone_number):
+            logger.warning(
+                "Termii verified a different phone number than expected: expected=%s actual=%s",
+                normalize_phone_number_for_termii(verification_request.phone_number),
+                verified_msisdn,
+            )
+            return Response(
+                {'detail': 'Verification failed for this phone number. Please request a new code.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 

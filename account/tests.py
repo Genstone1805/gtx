@@ -61,11 +61,19 @@ class PhoneVerificationFlowTests(APITestCase):
         self.assertTrue(call_args[0].endswith('/api/sms/otp/send'))
         self.assertEqual(call_kwargs['json']['to'], '2348109477743')
         self.assertEqual(call_kwargs['json']['from'], 'TestSender')
+        self.assertEqual(call_kwargs['json']['message_type'], 'NUMERIC')
+        self.assertEqual(call_kwargs['headers']['Content-Type'], 'application/json')
 
     @patch('account.views.requests.post')
     def test_verify_phone_number_saves_phone_after_successful_token_check(self, mock_post):
         PhoneVerificationRequest.create_for_user(self.user, '+2348109477743', 'pin-123')
-        mock_post.return_value = MockTermiiResponse({'verified': 'True'})
+        mock_post.return_value = MockTermiiResponse(
+            {
+                'pinId': 'pin-123',
+                'verified': 'True',
+                'msisdn': '2348109477743',
+            }
+        )
 
         response = self.client.post(
             reverse('verify-phone-number'),
@@ -84,6 +92,34 @@ class PhoneVerificationFlowTests(APITestCase):
         self.assertTrue(call_args[0].endswith('/api/sms/otp/verify'))
         self.assertEqual(call_kwargs['json']['pin_id'], 'pin-123')
         self.assertEqual(call_kwargs['json']['pin'], '123456')
+        self.assertEqual(call_kwargs['headers']['Content-Type'], 'application/json')
+
+    @patch('account.views.requests.post')
+    def test_verify_phone_number_rejects_mismatched_verified_number(self, mock_post):
+        PhoneVerificationRequest.create_for_user(self.user, '+2348109477743', 'pin-123')
+        mock_post.return_value = MockTermiiResponse(
+            {
+                'pinId': 'pin-123',
+                'verified': 'True',
+                'msisdn': '2348109077743',
+            }
+        )
+
+        response = self.client.post(
+            reverse('verify-phone-number'),
+            {'code': '123456'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data['detail'],
+            'Verification failed for this phone number. Please request a new code.',
+        )
+
+        self.user.refresh_from_db()
+        self.assertIsNone(self.user.phone_number)
+        self.assertTrue(PhoneVerificationRequest.objects.filter(user=self.user).exists())
 
     @patch('account.views.requests.post')
     def test_resend_phone_verification_replaces_existing_pin_id(self, mock_post):
