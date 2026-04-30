@@ -1,4 +1,5 @@
 from __future__ import annotations
+import os
 
 import logging
 from typing import Any, cast
@@ -13,11 +14,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.mail import EmailMultiAlternatives
+from rest_framework.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from requests import RequestException
+import secrets
 
 from .models import (
     UserProfile, EmailVerificationCode, PasswordResetCode, PhoneVerificationRequest,
@@ -119,95 +122,44 @@ def normalize_termii_error_detail(detail: Any) -> str | None:
     return normalized_detail
 
 
-def send_phone_verification_token(phone_number: Any) -> str:
-    """Send an OTP to the supplied phone number via Termii."""
-    config = validate_termii_phone_verification_config(require_sender_id=True)
-    endpoint = f"{config['base_url']}/api/sms/otp/send"
+
+
+def send_phone_verification_token(recipient: str):
+    """
+    Send otp to the registered number
+    """
+    
+    endpoint = f"{os.environ.get('TERMII_BASE_URL')}/api/sms/send"
+    api_key = os.environ.get("TERMII_API_KEY")
+    sender_id = os.environ.get("TERMII_PHONE_OTP_SENDER_ID")
+    otp = secrets.randbelow(900000) + 100000
+    message = f"Your verification code is: {otp}"
     payload = {
-        'api_key': config['api_key'],
-        'message_type': config['message_type'],
-        'pin_type': 'NUMERIC',
-        'to': normalize_phone_number_for_termii(phone_number),
-        'from': config['sender_id'],
-        'channel': config['channel'],
-        'pin_attempts': config['attempts'],
-        'pin_time_to_live': config['ttl_minutes'],
-        'pin_length': config['length'],
-        'pin_placeholder': config['placeholder'],
-        'message_text': (
-            f"Your {config['brand_name']} verification code is {config['placeholder']}. "
-            f"It expires in {config['ttl_minutes']} minutes."
-        ),
-    }
+                "api_key": api_key,
+                "to": [f"{recipient}"],
+                "from": sender_id,
+                "sms": message,
+                "type": "plain",
+                "channel": "generic",
+            }
     headers = {
         'Content-Type': 'application/json',
     }
-
-    try:
-        response = requests.post(
-            endpoint,
-            headers=headers,
-            json=payload,
-            timeout=config['timeout_seconds'],
-        )
-    except RequestException as exc:
-        logger.exception("Failed to send phone verification OTP via Termii.")
-        raise PhoneVerificationError('Unable to send verification code right now. Please try again.') from exc
-
-    data = parse_termii_response(response)
-    pin_id = data.get('pin_id') or data.get('pinId')
-
-    if not response.ok or not pin_id:
-        detail = normalize_termii_error_detail(
-            data.get('message') or data.get('detail') or data.get('smsStatus')
-        )
-        logger.warning("Termii send token request failed: status=%s payload=%s", response.status_code, data)
-        raise PhoneVerificationError(
-            str(detail) if detail else 'Unable to send verification code right now. Please try again.'
-        )
-
-    return str(pin_id)
-
-
-def verify_phone_verification_token(pin_id: str, code: str) -> dict[str, Any]:
-    """Verify a previously-sent OTP via Termii and return the provider payload."""
-    config = validate_termii_phone_verification_config(require_sender_id=False)
-    endpoint = f"{config['base_url']}/api/sms/otp/verify"
-    payload = {
-        'api_key': config['api_key'],
-        'pin_id': pin_id,
-        'pin': code,
-    }
-    headers = {
-        'Content-Type': 'application/json',
-    }
-
-    try:
-        response = requests.post(
-            endpoint,
-            headers=headers,
-            json=payload,
-            timeout=config['timeout_seconds'],
-        )
-    except RequestException as exc:
-        logger.exception("Failed to verify phone OTP via Termii.")
-        raise PhoneVerificationError('Unable to verify the code right now. Please try again.') from exc
-
-    data = parse_termii_response(response)
-    if not response.ok:
-        detail = normalize_termii_error_detail(data.get('message') or data.get('detail'))
-        logger.warning("Termii verify token request failed: status=%s payload=%s", response.status_code, data)
-        raise PhoneVerificationError(
-            str(detail) if detail else 'Unable to verify the code right now. Please try again.'
-        )
-
-    verified = data.get('verified')
-    if isinstance(verified, str):
-        data['verified'] = verified.lower() == 'true'
+    
+    response = requests.post(endpoint, json=payload, headers=headers, timeout=30)
+    response_object = response.json()
+    if response_object["code"] == "ok":
+        response_object["pin_id"] = otp
+        return response_object
     else:
-        data['verified'] = bool(verified)
+        raise ValidationError(response_object["message"])
 
-    return data
+
+def verify_phone_verification_token(pin_id: str, code: str) -> bool:
+    if pin_id == code:
+        return True
+    else:
+        return False
 
 
 def send_verification_email(user: UserProfile, code: str) -> None:
@@ -862,6 +814,7 @@ class AddPhoneNumberView(APIView):
 
     def post(self, request: Request) -> Response:
         user = request.user
+        
 
         if user.phone_number:
             return Response(
@@ -874,21 +827,27 @@ class AddPhoneNumberView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         phone_number = serializer.validated_data['phone_number']
+        
 
         try:
-            pin_id = send_phone_verification_token(phone_number)
+            response = send_phone_verification_token(phone_number)
+            pin_id = response["pin_id"]
+            PhoneVerificationRequest.create_for_user(user, phone_number, pin_id)
+            return Response(
+                {'detail': 'Verification code sent to your phone number.'},
+                status=status.HTTP_201_CREATED
+            )
+        except ValidationError as exc:
+            return Response(
+                {'detail': str(exc)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         except PhoneVerificationError as exc:
             return Response(
                 {'detail': str(exc)},
                 status=status.HTTP_502_BAD_GATEWAY
             )
 
-        PhoneVerificationRequest.create_for_user(user, phone_number, pin_id)
-
-        return Response(
-            {'detail': 'Verification code sent to your phone number.'},
-            status=status.HTTP_201_CREATED
-        )
 
 
 class VerifyPhoneNumberView(APIView):
@@ -902,7 +861,6 @@ class VerifyPhoneNumberView(APIView):
 
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
         verification_request = PhoneVerificationRequest.objects.filter(user=user).first()
         if not verification_request:
             return Response(
@@ -916,55 +874,36 @@ class VerifyPhoneNumberView(APIView):
                 {'detail': 'Verification code has expired. Please request a new one.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+            
+        verification_result = verify_phone_verification_token(
+            verification_request.pin_id,
+            serializer.validated_data['code'],
+        )
+        
+        if verification_result:
+            if UserProfile.objects.filter(phone_number=verification_request.phone_number).exclude(pk=user.pk).exists():
+                verification_request.delete()
+                return Response(
+                    {'detail': 'This phone number is already registered.'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-        try:
-            verification_result = verify_phone_verification_token(
-                verification_request.pin_id,
-                serializer.validated_data['code'],
-            )
-        except PhoneVerificationError as exc:
+            user.phone_number = verification_request.phone_number
+            user.save(update_fields=['phone_number'])
+            PhoneVerificationRequest.objects.filter(user=user).delete()
+
             return Response(
-                {'detail': str(exc)},
-                status=status.HTTP_502_BAD_GATEWAY
+                {
+                    'detail': 'Phone number verified successfully.',
+                    'phone_number': str(user.phone_number),
+                },
+                status=status.HTTP_200_OK
             )
-
-        if not verification_result.get('verified'):
+        else:
             return Response(
                 {'detail': 'Invalid verification code.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
-        verified_msisdn = verification_result.get('msisdn')
-        if verified_msisdn and verified_msisdn != normalize_phone_number_for_termii(verification_request.phone_number):
-            logger.warning(
-                "Termii verified a different phone number than expected: expected=%s actual=%s",
-                normalize_phone_number_for_termii(verification_request.phone_number),
-                verified_msisdn,
-            )
-            return Response(
-                {'detail': 'Verification failed for this phone number. Please request a new code.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        if UserProfile.objects.filter(phone_number=verification_request.phone_number).exclude(pk=user.pk).exists():
-            verification_request.delete()
-            return Response(
-                {'detail': 'This phone number is already registered.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        user.phone_number = verification_request.phone_number
-        user.save(update_fields=['phone_number'])
-        PhoneVerificationRequest.objects.filter(user=user).delete()
-
-        return Response(
-            {
-                'detail': 'Phone number verified successfully.',
-                'phone_number': str(user.phone_number),
-            },
-            status=status.HTTP_200_OK
-        )
-
 
 class ResendPhoneVerificationView(APIView):
     """Resend the OTP for the authenticated user's pending phone verification."""
@@ -987,19 +926,23 @@ class ResendPhoneVerificationView(APIView):
             )
 
         try:
-            pin_id = send_phone_verification_token(verification_request.phone_number)
+            response = send_phone_verification_token(verification_request.phone_number)
+            pin_id = response["pin_id"]
+            PhoneVerificationRequest.create_for_user(user, verification_request.phone_number, pin_id)
+            return Response(
+                {'detail': 'Verification code sent to your phone number.'},
+                status=status.HTTP_201_CREATED
+            )
+        except ValidationError as exc:
+            return Response(
+                {'detail': str(exc)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         except PhoneVerificationError as exc:
             return Response(
                 {'detail': str(exc)},
                 status=status.HTTP_502_BAD_GATEWAY
             )
-
-        PhoneVerificationRequest.create_for_user(user, verification_request.phone_number, pin_id)
-
-        return Response(
-            {'detail': 'Verification code resent successfully.'},
-            status=status.HTTP_200_OK
-        )
 
 
 # class SaveBankDetailsView(APIView):

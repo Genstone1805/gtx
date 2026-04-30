@@ -160,3 +160,1817 @@ django.db.utils.OperationalError: no such column: account_userprofile.bank_detai
 [2026-04-09 05:15:42] ERROR django.request Bad Gateway: /api/account/phone/update/
 [2026-04-09 05:15:44] ERROR django.request Bad Gateway: /api/account/phone/update/
 [2026-04-09 05:15:51] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-04-09 06:15:36] WARNING django.request Not Found: /
+[2026-04-09 06:15:36] WARNING django.request Not Found: /favicon.ico
+[2026-04-09 06:15:47] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-09 06:17:31] ERROR django.request Bad Gateway: /account/phone/update/
+[2026-04-24 00:42:23] WARNING django.request Not Found: /
+[2026-04-24 00:42:24] WARNING django.request Not Found: /favicon.ico
+[2026-04-24 00:44:58] WARNING django.request Not Found: /account/sss
+[2026-04-24 00:45:38] WARNING django.request Unauthorized: /account/phone/update/
+[2026-04-24 00:45:49] WARNING django.request Method Not Allowed: /account/phone/update/
+[2026-04-24 00:46:19] WARNING django.request Not Found: /
+[2026-04-24 00:50:25] WARNING django.request Not Found: /
+[2026-04-24 00:50:36] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-24 00:54:30] ERROR django.request Bad Gateway: /account/phone/update/
+[2026-04-24 01:33:46] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 149, in send_phone_verification_token
+    requests.request("POST", endpoint, headers=headers, json=payload)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\sessions.py", line 575, in request
+    prep = self.prepare_request(req)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\sessions.py", line 484, in prepare_request
+    p.prepare(
+    ~~~~~~~~~^
+        method=request.method.upper(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        hooks=merge_hooks(request.hooks, self.hooks),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\models.py", line 370, in prepare
+    self.prepare_body(data, files, json)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\models.py", line 510, in prepare_body
+    body = complexjson.dumps(json, allow_nan=False)
+  File "C:\Python313\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "C:\Python313\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Python313\Lib\json\encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Python313\Lib\json\encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+TypeError: Object of type PhoneNumber is not JSON serializable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 914, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 152, in send_phone_verification_token
+    raise ValueError(error)
+ValueError: Object of type PhoneNumber is not JSON serializable
+[2026-04-24 01:33:57] WARNING django.request Bad Request: /account/phone/update/
+[2026-04-24 01:34:04] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 149, in send_phone_verification_token
+    requests.request("POST", endpoint, headers=headers, json=payload)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\sessions.py", line 575, in request
+    prep = self.prepare_request(req)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\sessions.py", line 484, in prepare_request
+    p.prepare(
+    ~~~~~~~~~^
+        method=request.method.upper(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        hooks=merge_hooks(request.hooks, self.hooks),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\models.py", line 370, in prepare
+    self.prepare_body(data, files, json)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\models.py", line 510, in prepare_body
+    body = complexjson.dumps(json, allow_nan=False)
+  File "C:\Python313\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "C:\Python313\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Python313\Lib\json\encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Python313\Lib\json\encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+TypeError: Object of type PhoneNumber is not JSON serializable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 914, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 152, in send_phone_verification_token
+    raise ValueError(error)
+ValueError: Object of type PhoneNumber is not JSON serializable
+[2026-04-24 01:35:42] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 149, in send_phone_verification_token
+    requests.request("POST", endpoint, headers=headers, json=payload)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\sessions.py", line 575, in request
+    prep = self.prepare_request(req)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\sessions.py", line 484, in prepare_request
+    p.prepare(
+    ~~~~~~~~~^
+        method=request.method.upper(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        hooks=merge_hooks(request.hooks, self.hooks),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\models.py", line 370, in prepare
+    self.prepare_body(data, files, json)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\models.py", line 510, in prepare_body
+    body = complexjson.dumps(json, allow_nan=False)
+  File "C:\Python313\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "C:\Python313\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Python313\Lib\json\encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Python313\Lib\json\encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+TypeError: Object of type PhoneNumber is not JSON serializable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 916, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 152, in send_phone_verification_token
+    raise ValueError(error)
+ValueError: Object of type PhoneNumber is not JSON serializable
+[2026-04-24 01:43:22] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 151, in send_phone_verification_token
+    requests.request("POST", endpoint, headers=headers, json=payload)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\sessions.py", line 575, in request
+    prep = self.prepare_request(req)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\sessions.py", line 484, in prepare_request
+    p.prepare(
+    ~~~~~~~~~^
+        method=request.method.upper(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        hooks=merge_hooks(request.hooks, self.hooks),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\models.py", line 370, in prepare
+    self.prepare_body(data, files, json)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\models.py", line 510, in prepare_body
+    body = complexjson.dumps(json, allow_nan=False)
+  File "C:\Python313\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "C:\Python313\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Python313\Lib\json\encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Python313\Lib\json\encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+TypeError: Object of type PhoneNumber is not JSON serializable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 917, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 154, in send_phone_verification_token
+    raise ValueError(error)
+ValueError: Object of type PhoneNumber is not JSON serializable
+[2026-04-24 01:48:54] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Python313\Lib\http\client.py", line 1430, in getresponse
+    response.begin()
+    ~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\http\client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ~~~~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\http\client.py", line 300, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+                             " response")
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\adapters.py", line 644, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\util\retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\util\util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Python313\Lib\http\client.py", line 1430, in getresponse
+    response.begin()
+    ~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\http\client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ~~~~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\http\client.py", line 300, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+                             " response")
+urllib3.exceptions.ProtocolError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 150, in send_phone_verification_token
+    response = requests.request("POST", endpoint, headers=headers, json=payload)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\adapters.py", line 659, in send
+    raise ConnectionError(err, request=request)
+requests.exceptions.ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 865, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 153, in send_phone_verification_token
+    raise ValueError(error)
+ValueError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+[2026-04-24 01:51:03] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Python313\Lib\http\client.py", line 1430, in getresponse
+    response.begin()
+    ~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\http\client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ~~~~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\http\client.py", line 300, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+                             " response")
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\adapters.py", line 644, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\util\retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\util\util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Python313\Lib\http\client.py", line 1430, in getresponse
+    response.begin()
+    ~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\http\client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ~~~~~~~~~~~~~~~~~^^
+  File "C:\Python313\Lib\http\client.py", line 300, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+                             " response")
+urllib3.exceptions.ProtocolError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 150, in send_phone_verification_token
+    response = requests.request("POST", endpoint, headers=headers, json=payload)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\adapters.py", line 659, in send
+    raise ConnectionError(err, request=request)
+requests.exceptions.ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 865, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 153, in send_phone_verification_token
+    raise ValueError(error)
+ValueError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+[2026-04-24 01:53:25] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 151, in send_phone_verification_token
+    return response.pin_id
+           ^^^^^^^^^^^^^^^
+AttributeError: 'Response' object has no attribute 'pin_id'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 865, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 153, in send_phone_verification_token
+    raise ValueError(error)
+ValueError: 'Response' object has no attribute 'pin_id'
+[2026-04-24 02:08:51] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 865, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 153, in send_phone_verification_token
+    raise ValueError("Validation error")
+ValueError: Validation error
+[2026-04-24 02:11:24] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 149, in send_phone_verification_token
+    response.raise_for_status()  # raises HTTPError for bad responses (4xx, 5xx)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: https://v3.api.termii.com/api/sms/otp/send
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 156, in send_phone_verification_token
+    raise ValueError(error_data)
+ValueError: {'status': 400, 'error': 'Bad Request', 'message': 'JSON parse error: Unrecognized field "phone_number" (class com.termii.common.data.SendClassicOtpRequest), not marked as ignorable; nested exception is com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field "phone_number" (class com.termii.common.data.SendClassicOtpRequest), not marked as ignorable (14 known properties: "channel", "pin_type", "message_text", "pin_time_to_live", "pin_placeholder", "from", "overrideMobile", "pin_attempts", "message_type", "api_key", "to", "mobileOnboarding", "mobileOnboardingEmail", "pin_length"])\n at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 1, column: 119] (through reference chain: com.termii.common.data.SendClassicOtpRequest["phone_number"])', 'path': '/sms/otp/send'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 872, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 160, in send_phone_verification_token
+    raise ValueError(response.text)
+ValueError: {"status":400,"error":"Bad Request","message":"JSON parse error: Unrecognized field \"phone_number\" (class com.termii.common.data.SendClassicOtpRequest), not marked as ignorable; nested exception is com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field \"phone_number\" (class com.termii.common.data.SendClassicOtpRequest), not marked as ignorable (14 known properties: \"channel\", \"pin_type\", \"message_text\", \"pin_time_to_live\", \"pin_placeholder\", \"from\", \"overrideMobile\", \"pin_attempts\", \"message_type\", \"api_key\", \"to\", \"mobileOnboarding\", \"mobileOnboardingEmail\", \"pin_length\"])\n at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 1, column: 119] (through reference chain: com.termii.common.data.SendClassicOtpRequest[\"phone_number\"])","path":"/sms/otp/send"}
+[2026-04-24 02:17:44] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 150, in send_phone_verification_token
+    response.raise_for_status()  # raises HTTPError for bad responses (4xx, 5xx)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: https://v3.api.termii.com/api/sms/otp/send
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 157, in send_phone_verification_token
+    raise ValueError(error_data)
+ValueError: {'status': 400, 'error': 'Bad Request', 'message': 'JSON parse error: Unrecognized field "phone_number" (class com.termii.common.data.SendClassicOtpRequest), not marked as ignorable; nested exception is com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field "phone_number" (class com.termii.common.data.SendClassicOtpRequest), not marked as ignorable (14 known properties: "channel", "pin_type", "message_text", "pin_time_to_live", "pin_placeholder", "from", "overrideMobile", "pin_attempts", "message_type", "api_key", "to", "mobileOnboarding", "mobileOnboardingEmail", "pin_length"])\n at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 1, column: 119] (through reference chain: com.termii.common.data.SendClassicOtpRequest["phone_number"])', 'path': '/sms/otp/send'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 873, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 161, in send_phone_verification_token
+    raise ValueError(response.text)
+ValueError: {"status":400,"error":"Bad Request","message":"JSON parse error: Unrecognized field \"phone_number\" (class com.termii.common.data.SendClassicOtpRequest), not marked as ignorable; nested exception is com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field \"phone_number\" (class com.termii.common.data.SendClassicOtpRequest), not marked as ignorable (14 known properties: \"channel\", \"pin_type\", \"message_text\", \"pin_time_to_live\", \"pin_placeholder\", \"from\", \"overrideMobile\", \"pin_attempts\", \"message_type\", \"api_key\", \"to\", \"mobileOnboarding\", \"mobileOnboardingEmail\", \"pin_length\"])\n at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 1, column: 119] (through reference chain: com.termii.common.data.SendClassicOtpRequest[\"phone_number\"])","path":"/sms/otp/send"}
+[2026-04-24 02:18:06] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 150, in send_phone_verification_token
+    response.raise_for_status()  # raises HTTPError for bad responses (4xx, 5xx)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\requests\models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: https://v3.api.termii.com/api/sms/otp/send
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 157, in send_phone_verification_token
+    raise ValueError(error_data)
+ValueError: {'status': 400, 'error': 'Bad Request', 'message': 'JSON parse error: Unrecognized field "phone_number" (class com.termii.common.data.SendClassicOtpRequest), not marked as ignorable; nested exception is com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field "phone_number" (class com.termii.common.data.SendClassicOtpRequest), not marked as ignorable (14 known properties: "channel", "pin_type", "message_text", "pin_time_to_live", "pin_placeholder", "from", "overrideMobile", "pin_attempts", "message_type", "api_key", "to", "mobileOnboarding", "mobileOnboardingEmail", "pin_length"])\n at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 1, column: 119] (through reference chain: com.termii.common.data.SendClassicOtpRequest["phone_number"])', 'path': '/sms/otp/send'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 873, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 161, in send_phone_verification_token
+    raise ValueError(response.text)
+ValueError: {"status":400,"error":"Bad Request","message":"JSON parse error: Unrecognized field \"phone_number\" (class com.termii.common.data.SendClassicOtpRequest), not marked as ignorable; nested exception is com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field \"phone_number\" (class com.termii.common.data.SendClassicOtpRequest), not marked as ignorable (14 known properties: \"channel\", \"pin_type\", \"message_text\", \"pin_time_to_live\", \"pin_placeholder\", \"from\", \"overrideMobile\", \"pin_attempts\", \"message_type\", \"api_key\", \"to\", \"mobileOnboarding\", \"mobileOnboardingEmail\", \"pin_length\"])\n at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 1, column: 119] (through reference chain: com.termii.common.data.SendClassicOtpRequest[\"phone_number\"])","path":"/sms/otp/send"}
+[2026-04-24 02:21:08] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 865, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 149, in send_phone_verification_token
+    print(response.pin_id)
+          ^^^^^^^^^^^^^^^
+AttributeError: 'Response' object has no attribute 'pin_id'
+[2026-04-24 02:25:05] WARNING django.request Bad Request: /account/phone/update/
+[2026-04-24 02:26:32] WARNING django.request Bad Request: /account/phone/update/
+[2026-04-24 02:26:38] WARNING django.request Bad Request: /account/phone/update/
+[2026-04-24 02:28:29] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 861, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 146, in send_phone_verification_token
+    return response_object.pin_id
+           ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'pin_id'
+[2026-04-24 02:29:07] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 862, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 147, in send_phone_verification_token
+    return response_object.pin_id
+           ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'pin_id'
+[2026-04-24 02:40:41] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 860, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 146, in send_phone_verification_token
+    return response_object.pin_id
+           ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'pin_id'
+[2026-04-24 02:40:53] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 860, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 146, in send_phone_verification_token
+    return response_object.pin_id
+           ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'pin_id'
+[2026-04-24 02:41:27] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 861, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 147, in send_phone_verification_token
+    return response_object.pin_id
+           ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'pin_id'
+[2026-04-24 02:43:49] ERROR django.request Internal Server Error: /account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 861, in post
+    pin_id = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 147, in send_phone_verification_token
+    return response_object.pin_id
+           ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'pin_id'
+[2026-04-26 05:31:29] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-26 05:31:30] WARNING django.request Not Found: /favicon.ico
+[2026-04-26 05:32:02] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:32:09] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-26 05:32:41] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:33:31] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:35:14] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-26 05:35:45] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:37:42] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:38:23] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-26 05:38:53] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:40:51] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-26 05:41:19] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:41:47] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-26 05:43:00] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:44:42] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:47:30] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:48:20] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:50:33] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-26 05:51:00] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:53:53] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:54:26] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:58:05] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 05:58:44] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-26 05:59:30] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-26 06:00:02] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 19:16:09] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-26 19:16:09] WARNING django.request Not Found: /favicon.ico
+[2026-04-26 19:16:58] ERROR django.request Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 554, in post
+    send_new_login_email(user, ip_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 417, in send_new_login_email
+    email.send()
+    ~~~~~~~~~~^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 88, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+[2026-04-26 19:21:41] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-26 19:40:21] WARNING django.request Bad Request: /account/phone/update/
+[2026-04-30 05:50:42] WARNING django.request Method Not Allowed: /account/login/
+[2026-04-30 05:50:45] WARNING django.request Not Found: /favicon.ico
+[2026-04-30 05:58:20] WARNING django.request Bad Request: /account/phone/update/
+[2026-04-30 07:36:27] WARNING django.request Bad Request: /account/phone/update/
+[2026-04-30 07:36:54] WARNING django.request Bad Request: /account/phone/update/
+[2026-04-30 07:41:48] WARNING django.request Bad Request: /account/phone/update/
+[2026-04-30 07:42:14] WARNING django.request Bad Request: /account/phone/update/
+[2026-04-30 07:51:49] WARNING django.request Bad Request: /account/phone/verify/
+[2026-04-30 07:54:45] ERROR django.request Bad Gateway: /account/phone/verify/
+[2026-04-30 07:56:51] ERROR django.request Bad Gateway: /account/phone/verify/
+[2026-04-30 07:59:18] ERROR django.request Bad Gateway: /account/phone/verify/
+[2026-04-30 07:59:50] ERROR django.request Bad Gateway: /account/phone/verify/
+[2026-04-30 08:00:08] ERROR django.request Bad Gateway: /account/phone/verify/
+[2026-04-30 08:00:22] ERROR django.request Bad Gateway: /account/phone/verify/
+[2026-04-30 08:01:14] ERROR django.request Bad Gateway: /account/phone/verify/
+[2026-04-30 08:01:55] ERROR django.request Bad Gateway: /account/phone/verify/
+[2026-04-30 08:02:44] ERROR django.request Bad Gateway: /account/phone/verify/
+[2026-04-30 08:03:07] ERROR django.request Bad Gateway: /account/phone/verify/
+[2026-04-30 08:12:20] WARNING django.request Bad Request: /account/phone/verify/
+[2026-04-30 08:17:59] WARNING django.request Bad Request: /account/phone/verify/
+[2026-04-30 08:19:19] WARNING django.request Bad Request: /account/phone/verify/
+[2026-04-30 08:22:04] WARNING django.request Bad Request: /account/phone/resend-code/

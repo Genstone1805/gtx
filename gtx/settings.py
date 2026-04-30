@@ -229,6 +229,7 @@ EMAIL_HOST_USER = os.environ.get('AUTHEMAIL_EMAIL_HOST_USER') or 'gusanujoshua39
 EMAIL_HOST_PASSWORD = os.environ.get('AUTHEMAIL_EMAIL_HOST_PASSWORD') or 'gelm uqlv fqoh kgjn'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+EMAIL_TIMEOUT = int(os.environ.get('EMAIL_TIMEOUT') or 10)
 
 TERMII_API_KEY = os.environ.get('TERMII_API_KEY', '').strip()
 TERMII_BASE_URL = os.environ.get('TERMII_BASE_URL', 'https://v3.api.termii.com').strip().rstrip('/')

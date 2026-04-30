@@ -146,6 +146,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 class AddPhoneNumberSerializer(serializers.Serializer):
     phone_number = PhoneNumberField()
+    # phone_number = serializers.CharField(max_length=15)
 
     def validate_phone_number(self, value):
         if UserProfile.objects.filter(phone_number=value).exists():
