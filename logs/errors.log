@@ -1974,3 +1974,17 @@ TimeoutError: [WinError 10060] A connection attempt failed because the connected
 [2026-04-30 08:17:59] WARNING django.request Bad Request: /account/phone/verify/
 [2026-04-30 08:19:19] WARNING django.request Bad Request: /account/phone/verify/
 [2026-04-30 08:22:04] WARNING django.request Bad Request: /account/phone/resend-code/
+[2026-05-01 06:55:23] WARNING django.request Not Found: /
+[2026-05-01 06:55:23] WARNING django.request Not Found: /favicon.ico
+[2026-05-01 06:55:31] WARNING django.request Method Not Allowed: /account/login/
+[2026-05-01 06:56:14] WARNING django.request Unauthorized: /account/phone/update/
+[2026-05-01 06:56:45] WARNING django.request Bad Request: /account/phone/update/
+[2026-05-01 06:56:59] WARNING django.request Bad Request: /account/phone/update/
+[2026-05-01 06:57:43] WARNING django.request Not Found: /account/register/
+[2026-05-01 06:57:50] WARNING django.request Method Not Allowed: /account/signup/
+[2026-05-01 06:58:53] WARNING django.request Not Found: /
+[2026-05-01 06:58:56] WARNING django.request Method Not Allowed: /account/login/
+[2026-05-01 06:59:03] WARNING django.request Not Found: /admin
+[2026-05-01 07:00:19] WARNING django.request Method Not Allowed: /account/signup/
+[2026-05-01 07:00:21] WARNING django.request Not Found: /account/register/
+[2026-05-01 07:00:24] WARNING django.request Method Not Allowed: /account/login/

@@ -3240,3 +3240,171 @@ TimeoutError: timed out
 [2026-04-30 08:22:04] WARNING django.server "POST /account/phone/resend-code/ HTTP/1.1" 400 43
 [2026-04-30 08:24:35] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\views.py changed, reloading.
 [2026-04-30 08:24:36] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-05-01 06:54:28] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-05-01 06:55:23] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:55:23] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.085s
+[2026-05-01 06:55:23] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.085s
+[2026-05-01 06:55:23] WARNING django.request Not Found: /
+[2026-05-01 06:55:23] WARNING django.server "GET / HTTP/1.1" 404 4729
+[2026-05-01 06:55:23] INFO gtx REQUEST | GET /favicon.ico | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:55:23] INFO gtx RESPONSE | GET /favicon.ico | Status: 404 | Duration: 0.011s
+[2026-05-01 06:55:23] WARNING gtx ERROR | GET /favicon.ico | Status: 404 | User: Anonymous | Duration: 0.011s
+[2026-05-01 06:55:23] WARNING django.request Not Found: /favicon.ico
+[2026-05-01 06:55:23] WARNING django.server "GET /favicon.ico HTTP/1.1" 404 4780
+[2026-05-01 06:55:30] INFO gtx REQUEST | GET /account/login/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:55:31] INFO gtx RESPONSE | GET /account/login/ | Status: 405 | Duration: 0.615s
+[2026-05-01 06:55:31] WARNING gtx ERROR | GET /account/login/ | Status: 405 | User: Anonymous | Duration: 0.615s
+[2026-05-01 06:55:31] WARNING django.request Method Not Allowed: /account/login/
+[2026-05-01 06:55:31] WARNING django.server "GET /account/login/ HTTP/1.1" 405 7372
+[2026-05-01 06:55:31] INFO django.server "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+[2026-05-01 06:55:31] INFO django.server "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+[2026-05-01 06:55:31] INFO django.server "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+[2026-05-01 06:55:31] INFO django.server "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+[2026-05-01 06:55:32] INFO django.server "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+[2026-05-01 06:55:32] INFO django.server "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+[2026-05-01 06:55:32] INFO django.server "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+[2026-05-01 06:55:32] INFO django.server "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+[2026-05-01 06:55:32] INFO django.server "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+[2026-05-01 06:55:32] INFO django.server "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+[2026-05-01 06:55:32] INFO django.server "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+[2026-05-01 06:55:32] INFO django.server "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+[2026-05-01 06:55:40] INFO gtx REQUEST | GET /docs | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:55:40] INFO gtx RESPONSE | GET /docs | Status: 404 | Duration: 0.014s
+[2026-05-01 06:55:40] WARNING gtx ERROR | GET /docs | Status: 404 | User: Anonymous | Duration: 0.014s
+[2026-05-01 06:55:40] INFO django.server "GET /docs HTTP/1.1" 301 0
+[2026-05-01 06:55:40] INFO gtx REQUEST | GET /docs/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:55:40] INFO gtx RESPONSE | GET /docs/ | Status: 200 | Duration: 0.135s
+[2026-05-01 06:55:40] INFO django.server "GET /docs/ HTTP/1.1" 200 4655
+[2026-05-01 06:55:42] INFO gtx REQUEST | GET /download-docs/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:55:42] INFO gtx RESPONSE | GET /download-docs/ | Status: 200 | Duration: 0.364s
+[2026-05-01 06:55:42] INFO django.server "GET /download-docs/ HTTP/1.1" 200 212519
+[2026-05-01 06:56:14] INFO gtx REQUEST | POST /account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:56:14] INFO gtx RESPONSE | POST /account/phone/update/ | Status: 401 | Duration: 0.300s
+[2026-05-01 06:56:14] WARNING gtx ERROR | POST /account/phone/update/ | Status: 401 | User: Anonymous | Duration: 0.300s
+[2026-05-01 06:56:14] WARNING django.request Unauthorized: /account/phone/update/
+[2026-05-01 06:56:14] WARNING django.server "POST /account/phone/update/ HTTP/1.1" 401 172
+[2026-05-01 06:56:25] INFO gtx REQUEST | POST /account/login/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:56:30] INFO gtx RESPONSE | POST /account/login/ | Status: 200 | Duration: 5.379s
+[2026-05-01 06:56:30] INFO django.server "POST /account/login/ HTTP/1.1" 200 7981
+[2026-05-01 06:56:45] INFO gtx REQUEST | POST /account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:56:45] INFO gtx RESPONSE | POST /account/phone/update/ | Status: 400 | Duration: 0.014s
+[2026-05-01 06:56:45] WARNING gtx ERROR | POST /account/phone/update/ | Status: 400 | User: Anonymous | Duration: 0.014s
+[2026-05-01 06:56:45] WARNING django.request Bad Request: /account/phone/update/
+[2026-05-01 06:56:45] WARNING django.server "POST /account/phone/update/ HTTP/1.1" 400 75
+[2026-05-01 06:56:59] INFO gtx REQUEST | POST /account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:56:59] INFO gtx RESPONSE | POST /account/phone/update/ | Status: 400 | Duration: 0.005s
+[2026-05-01 06:56:59] WARNING gtx ERROR | POST /account/phone/update/ | Status: 400 | User: Anonymous | Duration: 0.005s
+[2026-05-01 06:56:59] WARNING django.request Bad Request: /account/phone/update/
+[2026-05-01 06:56:59] WARNING django.server "POST /account/phone/update/ HTTP/1.1" 400 75
+[2026-05-01 06:57:36] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-05-01 06:57:43] INFO gtx REQUEST | GET /account/register/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:57:43] INFO gtx RESPONSE | GET /account/register/ | Status: 404 | Duration: 0.028s
+[2026-05-01 06:57:43] WARNING gtx ERROR | GET /account/register/ | Status: 404 | User: Anonymous | Duration: 0.028s
+[2026-05-01 06:57:43] WARNING django.request Not Found: /account/register/
+[2026-05-01 06:57:43] WARNING django.server "GET /account/register/ HTTP/1.1" 404 11699
+[2026-05-01 06:57:50] INFO gtx REQUEST | GET /account/signup/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:57:50] INFO gtx RESPONSE | GET /account/signup/ | Status: 405 | Duration: 0.175s
+[2026-05-01 06:57:50] WARNING gtx ERROR | GET /account/signup/ | Status: 405 | User: Anonymous | Duration: 0.175s
+[2026-05-01 06:57:50] WARNING django.request Method Not Allowed: /account/signup/
+[2026-05-01 06:57:50] WARNING django.server "GET /account/signup/ HTTP/1.1" 405 7582
+[2026-05-01 06:58:30] INFO gtx REQUEST | POST /account/signup/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:58:35] INFO gtx RESPONSE | POST /account/signup/ | Status: 201 | Duration: 4.750s
+[2026-05-01 06:58:35] INFO django.server "POST /account/signup/ HTTP/1.1" 201 7667
+[2026-05-01 06:58:53] INFO gtx REQUEST | GET / | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:58:53] INFO gtx RESPONSE | GET / | Status: 404 | Duration: 0.014s
+[2026-05-01 06:58:53] WARNING gtx ERROR | GET / | Status: 404 | User: Anonymous | Duration: 0.014s
+[2026-05-01 06:58:53] WARNING django.request Not Found: /
+[2026-05-01 06:58:53] WARNING django.server "GET / HTTP/1.1" 404 4729
+[2026-05-01 06:58:56] INFO gtx REQUEST | GET /account/login/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:58:56] INFO gtx RESPONSE | GET /account/login/ | Status: 405 | Duration: 0.010s
+[2026-05-01 06:58:56] WARNING gtx ERROR | GET /account/login/ | Status: 405 | User: Anonymous | Duration: 0.010s
+[2026-05-01 06:58:56] WARNING django.request Method Not Allowed: /account/login/
+[2026-05-01 06:58:56] WARNING django.server "GET /account/login/ HTTP/1.1" 405 7372
+[2026-05-01 06:59:03] INFO gtx REQUEST | GET /admin | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:59:03] INFO gtx RESPONSE | GET /admin | Status: 404 | Duration: 0.012s
+[2026-05-01 06:59:03] WARNING gtx ERROR | GET /admin | Status: 404 | User: Anonymous | Duration: 0.012s
+[2026-05-01 06:59:03] WARNING django.request Not Found: /admin
+[2026-05-01 06:59:03] WARNING django.server "GET /admin HTTP/1.1" 404 4762
+[2026-05-01 06:59:11] INFO gtx REQUEST | GET /backend-admin | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:59:11] INFO gtx RESPONSE | GET /backend-admin | Status: 200 | Duration: 0.310s
+[2026-05-01 06:59:11] INFO django.server "GET /backend-admin HTTP/1.1" 200 4081
+[2026-05-01 06:59:12] INFO django.server "GET /static/admin/css/base.css HTTP/1.1" 200 23100
+[2026-05-01 06:59:12] INFO django.server "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 3538
+[2026-05-01 06:59:12] INFO django.server "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+[2026-05-01 06:59:12] INFO django.server "GET /static/admin/css/login.css HTTP/1.1" 200 951
+[2026-05-01 06:59:12] INFO django.server "GET /static/admin/css/responsive.css HTTP/1.1" 200 16194
+[2026-05-01 06:59:12] INFO django.server "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+[2026-05-01 06:59:12] INFO django.server "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+[2026-05-01 06:59:20] INFO gtx REQUEST | POST /backend-admin | User: Anonymous | IP: 127.0.0.1
+[2026-05-01 06:59:22] INFO gtx RESPONSE | POST /backend-admin | Status: 302 | Duration: 1.654s
+[2026-05-01 06:59:22] INFO django.server "POST /backend-admin HTTP/1.1" 302 0
+[2026-05-01 06:59:22] INFO gtx REQUEST | GET /backend-admin/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-05-01 06:59:22] INFO gtx RESPONSE | GET /backend-admin/ | Status: 200 | Duration: 0.083s
+[2026-05-01 06:59:22] INFO django.server "GET /backend-admin/ HTTP/1.1" 200 16979
+[2026-05-01 06:59:22] INFO django.server "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+[2026-05-01 06:59:22] INFO django.server "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 593
+[2026-05-01 06:59:22] INFO django.server "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 978
+[2026-05-01 06:59:29] INFO gtx REQUEST | GET /backend-admin/account/userprofile/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-05-01 06:59:30] INFO gtx RESPONSE | GET /backend-admin/account/userprofile/ | Status: 200 | Duration: 0.290s
+[2026-05-01 06:59:30] INFO django.server "GET /backend-admin/account/userprofile/ HTTP/1.1" 200 18034
+[2026-05-01 06:59:30] INFO django.server "GET /static/admin/css/changelists.css HTTP/1.1" 200 7501
+[2026-05-01 06:59:30] INFO gtx REQUEST | GET /backend-admin/jsi18n/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-05-01 06:59:30] INFO django.server "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+[2026-05-01 06:59:30] INFO django.server "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+[2026-05-01 06:59:30] INFO gtx RESPONSE | GET /backend-admin/jsi18n/ | Status: 200 | Duration: 0.076s
+[2026-05-01 06:59:30] INFO django.server "GET /backend-admin/jsi18n/ HTTP/1.1" 200 3342
+[2026-05-01 06:59:30] INFO django.server "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+[2026-05-01 06:59:30] INFO django.server "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+[2026-05-01 06:59:30] INFO django.server "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+[2026-05-01 06:59:30] INFO django.server "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+[2026-05-01 06:59:30] INFO django.server "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+[2026-05-01 06:59:30] INFO django.server "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+[2026-05-01 06:59:30] INFO django.server "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+[2026-05-01 06:59:30] INFO django.server "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 593
+[2026-05-01 06:59:33] INFO gtx REQUEST | GET /backend-admin/account/userprofile/3/change/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-05-01 06:59:34] INFO gtx RESPONSE | GET /backend-admin/account/userprofile/3/change/ | Status: 200 | Duration: 0.393s
+[2026-05-01 06:59:34] INFO django.server "GET /backend-admin/account/userprofile/3/change/ HTTP/1.1" 200 47579
+[2026-05-01 06:59:34] INFO django.server "GET /static/admin/css/forms.css HTTP/1.1" 200 8844
+[2026-05-01 06:59:34] INFO gtx REQUEST | GET /backend-admin/jsi18n/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-05-01 06:59:34] INFO gtx RESPONSE | GET /backend-admin/jsi18n/ | Status: 200 | Duration: 0.003s
+[2026-05-01 06:59:34] INFO django.server "GET /backend-admin/jsi18n/ HTTP/1.1" 200 3342
+[2026-05-01 06:59:34] INFO django.server "GET /static/admin/css/widgets.css HTTP/1.1" 200 11811
+[2026-05-01 06:59:34] INFO django.server "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+[2026-05-01 06:59:34] INFO django.server "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19698
+[2026-05-01 06:59:34] INFO django.server "GET /static/admin/js/calendar.js HTTP/1.1" 200 9159
+[2026-05-01 06:59:34] INFO django.server "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 928
+[2026-05-01 06:59:34] INFO django.server "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 689
+[2026-05-01 06:59:34] INFO django.server "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+[2026-05-01 06:59:34] INFO django.server "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1112
+[2026-05-01 06:59:34] INFO django.server "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 805
+[2026-05-01 07:00:03] INFO gtx REQUEST | POST /backend-admin/account/userprofile/3/change/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-05-01 07:00:03] INFO gtx RESPONSE | POST /backend-admin/account/userprofile/3/change/ | Status: 302 | Duration: 0.149s
+[2026-05-01 07:00:03] INFO django.server "POST /backend-admin/account/userprofile/3/change/ HTTP/1.1" 302 0
+[2026-05-01 07:00:03] INFO gtx REQUEST | GET /backend-admin/account/userprofile/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-05-01 07:00:03] INFO gtx RESPONSE | GET /backend-admin/account/userprofile/ | Status: 200 | Duration: 0.051s
+[2026-05-01 07:00:03] INFO django.server "GET /backend-admin/account/userprofile/ HTTP/1.1" 200 18266
+[2026-05-01 07:00:04] INFO gtx REQUEST | GET /backend-admin/jsi18n/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-05-01 07:00:04] INFO gtx RESPONSE | GET /backend-admin/jsi18n/ | Status: 200 | Duration: 0.003s
+[2026-05-01 07:00:04] INFO django.server "GET /backend-admin/jsi18n/ HTTP/1.1" 200 3342
+[2026-05-01 07:00:04] INFO django.server "GET /static/admin/img/icon-yes-dark.svg HTTP/1.1" 200 558
+[2026-05-01 07:00:19] INFO gtx REQUEST | GET /account/signup/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-05-01 07:00:19] INFO gtx RESPONSE | GET /account/signup/ | Status: 405 | Duration: 0.010s
+[2026-05-01 07:00:19] WARNING gtx ERROR | GET /account/signup/ | Status: 405 | User: admin@gmail.com | Duration: 0.010s
+[2026-05-01 07:00:19] WARNING django.request Method Not Allowed: /account/signup/
+[2026-05-01 07:00:19] WARNING django.server "GET /account/signup/ HTTP/1.1" 405 7582
+[2026-05-01 07:00:21] INFO gtx REQUEST | GET /account/register/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-05-01 07:00:21] INFO gtx RESPONSE | GET /account/register/ | Status: 404 | Duration: 0.008s
+[2026-05-01 07:00:21] WARNING gtx ERROR | GET /account/register/ | Status: 404 | User: admin@gmail.com | Duration: 0.008s
+[2026-05-01 07:00:21] WARNING django.request Not Found: /account/register/
+[2026-05-01 07:00:21] WARNING django.server "GET /account/register/ HTTP/1.1" 404 11699
+[2026-05-01 07:00:24] INFO gtx REQUEST | GET /account/login/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-05-01 07:00:24] INFO gtx RESPONSE | GET /account/login/ | Status: 405 | Duration: 0.008s
+[2026-05-01 07:00:24] WARNING gtx ERROR | GET /account/login/ | Status: 405 | User: admin@gmail.com | Duration: 0.008s
+[2026-05-01 07:00:24] WARNING django.request Method Not Allowed: /account/login/
+[2026-05-01 07:00:24] WARNING django.server "GET /account/login/ HTTP/1.1" 405 7372
+[2026-05-01 07:00:28] INFO gtx REQUEST | POST /account/login/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-05-01 07:00:33] INFO gtx RESPONSE | POST /account/login/ | Status: 200 | Duration: 4.664s
+[2026-05-01 07:00:33] INFO django.server "POST /account/login/ HTTP/1.1" 200 7990
+[2026-05-01 07:00:49] INFO gtx REQUEST | POST /account/phone/update/ | User: admin@gmail.com | IP: 127.0.0.1
+[2026-05-01 07:00:51] INFO gtx RESPONSE | POST /account/phone/update/ | Status: 201 | Duration: 2.006s
+[2026-05-01 07:00:51] INFO django.server "POST /account/phone/update/ HTTP/1.1" 201 57
