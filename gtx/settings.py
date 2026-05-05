@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'corsheaders',
     'drf_spectacular',
+    'django_celery_beat',
 
     # project apps
     'account',
@@ -117,6 +118,16 @@ TEMPLATES = [
         },
     },
 ]
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/0",
+        "KEY_PREFIX": "backend",
+        "TIMEOUT": 300,
+    }
+}
 
 STORAGES = {
   "default": {
@@ -245,6 +256,12 @@ TERMII_PHONE_OTP_TTL_MINUTES = int(os.environ.get('TERMII_PHONE_OTP_TTL_MINUTES'
 TERMII_PHONE_OTP_LENGTH = int(os.environ.get('TERMII_PHONE_OTP_LENGTH', '6'))
 TERMII_PHONE_OTP_PLACEHOLDER = os.environ.get('TERMII_PHONE_OTP_PLACEHOLDER', '<123456>').strip()
 TERMII_REQUEST_TIMEOUT_SECONDS = int(os.environ.get('TERMII_REQUEST_TIMEOUT_SECONDS', '15'))
+
+
+
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_BACKEND", "redis://redis:6379/0")
+
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = True  # For development only

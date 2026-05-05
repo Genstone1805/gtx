@@ -3408,3 +3408,74 @@ TimeoutError: timed out
 [2026-05-01 07:00:49] INFO gtx REQUEST | POST /account/phone/update/ | User: admin@gmail.com | IP: 127.0.0.1
 [2026-05-01 07:00:51] INFO gtx RESPONSE | POST /account/phone/update/ | Status: 201 | Duration: 2.006s
 [2026-05-01 07:00:51] INFO django.server "POST /account/phone/update/ HTTP/1.1" 201 57
+[2026-05-01 11:45:17] INFO flower.command Visit me at http://0.0.0.0:5555
+[2026-05-01 11:45:17] INFO flower.command Broker: redis://redis:6379/0
+[2026-05-01 11:45:17] INFO flower.command Registered tasks: 
+['account.tasks.periodictask',
+ 'celery.accumulate',
+ 'celery.backend_cleanup',
+ 'celery.chain',
+ 'celery.chord',
+ 'celery.chord_unlock',
+ 'celery.chunks',
+ 'celery.group',
+ 'celery.map',
+ 'celery.starmap']
+[2026-05-01 11:45:17] INFO kombu.mixins Connected to redis://redis:6379/0
+[2026-05-01 11:45:18] WARNING flower.inspector Inspect method scheduled failed
+[2026-05-01 11:45:18] WARNING flower.inspector Inspect method active_queues failed
+[2026-05-01 11:45:18] WARNING flower.inspector Inspect method active failed
+[2026-05-01 11:45:18] WARNING flower.inspector Inspect method revoked failed
+[2026-05-01 11:45:18] WARNING flower.inspector Inspect method registered failed
+[2026-05-01 11:45:18] WARNING flower.inspector Inspect method conf failed
+[2026-05-01 11:45:18] WARNING flower.inspector Inspect method stats failed
+[2026-05-01 11:45:18] WARNING flower.inspector Inspect method reserved failed
+[2026-05-01 11:46:38] WARNING tornado.general 404 GET /worker/celery%40b3fa959740b4 (172.19.0.1): Unknown worker 'celery@b3fa959740b4'
+[2026-05-01 12:17:52] INFO flower.command 15 detected, shutting down
+[2026-05-01 12:18:10] INFO flower.command Visit me at http://0.0.0.0:5555
+[2026-05-01 12:18:10] INFO flower.command Broker: redis://redis:6379/0
+[2026-05-01 12:18:10] INFO flower.command Registered tasks: 
+['account.tasks.periodictask',
+ 'celery.accumulate',
+ 'celery.backend_cleanup',
+ 'celery.chain',
+ 'celery.chord',
+ 'celery.chord_unlock',
+ 'celery.chunks',
+ 'celery.group',
+ 'celery.map',
+ 'celery.starmap']
+[2026-05-01 12:18:10] INFO kombu.mixins Connected to redis://redis:6379/0
+[2026-05-01 12:18:11] WARNING flower.inspector Inspect method reserved failed
+[2026-05-01 12:18:11] WARNING flower.inspector Inspect method registered failed
+[2026-05-01 12:18:11] WARNING flower.inspector Inspect method stats failed
+[2026-05-01 12:18:11] WARNING flower.inspector Inspect method conf failed
+[2026-05-01 12:18:11] WARNING flower.inspector Inspect method active failed
+[2026-05-01 12:18:11] WARNING flower.inspector Inspect method scheduled failed
+[2026-05-01 12:18:11] WARNING flower.inspector Inspect method active_queues failed
+[2026-05-01 12:18:11] WARNING flower.inspector Inspect method revoked failed
+[2026-05-01 14:10:23] ERROR flower.events Failed to capture events: 'Error 111 connecting to redis:6379. Connection refused.', trying again in 1 seconds.
+[2026-05-01 14:10:32] INFO flower.command 15 detected, shutting down
+[2026-05-01 14:11:52] INFO flower.command Visit me at http://0.0.0.0:5555
+[2026-05-01 14:11:52] INFO flower.command Broker: redis://redis:6379/0
+[2026-05-01 14:11:52] INFO flower.command Registered tasks: 
+['account.tasks.periodictask',
+ 'celery.accumulate',
+ 'celery.backend_cleanup',
+ 'celery.chain',
+ 'celery.chord',
+ 'celery.chord_unlock',
+ 'celery.chunks',
+ 'celery.group',
+ 'celery.map',
+ 'celery.starmap']
+[2026-05-01 14:11:52] INFO kombu.mixins Connected to redis://redis:6379/0
+[2026-05-01 14:11:54] WARNING flower.inspector Inspect method conf failed
+[2026-05-01 14:11:54] WARNING flower.inspector Inspect method active_queues failed
+[2026-05-01 14:11:54] WARNING flower.inspector Inspect method reserved failed
+[2026-05-01 14:11:54] WARNING flower.inspector Inspect method active failed
+[2026-05-01 14:11:54] WARNING flower.inspector Inspect method revoked failed
+[2026-05-01 14:11:54] WARNING flower.inspector Inspect method scheduled failed
+[2026-05-01 14:11:54] WARNING flower.inspector Inspect method registered failed
+[2026-05-01 14:11:54] WARNING flower.inspector Inspect method stats failed
+[2026-05-01 15:16:17] INFO flower.command 15 detected, shutting down

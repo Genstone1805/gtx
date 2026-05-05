@@ -277,7 +277,14 @@ def notify_withdrawal_status_changed(
         message = f'Your withdrawal request for ₦{amount} has been approved and processed.'
     elif new_status == 'Rejected':
         title = 'Withdrawal Rejected'
-        message = f'Your withdrawal request for ₦{amount} has been rejected. Please contact support for more information.'
+        if reason:
+            message = f'''Your withdrawal request for ₦{amount} has been rejected. Please contact support for more information.'''
+        else:
+            message = f'''
+            Your withdrawal request for ₦{amount} has been rejected. 
+            Reason:{reason} Please contact support for more information.
+            '''
+            
     else:
         return
 

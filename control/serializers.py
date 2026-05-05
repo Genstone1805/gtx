@@ -150,8 +150,8 @@ class WithdrawalApprovalSerializer(serializers.Serializer):
     ]
     action = serializers.ChoiceField(choices=ACTION_CHOICES, required=True)
     reason = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    transaction_reference = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    admin_notes = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    # transaction_reference = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    # admin_notes = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
     def validate(self, data):
         action = data.get('action')

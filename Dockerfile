@@ -8,26 +8,26 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    default-libmysqlclient-dev \
     libpq-dev \
+    pkg-config \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt -v
 
 # Copy project
 COPY . .
 
-# Create static directory if it doesn't exist
-RUN mkdir -p static staticfiles media
-
 # Collect static files
-RUN python manage.py makemigrations
-RUN python manage.py migrate
-RUN python manage.py collectstatic --noinput
-RUN python manage.py spectacular --color --file schema.yml
+RUN mkdir -p static staticfiles media \
+    && python manage.py makemigrations && python manage.py migrate \
+    && python manage.py collectstatic --noinput \
+    && python manage.py spectacular --color --file schema.yml
 
 
 # Expose port
