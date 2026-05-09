@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 from decimal import Decimal
 
 user = get_user_model()
@@ -32,10 +33,14 @@ class GiftCardNames(models.Model):
   name = models.CharField(max_length=150)
   store = models.ForeignKey(GiftCardStore, on_delete=models.CASCADE)
   user = models.ForeignKey(user, on_delete=models.CASCADE, related_name="gift_card_name_creator", null=True)
-  rate = models.DecimalField(decimal_places=2, max_digits=6, default=Decimal("0.00"))
+  rate = models.DecimalField(
+    decimal_places=2,
+    max_digits=12,
+    default=Decimal("0.00"),
+    validators=[MinValueValidator(Decimal("0.00"))],
+  )
   created_at = models.DateTimeField(auto_now_add=True, null=True)
 
   def __str__(self) -> str:
     return self.name
-
 

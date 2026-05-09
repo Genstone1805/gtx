@@ -2,6 +2,8 @@ from rest_framework import serializers
 from cards.models import GiftCardStore, GiftCardNames
 
 class GiftCardNameSerializer(serializers.ModelSerializer):
+  rate = serializers.DecimalField(max_digits=12, decimal_places=2)
+
   class Meta:
     model = GiftCardNames
     fields = ["id", "name", "type", "rate"]

@@ -5,13 +5,14 @@ from account.models import Level2Credentials, Level3Credentials, UserProfile
 from order.models import GiftCardOrder
 from withdrawal.models import Withdrawal, WithdrawalAuditLog
 
+class GiftCardInputSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = GiftCardNames
+    fields = ["type", "name", "rate"]
+
 class CreateGiftStoreSerializer(serializers.ModelSerializer):
   image = serializers.ImageField(use_url=False)
-  cards = serializers.ListField(
-        child=serializers.DictField(),
-        write_only=True,
-        required=False,
-    )
+  cards = GiftCardInputSerializer(many=True, write_only=True, required=False)
   
   class Meta:
     model = GiftCardStore
@@ -30,6 +31,8 @@ class GiftStoreListSerializer(serializers.ModelSerializer):
 
 class GiftCardListSerializer(serializers.ModelSerializer):
   store = GiftStoreListSerializer(read_only=True)
+  rate = serializers.DecimalField(max_digits=12, decimal_places=2)
+
   class Meta:
     model = GiftCardNames
     fields = ["id", "name", "rate", "type", "store" ]
