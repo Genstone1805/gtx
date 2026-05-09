@@ -10,11 +10,11 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DEBUG=${DEBUG:-False}
-      - SECRET_KEY=${SECRET_KEY:?Set SECRET_KEY in .env before starting the web service}
-      - TERMII_API_KEY=${TERMII_API_KEY:-}
-      - TERMII_BASE_URL=${TERMII_BASE_URL:-https://v3.api.termii.com}
-      - TERMII_PHONE_OTP_SENDER_ID=${TERMII_PHONE_OTP_SENDER_ID:-Greatxchnge}
+      - DEBUG=False
+      - SECRET_KEY=iuytiu897thkm,nui987tyhkjkoiuyhjkliouyuYTUIOKLJHGFYTUIiuytghj
+      - TERMII_API_KEY=TLPlVvPYstukdbJXHylgeDADwRVkYOQmptbCdZWzYQbmiqJMszigizEjzgFcoC
+      - TERMII_BASE_URL=https://v3.api.termii.com
+      - TERMII_PHONE_OTP_SENDER_ID=Greatxchnge
     volumes:
       - ./media:/app/media
       - ./db.sqlite3:/app/db.sqlite3
