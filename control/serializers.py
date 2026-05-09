@@ -41,9 +41,14 @@ class CreateGiftCardSerializer(serializers.ModelSerializer):
 
 
 class UserBasicSerializer(serializers.ModelSerializer):
+    referred_by = serializers.EmailField(source='referred_by.email', read_only=True)
+
     class Meta:
         model = UserProfile
-        fields = ['id', 'email', 'full_name', 'phone_number', 'level', 'transaction_limit']
+        fields = [
+            'id', 'email', 'full_name', 'phone_number', 'level',
+            'transaction_limit', 'referral_code', 'referred_by'
+        ]
 
 
 class Level2CredentialsPendingSerializer(serializers.ModelSerializer):

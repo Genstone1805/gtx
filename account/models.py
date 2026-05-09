@@ -6,6 +6,8 @@ from django.utils import timezone
 from django.conf import settings
 from decimal import Decimal
 import random
+import secrets
+import string
 
 
 class CustomUserManager(BaseUserManager):
@@ -116,6 +118,14 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     transaction_pin = models.CharField(max_length=128, blank=True)
     has_pin = models.BooleanField(default=False)
     transaction_limit = models.DecimalField(decimal_places=2, max_digits=12, default=Decimal("250000.00"))
+    referral_code = models.CharField(max_length=16, unique=True, db_index=True, blank=True)
+    referred_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='referrals',
+    )
     
     # Balance fields for gift card redemption system
     pending_balance = models.DecimalField(decimal_places=2, max_digits=12, default=Decimal("0.00"),
@@ -135,8 +145,20 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
-    
-    
+
+    @classmethod
+    def generate_referral_code(cls) -> str:
+        alphabet = string.ascii_uppercase + string.digits
+        while True:
+            code = ''.join(secrets.choice(alphabet) for _ in range(10))
+            if not cls.objects.filter(referral_code=code).exists():
+                return code
+
+    def save(self, *args, **kwargs):
+        if not self.referral_code:
+            self.referral_code = self.generate_referral_code()
+        super().save(*args, **kwargs)
+
     def set_transaction_pin(self, raw_pin):
         self.transaction_pin = make_password(raw_pin)
         self.has_pin = True
@@ -146,6 +168,52 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class ReferralCommission(models.Model):
+    STATUS_CHOICES = [
+        ("Pending", "Pending"),
+        ("Paid", "Paid"),
+        ("Cancelled", "Cancelled"),
+    ]
+
+    referrer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='referral_commissions',
+    )
+    referred_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='earned_referral_commissions',
+    )
+    qualifying_transaction = models.ForeignKey(
+        'order.GiftCardOrder',
+        on_delete=models.PROTECT,
+        related_name='referral_commissions',
+    )
+    amount = models.DecimalField(decimal_places=2, max_digits=12)
+    percentage = models.DecimalField(decimal_places=2, max_digits=5)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Paid")
+    paid_at = models.DateTimeField(null=True, blank=True)
+    metadata = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['referrer', 'referred_user'],
+                name='unique_referral_commission_per_referred_user',
+            ),
+        ]
+        indexes = [
+            models.Index(fields=['referrer', 'status'], name='ref_comm_referrer_status_idx'),
+            models.Index(fields=['referred_user'], name='ref_comm_referred_idx'),
+        ]
+
+    def __str__(self):
+        return f"{self.referrer.email} earned {self.amount} for {self.referred_user.email}"
 
 
 class EmailVerificationCode(models.Model):

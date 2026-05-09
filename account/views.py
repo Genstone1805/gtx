@@ -128,38 +128,59 @@ def send_phone_verification_token(recipient: str):
     """
     Send otp to the registered number
     """
-    
-    endpoint = f"{os.environ.get('TERMII_BASE_URL')}/api/sms/send"
-    api_key = os.environ.get("TERMII_API_KEY")
-    sender_id = os.environ.get("TERMII_PHONE_OTP_SENDER_ID")
-    otp = secrets.randbelow(900000) + 100000
-    message = f"Your verification code is: {otp}"
+    config = validate_termii_phone_verification_config(require_sender_id=True)
+    endpoint = f"{config['base_url']}/api/sms/otp/send"
     payload = {
-                "api_key": api_key,
-                "to": [f"{recipient}"],
-                "from": sender_id,
-                "sms": message,
-                "type": "plain",
-                "channel": "generic",
-            }
+        "api_key": config["api_key"],
+        "to": normalize_phone_number_for_termii(recipient),
+        "from": config["sender_id"],
+        "message_type": config["message_type"],
+        "channel": config["channel"],
+        "pin_attempts": config["attempts"],
+        "pin_time_to_live": config["ttl_minutes"],
+        "pin_length": config["length"],
+        "pin_placeholder": config["placeholder"],
+        "message_text": f"Your {config['brand_name']} verification code is {config['placeholder']}",
+    }
     headers = {
         'Content-Type': 'application/json',
     }
     
-    response = requests.post(endpoint, json=payload, headers=headers, timeout=30)
-    response_object = response.json()
-    if response_object["code"] == "ok":
-        response_object["pin_id"] = otp
+    response = requests.post(endpoint, json=payload, headers=headers, timeout=config["timeout_seconds"])
+    response_object = parse_termii_response(response)
+    if response.ok and (response_object.get("pin_id") or response_object.get("pinId")):
+        response_object["pin_id"] = response_object.get("pin_id") or response_object.get("pinId")
         return response_object
-    else:
-        raise ValidationError(response_object["message"])
+
+    detail = normalize_termii_error_detail(response_object.get("message") or response_object.get("detail"))
+    raise PhoneVerificationError(detail or "Phone verification provider rejected the request.")
 
 
-def verify_phone_verification_token(pin_id: str, code: str) -> bool:
-    if pin_id == code:
-        return True
-    else:
-        return False
+def verify_phone_verification_token(pin_id: str, code: str, phone_number=None) -> tuple[bool, str | None]:
+    config = validate_termii_phone_verification_config(require_sender_id=False)
+    endpoint = f"{config['base_url']}/api/sms/otp/verify"
+    payload = {
+        "api_key": config["api_key"],
+        "pin_id": pin_id,
+        "pin": code,
+    }
+    headers = {
+        'Content-Type': 'application/json',
+    }
+
+    response = requests.post(endpoint, json=payload, headers=headers, timeout=config["timeout_seconds"])
+    response_object = parse_termii_response(response)
+    verified = str(response_object.get("verified", "")).lower() == "true"
+    if not response.ok or not verified:
+        return False, None
+
+    if phone_number is not None:
+        verified_number = str(response_object.get("msisdn") or "").lstrip("+")
+        expected_number = normalize_phone_number_for_termii(phone_number)
+        if verified_number and verified_number != expected_number:
+            return False, "Verification failed for this phone number. Please request a new code."
+
+    return True, None
 
 
 def send_verification_email(user: UserProfile, code: str) -> None:
@@ -193,6 +214,7 @@ class SignupView(APIView):
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
         full_name = serializer.validated_data.get('full_name', '')
+        referral_code = serializer.validated_data.get('referral_code', '')
 
         # Check if user already exists
         try:
@@ -202,10 +224,20 @@ class SignupView(APIView):
                     {'detail': 'User with this email already exists.'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
+            if referral_code:
+                referrer = UserProfile.objects.get(referral_code=referral_code)
+                if referrer.pk == user.pk:
+                    return Response(
+                        {'referral_code': ['You cannot use your own referral code.']},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
             # User exists but not verified - resend code
         except UserProfile.DoesNotExist:
             # Create new user
-            user = UserProfile.objects.create_user(email=email, password=password)
+            referrer = None
+            if referral_code:
+                referrer = UserProfile.objects.get(referral_code=referral_code)
+            user = UserProfile.objects.create_user(email=email, password=password, referred_by=referrer)
             user.full_name = full_name
             user.is_verified = False
             user.save()
@@ -875,9 +907,10 @@ class VerifyPhoneNumberView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
             
-        verification_result = verify_phone_verification_token(
+        verification_result, verification_error = verify_phone_verification_token(
             verification_request.pin_id,
             serializer.validated_data['code'],
+            verification_request.phone_number,
         )
         
         if verification_result:
@@ -901,7 +934,7 @@ class VerifyPhoneNumberView(APIView):
             )
         else:
             return Response(
-                {'detail': 'Invalid verification code.'},
+                {'detail': verification_error or 'Invalid verification code.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -930,8 +963,8 @@ class ResendPhoneVerificationView(APIView):
             pin_id = response["pin_id"]
             PhoneVerificationRequest.create_for_user(user, verification_request.phone_number, pin_id)
             return Response(
-                {'detail': 'Verification code sent to your phone number.'},
-                status=status.HTTP_201_CREATED
+                {'detail': 'Verification code resent successfully.'},
+                status=status.HTTP_200_OK
             )
         except ValidationError as exc:
             return Response(

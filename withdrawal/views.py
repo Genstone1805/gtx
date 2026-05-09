@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 
+from account.models import UserProfile
 from .models import Withdrawal, WithdrawalAuditLog
 from .serializers import (
     WithdrawalCreateSerializer,
@@ -15,6 +16,7 @@ from .serializers import (
 )
 from order.signals import recalculate_user_balances
 from notification.services import notify_withdrawal_created
+from withdrawal.services import WithdrawalLimitService
 
 
 class UserBalanceView(APIView):
@@ -49,7 +51,8 @@ class WithdrawalCreateView(APIView):
 
         # Reconcile before validation so available amount is never stale.
         recalculate_user_balances(user)
-        user.refresh_from_db(fields=['withdrawable_balance'])
+        user = UserProfile.objects.select_for_update().get(pk=user.pk)
+        request.user.withdrawable_balance = user.withdrawable_balance
 
         # Check if user has a transaction PIN set
         if not user.has_pin:
@@ -68,8 +71,10 @@ class WithdrawalCreateView(APIView):
             context={'request': request}
         )
         serializer.is_valid(raise_exception=True)
+        WithdrawalLimitService.validate_withdrawal(user, serializer.validated_data['amount'])
         
         withdrawal = serializer.save()
+        WithdrawalLimitService.refresh_usage_for_user(user)
         recalculate_user_balances(user)
         user.refresh_from_db(fields=['withdrawable_balance'])
 

@@ -49,6 +49,10 @@ def handle_order_created(sender, instance, created, **kwargs):
         return
 
     recalculate_user_balances(instance.user)
+    if instance.status in WITHDRAWABLE_STATUSES:
+        from account.services import process_referral_commission_for_order
+
+        process_referral_commission_for_order(instance)
     notify_order_created(
         user=instance.user,
         order=instance,
@@ -71,6 +75,10 @@ def handle_order_status_change(sender, instance, **kwargs):
         return
 
     recalculate_user_balances(instance.user)
+    if instance.status in WITHDRAWABLE_STATUSES:
+        from account.services import process_referral_commission_for_order
+
+        process_referral_commission_for_order(instance)
 
     # Send notification about status change
     notify_order_status_changed(
@@ -90,6 +98,8 @@ def recalculate_user_balances(user: UserProfile) -> tuple[Decimal, Decimal]:
         Tuple of (pending_balance, withdrawable_balance)
     """
     from withdrawal.models import Withdrawal
+    from account.models import ReferralCommission
+    from account.services import REFERRAL_COMMISSION_PAID_STATUS
 
     with transaction.atomic():
         locked_user = UserProfile.objects.select_for_update().get(pk=user.pk)
@@ -108,6 +118,12 @@ def recalculate_user_balances(user: UserProfile) -> tuple[Decimal, Decimal]:
         ).aggregate(total=Sum('amount'))
         gross_withdrawable = _as_decimal(gross_withdrawable_result['total'] or 0)
 
+        referral_commissions_result = ReferralCommission.objects.filter(
+            referrer_id=locked_user.pk,
+            status=REFERRAL_COMMISSION_PAID_STATUS,
+        ).aggregate(total=Sum('amount'))
+        referral_commissions_total = _as_decimal(referral_commissions_result['total'] or 0)
+
         # Reserve funds for all active or completed withdrawals.
         # This ensures:
         # - Pending withdrawals are deducted immediately
@@ -121,7 +137,7 @@ def recalculate_user_balances(user: UserProfile) -> tuple[Decimal, Decimal]:
 
         withdrawable_balance = max(
             Decimal('0.00'),
-            gross_withdrawable - reserved_withdrawals_total
+            gross_withdrawable + referral_commissions_total - reserved_withdrawals_total
         )
 
         locked_user.pending_balance = pending_balance

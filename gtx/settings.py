@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from decimal import Decimal
 
 import os
 
@@ -158,6 +159,7 @@ SPECTACULAR_SETTINGS = {
 
 
 from datetime import timedelta
+from celery.schedules import crontab
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
@@ -261,6 +263,15 @@ TERMII_REQUEST_TIMEOUT_SECONDS = int(os.environ.get('TERMII_REQUEST_TIMEOUT_SECO
 
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_BACKEND", "redis://redis:6379/0")
+CELERY_BEAT_SCHEDULE = {
+    "refresh-daily-withdrawal-limits": {
+        "task": "withdrawal.tasks.refresh_daily_withdrawal_limits",
+        "schedule": crontab(hour=0, minute=5),
+    },
+}
+
+REFERRAL_QUALIFYING_AMOUNT = Decimal(os.environ.get("REFERRAL_QUALIFYING_AMOUNT", "100.00"))
+REFERRAL_COMMISSION_PERCENT = Decimal(os.environ.get("REFERRAL_COMMISSION_PERCENT", "10.00"))
 
 
 # CORS settings

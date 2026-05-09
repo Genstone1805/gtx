@@ -5,9 +5,19 @@ from .models import UserProfile, Level2Credentials, Level3Credentials, BankAccou
 
 class SignupSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(max_length=80, required=True)
+    referral_code = serializers.CharField(max_length=16, required=False, allow_blank=True, write_only=True)
+
     class Meta:
         model = UserProfile
-        fields = ['email', 'password', 'full_name']
+        fields = ['email', 'password', 'full_name', 'referral_code']
+
+    def validate_referral_code(self, value):
+        code = value.strip().upper()
+        if not code:
+            return ''
+        if not UserProfile.objects.filter(referral_code=code).exists():
+            raise serializers.ValidationError("Invalid referral code.")
+        return code
 
 
 class VerifyCodeSerializer(serializers.Serializer):
@@ -112,6 +122,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
     level2_credentials = Level2CredentialsSerializer(read_only=True)
     level3_credentials = Level3CredentialsSerializer(read_only=True)
     bank_details = BankAccountDetailsSerializer(read_only=True)
+    referred_by = serializers.EmailField(source='referred_by.email', read_only=True)
+    referral_count = serializers.SerializerMethodField()
     # account_information = BankAccountDetailsSerializer(source='bank_details', read_only=True)
 
     class Meta:
@@ -120,13 +132,18 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'id', 'email', 'full_name', 'phone_number', 'dp', 'level', 'is_staff',
             'transaction_limit', 'status', 'is_verified', 'date_joined',
             'last_login', 'level2_credentials', 'level3_credentials', 'has_pin',
-            'pending_balance', 'withdrawable_balance', 'bank_details'
+            'pending_balance', 'withdrawable_balance', 'bank_details',
+            'referral_code', 'referred_by', 'referral_count'
         ]
         read_only_fields = [
             'id', 'email', 'level', 'is_staff', 'transaction_limit', 'status',
             'is_verified', 'date_joined', 'last_login',
-            'pending_balance', 'withdrawable_balance'
+            'pending_balance', 'withdrawable_balance', 'referral_code',
+            'referred_by', 'referral_count'
         ]
+
+    def get_referral_count(self, obj):
+        return obj.referrals.count()
 
 
 class ProfilePictureSerializer(serializers.Serializer):

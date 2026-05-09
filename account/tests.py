@@ -5,7 +5,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from .models import PhoneVerificationRequest, UserProfile
+from order.models import GiftCardOrder
+from .models import PhoneVerificationRequest, ReferralCommission, UserProfile
 
 
 class MockTermiiResponse:
@@ -181,3 +182,109 @@ class PhoneVerificationFlowTests(APITestCase):
             "Termii sender ID 'TestSender' is not active for this account. "
             'Set TERMII_PHONE_OTP_SENDER_ID to an approved sender ID from your Termii dashboard.',
         )
+
+
+@override_settings(
+    EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend',
+    REFERRAL_QUALIFYING_AMOUNT='100.00',
+    REFERRAL_COMMISSION_PERCENT='10.00',
+)
+class ReferralFlowTests(APITestCase):
+    def test_user_gets_referral_code_automatically(self):
+        user = UserProfile.objects.create_user(
+            email='referrer@example.com',
+            password='StrongPassword123',
+        )
+
+        self.assertTrue(user.referral_code)
+        self.assertEqual(len(user.referral_code), 10)
+
+    def test_signup_accepts_valid_referral_code(self):
+        referrer = UserProfile.objects.create_user(
+            email='referrer@example.com',
+            password='StrongPassword123',
+        )
+
+        response = self.client.post(
+            reverse('signup'),
+            {
+                'email': 'referred@example.com',
+                'password': 'StrongPassword123',
+                'full_name': 'Referred User',
+                'referral_code': referrer.referral_code,
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        referred = UserProfile.objects.get(email='referred@example.com')
+        self.assertEqual(referred.referred_by, referrer)
+
+    def test_signup_rejects_invalid_referral_code(self):
+        response = self.client.post(
+            reverse('signup'),
+            {
+                'email': 'referred@example.com',
+                'password': 'StrongPassword123',
+                'full_name': 'Referred User',
+                'referral_code': 'BADCODE123',
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('referral_code', response.data)
+
+    def test_referrer_is_not_rewarded_immediately(self):
+        referrer = UserProfile.objects.create_user(email='referrer@example.com', password='StrongPassword123')
+        UserProfile.objects.create_user(
+            email='referred@example.com',
+            password='StrongPassword123',
+            referred_by=referrer,
+        )
+
+        self.assertFalse(ReferralCommission.objects.exists())
+
+    def test_referrer_gets_reward_after_qualifying_successful_transaction_once(self):
+        referrer = UserProfile.objects.create_user(email='referrer@example.com', password='StrongPassword123')
+        referred = UserProfile.objects.create_user(
+            email='referred@example.com',
+            password='StrongPassword123',
+            referred_by=referrer,
+        )
+
+        GiftCardOrder.objects.create(user=referred, type='E-Code', card=None, amount=80, status='Approved')
+        self.assertFalse(ReferralCommission.objects.exists())
+
+        qualifying_order = GiftCardOrder.objects.create(
+            user=referred,
+            type='E-Code',
+            card=None,
+            amount=20,
+            status='Approved',
+        )
+
+        commission = ReferralCommission.objects.get()
+        self.assertEqual(commission.referrer, referrer)
+        self.assertEqual(commission.referred_user, referred)
+        self.assertEqual(commission.qualifying_transaction, qualifying_order)
+        self.assertEqual(str(commission.amount), '2.00')
+
+        GiftCardOrder.objects.create(user=referred, type='E-Code', card=None, amount=200, status='Approved')
+        self.assertEqual(ReferralCommission.objects.count(), 1)
+
+        referrer.refresh_from_db()
+        self.assertEqual(str(referrer.withdrawable_balance), '2.00')
+
+    def test_failed_or_pending_transactions_do_not_trigger_reward(self):
+        referrer = UserProfile.objects.create_user(email='referrer@example.com', password='StrongPassword123')
+        referred = UserProfile.objects.create_user(
+            email='referred@example.com',
+            password='StrongPassword123',
+            referred_by=referrer,
+        )
+
+        GiftCardOrder.objects.create(user=referred, type='E-Code', card=None, amount=1000, status='Pending')
+        GiftCardOrder.objects.create(user=referred, type='E-Code', card=None, amount=1000, status='Rejected')
+
+        self.assertFalse(ReferralCommission.objects.exists())

@@ -163,3 +163,29 @@ class WithdrawalAuditLog(models.Model):
 
     def __str__(self):
         return f"Audit #{self.id} - Withdrawal #{self.withdrawal.id} - {self.action}"
+
+
+class WithdrawalLimitUsage(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='withdrawal_limit_usages',
+    )
+    date = models.DateField()
+    total_amount = models.DecimalField(decimal_places=2, max_digits=12, default=0)
+    total_count = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-date', 'user_id']
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'date'], name='unique_withdrawal_usage_per_user_date'),
+        ]
+        indexes = [
+            models.Index(fields=['date'], name='withdrawal_usage_date_idx'),
+            models.Index(fields=['user', 'date'], name='withdrawal_usage_user_date_idx'),
+        ]
+
+    def __str__(self):
+        return f"{self.user.email} usage on {self.date}: {self.total_count} / ₦{self.total_amount}"

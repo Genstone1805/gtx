@@ -1988,3 +1988,103 @@ TimeoutError: [WinError 10060] A connection attempt failed because the connected
 [2026-05-01 07:00:19] WARNING django.request Method Not Allowed: /account/signup/
 [2026-05-01 07:00:21] WARNING django.request Not Found: /account/register/
 [2026-05-01 07:00:24] WARNING django.request Method Not Allowed: /account/login/
+[2026-05-09 15:21:04] WARNING django.request Bad Request: /api/account/phone/update/
+[2026-05-09 15:21:06] ERROR django.request Internal Server Error: /api/account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 844, in post
+    response = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 151, in send_phone_verification_token
+    if response_object["code"] == "ok":
+       ~~~~~~~~~~~~~~~^^^^^^^^
+KeyError: 'code'
+[2026-05-09 15:21:08] ERROR django.request Internal Server Error: /api/account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 844, in post
+    response = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 151, in send_phone_verification_token
+    if response_object["code"] == "ok":
+       ~~~~~~~~~~~~~~~^^^^^^^^
+KeyError: 'code'
+[2026-05-09 15:21:09] ERROR django.request Internal Server Error: /api/account/phone/resend-code/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 940, in post
+    response = send_phone_verification_token(verification_request.phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 151, in send_phone_verification_token
+    if response_object["code"] == "ok":
+       ~~~~~~~~~~~~~~~^^^^^^^^
+KeyError: 'code'
+[2026-05-09 15:21:11] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-05-09 15:21:12] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-05-09 15:21:26] WARNING django.request Bad Request: /api/account/signup/
+[2026-05-09 15:21:38] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:21:46] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:23:11] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-05-09 15:23:13] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-05-09 15:23:18] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-05-09 15:23:35] WARNING django.request Bad Request: /api/account/signup/
+[2026-05-09 15:23:43] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:23:49] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:23:55] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:24:05] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:24:18] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-05-09 15:24:20] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-05-09 15:24:25] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-05-09 15:24:45] WARNING django.request Bad Request: /api/account/signup/
+[2026-05-09 15:24:54] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:25:01] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:25:08] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:25:18] WARNING django.request Bad Request: /withdrawal/requests/create/

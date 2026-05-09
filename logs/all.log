@@ -3479,3 +3479,202 @@ TimeoutError: timed out
 [2026-05-01 14:11:54] WARNING flower.inspector Inspect method registered failed
 [2026-05-01 14:11:54] WARNING flower.inspector Inspect method stats failed
 [2026-05-01 15:16:17] INFO flower.command 15 detected, shutting down
+[2026-05-09 15:21:04] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:21:04] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 400 | Duration: 0.025s
+[2026-05-09 15:21:04] WARNING gtx ERROR | POST /api/account/phone/update/ | Status: 400 | User: Anonymous | Duration: 0.025s
+[2026-05-09 15:21:04] WARNING django.request Bad Request: /api/account/phone/update/
+[2026-05-09 15:21:06] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:21:06] ERROR django.request Internal Server Error: /api/account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 844, in post
+    response = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 151, in send_phone_verification_token
+    if response_object["code"] == "ok":
+       ~~~~~~~~~~~~~~~^^^^^^^^
+KeyError: 'code'
+[2026-05-09 15:21:06] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 500 | Duration: 0.156s
+[2026-05-09 15:21:06] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 500 | User: Anonymous | Duration: 0.156s
+[2026-05-09 15:21:08] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:21:08] ERROR django.request Internal Server Error: /api/account/phone/update/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 844, in post
+    response = send_phone_verification_token(phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 151, in send_phone_verification_token
+    if response_object["code"] == "ok":
+       ~~~~~~~~~~~~~~~^^^^^^^^
+KeyError: 'code'
+[2026-05-09 15:21:08] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 500 | Duration: 0.004s
+[2026-05-09 15:21:08] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 500 | User: Anonymous | Duration: 0.004s
+[2026-05-09 15:21:09] INFO gtx REQUEST | POST /api/account/phone/resend-code/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:21:09] ERROR django.request Internal Server Error: /api/account/phone/resend-code/
+Traceback (most recent call last):
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\django\views\generic\base.py", line 106, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\gusan\Documents\projects\business\gtx\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 940, in post
+    response = send_phone_verification_token(verification_request.phone_number)
+  File "C:\Users\gusan\Documents\projects\business\gtx\account\views.py", line 151, in send_phone_verification_token
+    if response_object["code"] == "ok":
+       ~~~~~~~~~~~~~~~^^^^^^^^
+KeyError: 'code'
+[2026-05-09 15:21:09] INFO gtx RESPONSE | POST /api/account/phone/resend-code/ | Status: 500 | Duration: 0.009s
+[2026-05-09 15:21:09] ERROR gtx ERROR | POST /api/account/phone/resend-code/ | Status: 500 | User: Anonymous | Duration: 0.009s
+[2026-05-09 15:21:11] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:21:11] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 400 | Duration: 0.003s
+[2026-05-09 15:21:11] WARNING gtx ERROR | POST /api/account/phone/verify/ | Status: 400 | User: Anonymous | Duration: 0.003s
+[2026-05-09 15:21:11] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-05-09 15:21:12] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:21:12] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 400 | Duration: 0.001s
+[2026-05-09 15:21:12] WARNING gtx ERROR | POST /api/account/phone/verify/ | Status: 400 | User: Anonymous | Duration: 0.001s
+[2026-05-09 15:21:12] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-05-09 15:21:25] INFO gtx REQUEST | POST /api/account/signup/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:21:26] INFO gtx RESPONSE | POST /api/account/signup/ | Status: 201 | Duration: 1.443s
+[2026-05-09 15:21:26] INFO gtx REQUEST | POST /api/account/signup/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:21:26] INFO gtx RESPONSE | POST /api/account/signup/ | Status: 400 | Duration: 0.002s
+[2026-05-09 15:21:26] WARNING gtx ERROR | POST /api/account/signup/ | Status: 400 | User: Anonymous | Duration: 0.002s
+[2026-05-09 15:21:26] WARNING django.request Bad Request: /api/account/signup/
+[2026-05-09 15:21:36] INFO gtx REQUEST | POST /withdrawal/requests/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:21:38] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 400 | Duration: 1.273s
+[2026-05-09 15:21:38] WARNING gtx ERROR | POST /withdrawal/requests/create/ | Status: 400 | User: Anonymous | Duration: 1.273s
+[2026-05-09 15:21:38] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:21:41] INFO gtx REQUEST | POST /withdrawal/requests/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:21:42] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 201 | Duration: 1.436s
+[2026-05-09 15:21:45] INFO gtx REQUEST | POST /withdrawal/requests/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:21:46] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 400 | Duration: 1.300s
+[2026-05-09 15:21:46] WARNING gtx ERROR | POST /withdrawal/requests/create/ | Status: 400 | User: Anonymous | Duration: 1.300s
+[2026-05-09 15:21:46] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:23:11] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:23:11] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.004s
+[2026-05-09 15:23:11] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.004s
+[2026-05-09 15:23:11] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-05-09 15:23:13] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:23:13] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.004s
+[2026-05-09 15:23:13] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.004s
+[2026-05-09 15:23:13] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-05-09 15:23:15] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:23:15] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 201 | Duration: 0.003s
+[2026-05-09 15:23:16] INFO gtx REQUEST | POST /api/account/phone/resend-code/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:23:16] INFO gtx RESPONSE | POST /api/account/phone/resend-code/ | Status: 200 | Duration: 0.005s
+[2026-05-09 15:23:18] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:23:18] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 400 | Duration: 0.003s
+[2026-05-09 15:23:18] WARNING gtx ERROR | POST /api/account/phone/verify/ | Status: 400 | User: Anonymous | Duration: 0.003s
+[2026-05-09 15:23:18] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-05-09 15:23:20] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:23:20] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 200 | Duration: 0.003s
+[2026-05-09 15:23:33] INFO gtx REQUEST | POST /api/account/signup/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:23:35] INFO gtx RESPONSE | POST /api/account/signup/ | Status: 201 | Duration: 2.176s
+[2026-05-09 15:23:35] INFO gtx REQUEST | POST /api/account/signup/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:23:35] INFO gtx RESPONSE | POST /api/account/signup/ | Status: 400 | Duration: 0.004s
+[2026-05-09 15:23:35] WARNING gtx ERROR | POST /api/account/signup/ | Status: 400 | User: Anonymous | Duration: 0.004s
+[2026-05-09 15:23:35] WARNING django.request Bad Request: /api/account/signup/
+[2026-05-09 15:23:42] INFO gtx REQUEST | POST /withdrawal/requests/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:23:43] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 400 | Duration: 1.549s
+[2026-05-09 15:23:43] WARNING gtx ERROR | POST /withdrawal/requests/create/ | Status: 400 | User: Anonymous | Duration: 1.549s
+[2026-05-09 15:23:43] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:23:47] INFO gtx REQUEST | POST /withdrawal/requests/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:23:49] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 400 | Duration: 1.978s
+[2026-05-09 15:23:49] WARNING gtx ERROR | POST /withdrawal/requests/create/ | Status: 400 | User: Anonymous | Duration: 1.978s
+[2026-05-09 15:23:49] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:23:53] INFO gtx REQUEST | POST /withdrawal/requests/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:23:55] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 400 | Duration: 1.672s
+[2026-05-09 15:23:55] WARNING gtx ERROR | POST /withdrawal/requests/create/ | Status: 400 | User: Anonymous | Duration: 1.672s
+[2026-05-09 15:23:55] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:23:58] INFO gtx REQUEST | POST /withdrawal/requests/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:24:00] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 201 | Duration: 1.513s
+[2026-05-09 15:24:03] INFO gtx REQUEST | POST /withdrawal/requests/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:24:05] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 400 | Duration: 1.621s
+[2026-05-09 15:24:05] WARNING gtx ERROR | POST /withdrawal/requests/create/ | Status: 400 | User: Anonymous | Duration: 1.621s
+[2026-05-09 15:24:05] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:24:18] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:24:18] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.004s
+[2026-05-09 15:24:18] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.004s
+[2026-05-09 15:24:18] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-05-09 15:24:20] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:24:20] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.002s
+[2026-05-09 15:24:20] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.002s
+[2026-05-09 15:24:20] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-05-09 15:24:21] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:24:21] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 201 | Duration: 0.005s
+[2026-05-09 15:24:23] INFO gtx REQUEST | POST /api/account/phone/resend-code/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:24:23] INFO gtx RESPONSE | POST /api/account/phone/resend-code/ | Status: 200 | Duration: 0.003s
+[2026-05-09 15:24:25] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:24:25] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 400 | Duration: 0.002s
+[2026-05-09 15:24:25] WARNING gtx ERROR | POST /api/account/phone/verify/ | Status: 400 | User: Anonymous | Duration: 0.002s
+[2026-05-09 15:24:25] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-05-09 15:24:27] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:24:27] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 200 | Duration: 0.004s
+[2026-05-09 15:24:42] INFO gtx REQUEST | POST /api/account/signup/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:24:45] INFO gtx RESPONSE | POST /api/account/signup/ | Status: 201 | Duration: 2.710s
+[2026-05-09 15:24:45] INFO gtx REQUEST | POST /api/account/signup/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:24:45] INFO gtx RESPONSE | POST /api/account/signup/ | Status: 400 | Duration: 0.004s
+[2026-05-09 15:24:45] WARNING gtx ERROR | POST /api/account/signup/ | Status: 400 | User: Anonymous | Duration: 0.004s
+[2026-05-09 15:24:45] WARNING django.request Bad Request: /api/account/signup/
+[2026-05-09 15:24:51] INFO gtx REQUEST | POST /withdrawal/requests/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:24:54] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 400 | Duration: 2.565s
+[2026-05-09 15:24:54] WARNING gtx ERROR | POST /withdrawal/requests/create/ | Status: 400 | User: Anonymous | Duration: 2.565s
+[2026-05-09 15:24:54] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:24:58] INFO gtx REQUEST | POST /withdrawal/requests/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:25:01] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 400 | Duration: 3.043s
+[2026-05-09 15:25:01] WARNING gtx ERROR | POST /withdrawal/requests/create/ | Status: 400 | User: Anonymous | Duration: 3.043s
+[2026-05-09 15:25:01] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:25:06] INFO gtx REQUEST | POST /withdrawal/requests/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:25:08] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 400 | Duration: 1.939s
+[2026-05-09 15:25:08] WARNING gtx ERROR | POST /withdrawal/requests/create/ | Status: 400 | User: Anonymous | Duration: 1.939s
+[2026-05-09 15:25:08] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-09 15:25:11] INFO gtx REQUEST | POST /withdrawal/requests/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:25:13] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 201 | Duration: 1.658s
+[2026-05-09 15:25:16] INFO gtx REQUEST | POST /withdrawal/requests/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-09 15:25:18] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 400 | Duration: 1.772s
+[2026-05-09 15:25:18] WARNING gtx ERROR | POST /withdrawal/requests/create/ | Status: 400 | User: Anonymous | Duration: 1.772s
+[2026-05-09 15:25:18] WARNING django.request Bad Request: /withdrawal/requests/create/
