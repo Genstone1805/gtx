@@ -154,6 +154,47 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'This is a platform where you sell giftcards',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+    'ENUM_NAME_OVERRIDES': {
+        'CredentialStatusEnum': [
+            ('Pending', 'Pending'),
+            ('Approved', 'Approved'),
+            ('Rejected', 'Rejected'),
+        ],
+        'UserStatusEnum': [
+            ('Active', 'Active'),
+            ('Warning', 'Warning'),
+            ('Disabled', 'Disabled'),
+            ('Under Review', 'Under Review'),
+        ],
+        'ReferralCommissionStatusEnum': [
+            ('Pending', 'Pending'),
+            ('Paid', 'Paid'),
+            ('Cancelled', 'Cancelled'),
+        ],
+        'NotificationEventStatusEnum': [
+            ('pending', 'Pending'),
+            ('sent', 'Sent'),
+            ('failed', 'Failed'),
+        ],
+        'GiftCardNameTypeEnum': [
+            ('Both', 'Both'),
+            ('Physical', 'Physical'),
+            ('E-code', 'E-code'),
+        ],
+        'GiftCardOrderTypeEnum': [
+            ('Physical', 'Physical'),
+            ('E-Code', 'E-Code'),
+        ],
+        'WithdrawalStatusEnum': [
+            ('Pending', 'Pending'),
+            ('Approved', 'Approved'),
+            ('Rejected', 'Rejected'),
+            ('Cancelled', 'Cancelled'),
+            ('Processing', 'Processing'),
+            ('Completed', 'Completed'),
+            ('Failed', 'Failed'),
+        ],
+    },
     # OTHER SETTINGS
 }
 

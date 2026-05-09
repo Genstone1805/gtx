@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
 from cards.models import GiftCardStore, GiftCardNames
 
 class GiftCardNameSerializer(serializers.ModelSerializer):
@@ -7,6 +8,7 @@ class GiftCardNameSerializer(serializers.ModelSerializer):
   class Meta:
     model = GiftCardNames
     fields = ["id", "name", "type", "rate"]
+    ref_name = "CardsGiftCardName"
 
 class GiftCardStoreListSerializer(serializers.ModelSerializer):
   cards = serializers.SerializerMethodField()
@@ -15,6 +17,7 @@ class GiftCardStoreListSerializer(serializers.ModelSerializer):
     model = GiftCardStore
     fields = ["id", "category", "name", "image", "cards"]
 
-  def get_cards(self, obj):
+  @extend_schema_field(GiftCardNameSerializer(many=True))
+  def get_cards(self, obj) -> list[dict]:
     cards = GiftCardNames.objects.filter(store=obj)
     return GiftCardNameSerializer(cards, many=True).data

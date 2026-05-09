@@ -1,10 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import serializers, status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.exceptions import ValidationError
 from django.utils import timezone
+from drf_spectacular.utils import extend_schema, inline_serializer
 
 from .models import Notification, NotificationEvent
 from .services import NotificationService
@@ -54,7 +55,20 @@ class NotificationDetailView(RetrieveAPIView):
 class NotificationMarkAsReadView(APIView):
     """Mark one or all notifications as read."""
     permission_classes = [IsAuthenticated]
+    serializer_class = NotificationMarkAsReadSerializer
 
+    @extend_schema(
+        request=NotificationMarkAsReadSerializer,
+        responses={
+            200: inline_serializer(
+                name="NotificationMarkAsReadResponse",
+                fields={
+                    "detail": serializers.CharField(),
+                    "marked_count": serializers.IntegerField(),
+                },
+            )
+        },
+    )
     def post(self, request):
         user = request.user
         serializer = NotificationMarkAsReadSerializer(data=request.data)
@@ -83,6 +97,18 @@ class NotificationMarkAllAsReadView(APIView):
     """Mark all notifications as read for the authenticated user."""
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=None,
+        responses={
+            200: inline_serializer(
+                name="NotificationMarkAllAsReadResponse",
+                fields={
+                    "detail": serializers.CharField(),
+                    "marked_count": serializers.IntegerField(),
+                },
+            )
+        },
+    )
     def post(self, request):
         user = request.user
         updated = NotificationService.mark_all_as_read(user)
@@ -97,6 +123,14 @@ class NotificationUnreadCountView(APIView):
     """Get count of unread notifications."""
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        responses={
+            200: inline_serializer(
+                name="NotificationUnreadCountResponse",
+                fields={"unread_count": serializers.IntegerField()},
+            )
+        },
+    )
     def get(self, request):
         count = NotificationService.get_unread_count(request.user)
         return Response({'unread_count': count})
@@ -134,6 +168,22 @@ class AdminNotificationStatsView(APIView):
     """Get notification statistics (admin only)."""
     permission_classes = [IsAdminUser]
 
+    @extend_schema(
+        responses={
+            200: inline_serializer(
+                name="AdminNotificationStatsResponse",
+                fields={
+                    "total_notifications": serializers.IntegerField(),
+                    "unread_notifications": serializers.IntegerField(),
+                    "total_events": serializers.IntegerField(),
+                    "sent_events": serializers.IntegerField(),
+                    "failed_events": serializers.IntegerField(),
+                    "success_rate": serializers.CharField(),
+                    "notifications_by_type": serializers.ListField(child=serializers.DictField()),
+                },
+            )
+        },
+    )
     def get(self, request):
         from django.db.models import Count, Q
         

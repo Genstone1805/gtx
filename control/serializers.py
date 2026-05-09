@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
 from decimal import Decimal
 from cards.models import GiftCardNames, GiftCardStore
 from account.models import Level2Credentials, Level3Credentials, UserProfile
@@ -61,7 +62,8 @@ class Level2CredentialsPendingSerializer(serializers.ModelSerializer):
         model = Level2Credentials
         fields = ['id', 'nin', 'nin_image', 'status', 'approved', 'user']
 
-    def get_user(self, obj):
+    @extend_schema_field(UserBasicSerializer)
+    def get_user(self, obj) -> dict | None:
         user = UserProfile.objects.filter(level2_credentials=obj).first()
         if user:
             return UserBasicSerializer(user).data
@@ -79,7 +81,8 @@ class Level3CredentialsPendingSerializer(serializers.ModelSerializer):
             'face_verification_image', 'status', 'approved', 'user'
         ]
 
-    def get_user(self, obj):
+    @extend_schema_field(UserBasicSerializer)
+    def get_user(self, obj) -> dict | None:
         user = UserProfile.objects.filter(level3_credentials=obj).first()
         if user:
             return UserBasicSerializer(user).data
@@ -129,6 +132,7 @@ class WithdrawalListSerializer(serializers.ModelSerializer):
             'id', 'amount',
             'status', 'status_display', 'created_at', 'updated_at'
         ]
+        ref_name = "AdminWithdrawalList"
 
 
 class WithdrawalDetailSerializer(serializers.ModelSerializer):
@@ -148,6 +152,7 @@ class WithdrawalDetailSerializer(serializers.ModelSerializer):
             'transaction_reference',
             'created_at', 'updated_at'
         ]
+        ref_name = "AdminWithdrawalDetail"
 
 
 class WithdrawalApprovalSerializer(serializers.Serializer):

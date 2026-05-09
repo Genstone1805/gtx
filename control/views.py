@@ -2,9 +2,10 @@ import json
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import serializers, status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.exceptions import ValidationError
+from drf_spectacular.utils import extend_schema, inline_serializer
 from django.shortcuts import get_object_or_404
 from django.db import transaction
 from decimal import Decimal
@@ -156,7 +157,17 @@ class PendingLevel3CredentialsListView(ListAPIView):
 class Level2CredentialApprovalView(APIView):
     """Approve or reject Level 2 credentials."""
     permission_classes = [IsAdminUser]
+    serializer_class = CredentialApprovalSerializer
 
+    @extend_schema(
+        request=CredentialApprovalSerializer,
+        responses={
+            200: inline_serializer(
+                name="Level2CredentialApprovalResponse",
+                fields={"detail": serializers.CharField()},
+            )
+        },
+    )
     def post(self, request, credential_id):
         credentials = get_object_or_404(Level2Credentials, id=credential_id)
 
@@ -210,7 +221,17 @@ class Level2CredentialApprovalView(APIView):
 class Level3CredentialApprovalView(APIView):
     """Approve or reject Level 3 credentials."""
     permission_classes = [IsAdminUser]
+    serializer_class = CredentialApprovalSerializer
 
+    @extend_schema(
+        request=CredentialApprovalSerializer,
+        responses={
+            200: inline_serializer(
+                name="Level3CredentialApprovalResponse",
+                fields={"detail": serializers.CharField()},
+            )
+        },
+    )
     def post(self, request, credential_id):
         credentials = get_object_or_404(Level3Credentials, id=credential_id)
 
@@ -460,6 +481,17 @@ class AdminPendingWithdrawalsCountView(APIView):
     """Get count of pending withdrawals (for admin dashboard)."""
     permission_classes = [IsAdminUser]
 
+    @extend_schema(
+        responses={
+            200: inline_serializer(
+                name="AdminPendingWithdrawalsCountResponse",
+                fields={
+                    "pending_count": serializers.IntegerField(),
+                    "pending_total": serializers.DecimalField(max_digits=12, decimal_places=2),
+                },
+            )
+        },
+    )
     def get(self, request):
         pending_count = Withdrawal.objects.filter(status='Pending').count()
         pending_total = Withdrawal.objects.filter(

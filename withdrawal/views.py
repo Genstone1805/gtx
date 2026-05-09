@@ -1,10 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import serializers, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
+from drf_spectacular.utils import extend_schema, inline_serializer
 
 from account.models import UserProfile
 from .models import Withdrawal, WithdrawalAuditLog
@@ -22,7 +23,9 @@ from withdrawal.services import WithdrawalLimitService
 class UserBalanceView(APIView):
     """Get current user's balance information."""
     permission_classes = [IsAuthenticated]
+    serializer_class = UserBalanceSerializer
 
+    @extend_schema(responses=UserBalanceSerializer)
     def get(self, request):
         user = request.user
         recalculate_user_balances(user)
@@ -120,6 +123,18 @@ class WithdrawalCancelView(APIView):
     """Cancel a pending withdrawal request."""
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=None,
+        responses={
+            200: inline_serializer(
+                name="WithdrawalCancelResponse",
+                fields={
+                    "detail": serializers.CharField(),
+                    "status": serializers.CharField(),
+                },
+            )
+        },
+    )
     @transaction.atomic
     def post(self, request, pk):
         user = request.user

@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from .models import Notification, NotificationEvent
 
 
@@ -18,7 +20,8 @@ class NotificationSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = fields
 
-    def get_created_at_formatted(self, obj):
+    @extend_schema_field(OpenApiTypes.STR)
+    def get_created_at_formatted(self, obj) -> str:
         return obj.created_at.strftime('%Y-%m-%d %H:%M')
 
 
@@ -48,5 +51,6 @@ class NotificationEventSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = fields
 
-    def get_event_type_display(self, obj):
+    @extend_schema_field(OpenApiTypes.STR)
+    def get_event_type_display(self, obj) -> str:
         return obj.event_type.replace('_', ' ').title()

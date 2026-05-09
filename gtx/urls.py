@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 
@@ -35,9 +36,11 @@ urlpatterns = [
     path('template/', include('frontend.urls')),
 
     # DOcumentation Urls
+    path('docks', RedirectView.as_view(pattern_name='swagger-ui', permanent=False)),
     path('download-docs/', SpectacularAPIView.as_view(), name='schema'),
     path('docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('schema/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'rest_framework/docs/img/favicon.ico', permanent=False)),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

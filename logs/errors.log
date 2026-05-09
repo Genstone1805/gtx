@@ -2088,3 +2088,5 @@ KeyError: 'code'
 [2026-05-09 15:25:01] WARNING django.request Bad Request: /withdrawal/requests/create/
 [2026-05-09 15:25:08] WARNING django.request Bad Request: /withdrawal/requests/create/
 [2026-05-09 15:25:18] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-10 05:27:03] WARNING django.request Not Found: /docks
+[2026-05-10 05:27:03] WARNING django.request Not Found: /favicon.ico

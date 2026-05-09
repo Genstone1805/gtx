@@ -3678,3 +3678,42 @@ KeyError: 'code'
 [2026-05-09 15:25:18] INFO gtx RESPONSE | POST /withdrawal/requests/create/ | Status: 400 | Duration: 1.772s
 [2026-05-09 15:25:18] WARNING gtx ERROR | POST /withdrawal/requests/create/ | Status: 400 | User: Anonymous | Duration: 1.772s
 [2026-05-09 15:25:18] WARNING django.request Bad Request: /withdrawal/requests/create/
+[2026-05-10 05:25:46] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-05-10 05:27:01] INFO gtx REQUEST | GET /docs/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-10 05:27:01] INFO gtx RESPONSE | GET /docs/ | Status: 200 | Duration: 0.235s
+[2026-05-10 05:27:01] INFO django.server "GET /docs/ HTTP/1.1" 200 4655
+[2026-05-10 05:27:02] INFO gtx REQUEST | GET /download-docs/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-10 05:27:02] INFO gtx RESPONSE | GET /download-docs/ | Status: 200 | Duration: 0.251s
+[2026-05-10 05:27:02] INFO django.server "GET /download-docs/ HTTP/1.1" 200 214034
+[2026-05-10 05:27:03] INFO gtx REQUEST | GET /docks | User: Anonymous | IP: 127.0.0.1
+[2026-05-10 05:27:03] INFO gtx RESPONSE | GET /docks | Status: 404 | Duration: 0.002s
+[2026-05-10 05:27:03] WARNING gtx ERROR | GET /docks | Status: 404 | User: Anonymous | Duration: 0.002s
+[2026-05-10 05:27:03] WARNING django.request Not Found: /docks
+[2026-05-10 05:27:03] WARNING django.server "GET /docks HTTP/1.1" 404 179
+[2026-05-10 05:27:03] INFO gtx REQUEST | GET /favicon.ico | User: Anonymous | IP: 127.0.0.1
+[2026-05-10 05:27:03] INFO gtx RESPONSE | GET /favicon.ico | Status: 404 | Duration: 0.001s
+[2026-05-10 05:27:03] WARNING gtx ERROR | GET /favicon.ico | Status: 404 | User: Anonymous | Duration: 0.001s
+[2026-05-10 05:27:03] WARNING django.request Not Found: /favicon.ico
+[2026-05-10 05:27:03] WARNING django.server "GET /favicon.ico HTTP/1.1" 404 179
+[2026-05-10 05:27:06] INFO gtx REQUEST | GET /docs/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-10 05:27:06] INFO gtx RESPONSE | GET /docs/ | Status: 200 | Duration: 0.003s
+[2026-05-10 05:27:06] INFO django.server "GET /docs/ HTTP/1.1" 200 4655
+[2026-05-10 05:27:06] INFO gtx REQUEST | GET /download-docs/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-10 05:27:06] INFO gtx RESPONSE | GET /download-docs/ | Status: 200 | Duration: 0.120s
+[2026-05-10 05:27:06] INFO django.server "GET /download-docs/ HTTP/1.1" 200 214034
+[2026-05-10 05:30:40] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\serializers.py changed, reloading.
+[2026-05-10 05:30:42] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-05-10 05:31:33] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\views.py changed, reloading.
+[2026-05-10 05:31:34] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-05-10 05:32:03] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\withdrawal\views.py changed, reloading.
+[2026-05-10 05:32:05] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-05-10 05:32:23] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\gtx\settings.py changed, reloading.
+[2026-05-10 05:32:25] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-05-10 05:36:02] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\account\views.py changed, reloading.
+[2026-05-10 05:36:03] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-05-10 05:36:58] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\gtx\settings.py changed, reloading.
+[2026-05-10 05:37:00] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-05-10 05:37:27] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\gtx\settings.py changed, reloading.
+[2026-05-10 05:37:28] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-05-10 05:37:58] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\withdrawal\serializers.py changed, reloading.
+[2026-05-10 05:37:59] INFO django.utils.autoreload Watching for file changes with StatReloader

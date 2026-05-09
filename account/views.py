@@ -9,12 +9,14 @@ import requests
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.request import Request
-from rest_framework import status
+from rest_framework import serializers, status
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework_simplejwt.tokens import RefreshToken
+from drf_spectacular.utils import extend_schema, inline_serializer
 from django.core.mail import EmailMultiAlternatives
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -942,6 +944,15 @@ class ResendPhoneVerificationView(APIView):
     """Resend the OTP for the authenticated user's pending phone verification."""
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=None,
+        responses={
+            200: inline_serializer(
+                name="ResendPhoneVerificationResponse",
+                fields={"detail": serializers.CharField()},
+            )
+        },
+    )
     def post(self, request: Request) -> Response:
         user = request.user
 
@@ -1093,6 +1104,15 @@ class DeleteBankDetailsView(APIView):
     """Delete bank details attached to authenticated user."""
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=None,
+        responses={
+            200: inline_serializer(
+                name="DeleteBankDetailsResponse",
+                fields={"detail": serializers.CharField()},
+            )
+        },
+    )
     def delete(self, request: Request) -> Response:
         user = request.user
         if not user.bank_details:
@@ -1145,39 +1165,24 @@ class UserTransactionHistoryView(APIView):
         )
 
 
-class UserOrdersView(APIView):
+class UserOrdersView(ListAPIView):
     """Get all orders created by the authenticated user."""
     permission_classes = [IsAuthenticated]
     serializer_class = GiftCardOrderListSerializer
 
-    def get(self, request: Request) -> Response:
-        user = request.user
-        orders = GiftCardOrder.objects.filter(user=user)
-        serializer = self.serializer_class(orders, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        return GiftCardOrder.objects.filter(user=self.request.user)
 
 
-class UserOrderDetailView(APIView):
+class UserOrderDetailView(RetrieveAPIView):
     """Get a single order detail for the authenticated user."""
     permission_classes = [IsAuthenticated]
     serializer_class = GiftCardOrderSerializer
+    queryset = GiftCardOrder.objects.all()
+    lookup_url_kwarg = 'order_id'
 
-    def get(self, request: Request, order_id: int) -> Response:
-        user = request.user
-
-        try:
-            order = GiftCardOrder.objects.get(id=order_id)
-        except GiftCardOrder.DoesNotExist:
-            return Response(
-                {'detail': 'Order not found.'},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        if order.user != user:
-            return Response(
-                {'detail': 'You do not have permission to view this order.'},
-                status=status.HTTP_403_FORBIDDEN
-            )
-
-        serializer = self.serializer_class(order)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get_object(self):
+        order = super().get_object()
+        if order.user != self.request.user:
+            raise PermissionDenied('You do not have permission to view this order.')
+        return order

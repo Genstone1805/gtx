@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from decimal import Decimal
 from .models import Withdrawal
 from account.models import UserProfile
@@ -91,6 +93,7 @@ class UserBalanceSerializer(serializers.Serializer):
     transaction_limit = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
     total_balance = serializers.SerializerMethodField()
 
-    def get_total_balance(self, obj):
+    @extend_schema_field(OpenApiTypes.NUMBER)
+    def get_total_balance(self, obj) -> Decimal:
         # obj is the user profile
         return obj.pending_balance + obj.withdrawable_balance

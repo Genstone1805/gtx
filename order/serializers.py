@@ -21,6 +21,7 @@ class GiftCardNameSerializer(serializers.ModelSerializer):
   class Meta:
     model = GiftCardNames
     fields = ["id", "name", "type", "rate", "store"]
+    ref_name = "OrderGiftCardName"
 
 class GiftCardOrderSerializer(serializers.ModelSerializer):
     card = GiftCardNameSerializer()

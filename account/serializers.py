@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from phonenumber_field.serializerfields import PhoneNumberField
 from .models import UserProfile, Level2Credentials, Level3Credentials, BankAccountDetails
 
@@ -142,7 +144,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'referred_by', 'referral_count'
         ]
 
-    def get_referral_count(self, obj):
+    @extend_schema_field(OpenApiTypes.INT)
+    def get_referral_count(self, obj) -> int:
         return obj.referrals.count()
 
 
