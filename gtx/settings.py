@@ -52,10 +52,10 @@ ALLOWED_HOSTS = ["*"]
 # ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
 
 # Allow ngrok domains for CSRF
-CSRF_TRUSTED_ORIGINS = [
-    "https://*.ngrok-free.app",
-    "https://*.ngrok.io",
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://*.ngrok-free.app",
+#     "https://*.ngrok.io",
+# ]
 
 
 # Application definition

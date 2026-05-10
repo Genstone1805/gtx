@@ -3717,3 +3717,29 @@ KeyError: 'code'
 [2026-05-10 05:37:28] INFO django.utils.autoreload Watching for file changes with StatReloader
 [2026-05-10 05:37:58] INFO django.utils.autoreload C:\Users\gusan\Documents\projects\business\gtx\withdrawal\serializers.py changed, reloading.
 [2026-05-10 05:37:59] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-05-10 08:28:30] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-05-10 08:28:44] INFO gtx REQUEST | GET /order/create | User: Anonymous | IP: 127.0.0.1
+[2026-05-10 08:28:44] INFO gtx RESPONSE | GET /order/create | Status: 404 | Duration: 0.002s
+[2026-05-10 08:28:44] WARNING gtx ERROR | GET /order/create | Status: 404 | User: Anonymous | Duration: 0.002s
+[2026-05-10 08:28:44] INFO django.server "GET /order/create HTTP/1.1" 301 0
+[2026-05-10 08:28:44] INFO gtx REQUEST | GET /order/create/ | User: Anonymous | IP: 127.0.0.1
+[2026-05-10 08:28:44] INFO gtx RESPONSE | GET /order/create/ | Status: 401 | Duration: 0.246s
+[2026-05-10 08:28:44] WARNING gtx ERROR | GET /order/create/ | Status: 401 | User: Anonymous | Duration: 0.246s
+[2026-05-10 08:28:44] WARNING django.request Unauthorized: /order/create/
+[2026-05-10 08:28:44] WARNING django.server "GET /order/create/ HTTP/1.1" 401 3937
+[2026-05-10 08:28:44] INFO django.server "GET /static/rest_framework/css/prettify.a987f72342ee.css HTTP/1.1" 200 390
+[2026-05-10 08:28:44] INFO django.server "GET /static/rest_framework/css/bootstrap-tweaks.ee4ee6acf9eb.css HTTP/1.1" 200 1282
+[2026-05-10 08:28:44] INFO django.server "GET /static/rest_framework/css/bootstrap.min.f17d4516b026.css HTTP/1.1" 200 19657
+[2026-05-10 08:28:44] INFO django.server "GET /static/rest_framework/css/default.789dfb5732d7.css HTTP/1.1" 200 612
+[2026-05-10 08:28:44] INFO django.server "GET /static/rest_framework/js/ajax-form.4e1cdcb7acab.js HTTP/1.1" 200 1645
+[2026-05-10 08:28:44] INFO django.server "GET /static/rest_framework/js/jquery-3.7.1.min.2c872dbe60f4.js HTTP/1.1" 200 30336
+[2026-05-10 08:28:44] INFO django.server "GET /static/rest_framework/js/csrf.455080a7b2ce.js HTTP/1.1" 200 827
+[2026-05-10 08:28:44] INFO django.server "GET /static/rest_framework/js/prettify-min.709bfcc456c6.js HTTP/1.1" 200 6025
+[2026-05-10 08:28:44] INFO django.server "GET /static/rest_framework/js/bootstrap.min.2f34b630ffe3.js HTTP/1.1" 200 10896
+[2026-05-10 08:28:45] INFO django.server "GET /static/rest_framework/img/grid.a4b938cf382b.png HTTP/1.1" 200 1458
+[2026-05-10 08:28:45] INFO django.server "GET /static/rest_framework/js/default.5b08897dbdc3.js HTTP/1.1" 200 571
+[2026-05-10 08:28:45] INFO django.server "GET /static/rest_framework/js/load-ajax-form.8cdb3a9f3466.js HTTP/1.1" 200 59
+[2026-05-10 08:28:45] INFO gtx REQUEST | GET /favicon.ico | User: Anonymous | IP: 127.0.0.1
+[2026-05-10 08:28:45] INFO gtx RESPONSE | GET /favicon.ico | Status: 302 | Duration: 0.002s
+[2026-05-10 08:28:45] INFO django.server "GET /favicon.ico HTTP/1.1" 302 0
+[2026-05-10 08:28:45] INFO django.server "GET /static/rest_framework/docs/img/favicon.ico HTTP/1.1" 200 256
