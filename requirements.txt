@@ -23,6 +23,7 @@ django-timezone-field==7.2.1
 djangorestframework==3.16.1
 djangorestframework_simplejwt==5.5.1
 drf-spectacular==0.29.0
+exponent_server_sdk==2.2.0
 flower==2.0.1
 gunicorn==25.1.0
 hiredis==3.3.1

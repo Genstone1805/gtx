@@ -27,10 +27,6 @@ __pycache__/
 .env.local
 .env.*.local
 
-# Database
-db.sqlite3
-*.sqlite3
-
 # Docker
 Dockerfile
 docker-compose*.yml
