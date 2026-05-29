@@ -3743,3 +3743,49 @@ KeyError: 'code'
 [2026-05-10 08:28:45] INFO gtx RESPONSE | GET /favicon.ico | Status: 302 | Duration: 0.002s
 [2026-05-10 08:28:45] INFO django.server "GET /favicon.ico HTTP/1.1" 302 0
 [2026-05-10 08:28:45] INFO django.server "GET /static/rest_framework/docs/img/favicon.ico HTTP/1.1" 200 256
+[2026-05-11 14:08:17] INFO flower.command Visit me at http://0.0.0.0:5555
+[2026-05-11 14:08:17] INFO flower.command Broker: redis://redis:6379/0
+[2026-05-11 14:08:17] INFO flower.command Registered tasks: 
+['account.tasks.periodictask',
+ 'celery.accumulate',
+ 'celery.backend_cleanup',
+ 'celery.chain',
+ 'celery.chord',
+ 'celery.chord_unlock',
+ 'celery.chunks',
+ 'celery.group',
+ 'celery.map',
+ 'celery.starmap',
+ 'withdrawal.tasks.refresh_daily_withdrawal_limits']
+[2026-05-11 14:08:17] INFO kombu.mixins Connected to redis://redis:6379/0
+[2026-05-11 14:08:18] WARNING flower.inspector Inspect method active failed
+[2026-05-11 14:08:18] WARNING flower.inspector Inspect method registered failed
+[2026-05-11 14:08:18] WARNING flower.inspector Inspect method scheduled failed
+[2026-05-11 14:08:18] WARNING flower.inspector Inspect method reserved failed
+[2026-05-11 14:08:18] WARNING flower.inspector Inspect method active_queues failed
+[2026-05-11 14:08:18] WARNING flower.inspector Inspect method revoked failed
+[2026-05-11 14:08:18] WARNING flower.inspector Inspect method conf failed
+[2026-05-11 14:08:18] WARNING flower.inspector Inspect method stats failed
+[2026-05-29 16:30:23] INFO flower.command Visit me at http://0.0.0.0:5555
+[2026-05-29 16:30:23] INFO flower.command Broker: redis://redis:6379/0
+[2026-05-29 16:30:23] INFO flower.command Registered tasks: 
+['account.tasks.periodictask',
+ 'celery.accumulate',
+ 'celery.backend_cleanup',
+ 'celery.chain',
+ 'celery.chord',
+ 'celery.chord_unlock',
+ 'celery.chunks',
+ 'celery.group',
+ 'celery.map',
+ 'celery.starmap',
+ 'withdrawal.tasks.refresh_daily_withdrawal_limits']
+[2026-05-29 16:30:23] INFO kombu.mixins Connected to redis://redis:6379/0
+[2026-05-29 16:30:25] WARNING flower.inspector Inspect method active_queues failed
+[2026-05-29 16:30:25] WARNING flower.inspector Inspect method reserved failed
+[2026-05-29 16:30:25] WARNING flower.inspector Inspect method active failed
+[2026-05-29 16:30:25] WARNING flower.inspector Inspect method registered failed
+[2026-05-29 16:30:25] WARNING flower.inspector Inspect method revoked failed
+[2026-05-29 16:30:25] WARNING flower.inspector Inspect method scheduled failed
+[2026-05-29 16:30:25] WARNING flower.inspector Inspect method conf failed
+[2026-05-29 16:30:25] WARNING flower.inspector Inspect method stats failed
