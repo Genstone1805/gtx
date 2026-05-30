@@ -3789,3 +3789,4 @@ KeyError: 'code'
 [2026-05-29 16:30:25] WARNING flower.inspector Inspect method scheduled failed
 [2026-05-29 16:30:25] WARNING flower.inspector Inspect method conf failed
 [2026-05-29 16:30:25] WARNING flower.inspector Inspect method stats failed
+[2026-05-29 17:49:45] WARNING celery.events.state Substantial drift from celery@7112da083f6a may mean clocks are out of sync.  Current drift is 18 seconds.  [orig: 2026-05-29 17:49:45.918827 recv: 2026-05-29 17:49:27.129414]
