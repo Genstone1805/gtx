@@ -295,7 +295,7 @@ class PhoneVerificationRequest(models.Model):
     )
     phone_number = PhoneNumberField()
     message_id = models.CharField(max_length=25, default="")
-    pin_id = models.CharField(max_length=7)
+    pin_id = models.CharField(max_length=34)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -311,7 +311,7 @@ class PhoneVerificationRequest(models.Model):
         """Check if the pending verification request is expired (valid for 10 minutes)."""
         from datetime import timedelta
 
-        expiry_time = self.created_at + timedelta(minutes=120)
+        expiry_time = self.created_at + timedelta(minutes=10)
         return timezone.now() > expiry_time
 
     def __str__(self):

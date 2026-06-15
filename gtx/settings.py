@@ -39,6 +39,15 @@ def load_env_file(path: Path) -> None:
 load_env_file(BASE_DIR / '.env')
 
 
+def env_first(*names: str, default: str = '') -> str:
+    """Return the first configured environment value from a list of aliases."""
+    for name in names:
+        value = os.environ.get(name)
+        if value:
+            return value
+    return default
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
@@ -285,20 +294,15 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_TIMEOUT = int(os.environ.get('EMAIL_TIMEOUT') or 10)
 
-TERMII_API_KEY = os.environ.get('TERMII_API_KEY', '').strip()
-TERMII_BASE_URL = os.environ.get('TERMII_BASE_URL', 'https://v3.api.termii.com').strip().rstrip('/')
-TERMII_PHONE_OTP_SENDER_ID = os.environ.get('TERMII_PHONE_OTP_SENDER_ID', '').strip()
-TERMII_PHONE_OTP_BRAND_NAME = os.environ.get(
-    'TERMII_PHONE_OTP_BRAND_NAME',
-    TERMII_PHONE_OTP_SENDER_ID or 'GTX',
-).strip()
-TERMII_PHONE_OTP_CHANNEL = os.environ.get('TERMII_PHONE_OTP_CHANNEL', 'generic').strip()
-TERMII_PHONE_OTP_MESSAGE_TYPE = os.environ.get('TERMII_PHONE_OTP_MESSAGE_TYPE', 'NUMERIC').strip()
-TERMII_PHONE_OTP_ATTEMPTS = int(os.environ.get('TERMII_PHONE_OTP_ATTEMPTS', '3'))
-TERMII_PHONE_OTP_TTL_MINUTES = int(os.environ.get('TERMII_PHONE_OTP_TTL_MINUTES', '10'))
-TERMII_PHONE_OTP_LENGTH = int(os.environ.get('TERMII_PHONE_OTP_LENGTH', '6'))
-TERMII_PHONE_OTP_PLACEHOLDER = os.environ.get('TERMII_PHONE_OTP_PLACEHOLDER', '<123456>').strip()
-TERMII_REQUEST_TIMEOUT_SECONDS = int(os.environ.get('TERMII_REQUEST_TIMEOUT_SECONDS', '15'))
+TWILIO_ACCOUNT_SID = env_first('TWILIO_ACCOUNT_SID', 'TWILIO_SID').strip()
+TWILIO_AUTH_TOKEN = env_first('TWILIO_AUTH_TOKEN', 'TWILIO_AUTH_TOKEN_SECRET', 'TWILIO_SECRET', 'TWILIO_SECRETE').strip()
+TWILIO_VERIFY_SERVICE_SID = env_first('TWILIO_VERIFY_SERVICE_SID', 'TWILIO_APP_SID', 'TWILIO_APP_NAME').strip()
+TWILIO_VERIFY_BASE_URL = os.environ.get(
+    'TWILIO_VERIFY_BASE_URL',
+    'https://verify.twilio.com/v2',
+).strip().rstrip('/')
+TWILIO_VERIFY_CHANNEL = os.environ.get('TWILIO_VERIFY_CHANNEL', 'sms').strip()
+TWILIO_REQUEST_TIMEOUT_SECONDS = int(os.environ.get('TWILIO_REQUEST_TIMEOUT_SECONDS', '15'))
 
 
 

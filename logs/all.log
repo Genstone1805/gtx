@@ -3790,3 +3790,67 @@ KeyError: 'code'
 [2026-05-29 16:30:25] WARNING flower.inspector Inspect method conf failed
 [2026-05-29 16:30:25] WARNING flower.inspector Inspect method stats failed
 [2026-05-29 17:49:45] WARNING celery.events.state Substantial drift from celery@7112da083f6a may mean clocks are out of sync.  Current drift is 18 seconds.  [orig: 2026-05-29 17:49:45.918827 recv: 2026-05-29 17:49:27.129414]
+[2026-06-15 21:22:33] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:22:33] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 201 | Duration: 0.018s
+[2026-06-15 21:22:34] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:22:34] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.001s
+[2026-06-15 21:22:34] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.001s
+[2026-06-15 21:22:34] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-06-15 21:22:35] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:22:35] WARNING account.views Twilio Verify start request failed: status=401 code=20003
+[2026-06-15 21:22:35] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.002s
+[2026-06-15 21:22:35] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.002s
+[2026-06-15 21:22:35] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-06-15 21:22:36] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:22:36] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 201 | Duration: 0.002s
+[2026-06-15 21:22:37] INFO gtx REQUEST | POST /api/account/phone/resend-code/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:22:37] INFO gtx RESPONSE | POST /api/account/phone/resend-code/ | Status: 200 | Duration: 0.002s
+[2026-06-15 21:22:39] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:22:39] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 400 | Duration: 0.002s
+[2026-06-15 21:22:39] WARNING gtx ERROR | POST /api/account/phone/verify/ | Status: 400 | User: Anonymous | Duration: 0.002s
+[2026-06-15 21:22:39] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-06-15 21:22:40] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:22:40] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 502 | Duration: 0.002s
+[2026-06-15 21:22:40] ERROR gtx ERROR | POST /api/account/phone/verify/ | Status: 502 | User: Anonymous | Duration: 0.002s
+[2026-06-15 21:22:40] ERROR django.request Bad Gateway: /api/account/phone/verify/
+[2026-06-15 21:22:41] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:22:41] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 200 | Duration: 0.003s
+[2026-06-15 21:22:49] INFO gtx REQUEST | POST /api/account/signup/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:22:50] INFO gtx RESPONSE | POST /api/account/signup/ | Status: 201 | Duration: 1.165s
+[2026-06-15 21:22:50] INFO gtx REQUEST | POST /api/account/signup/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:22:50] INFO gtx RESPONSE | POST /api/account/signup/ | Status: 400 | Duration: 0.002s
+[2026-06-15 21:22:50] WARNING gtx ERROR | POST /api/account/signup/ | Status: 400 | User: Anonymous | Duration: 0.002s
+[2026-06-15 21:22:50] WARNING django.request Bad Request: /api/account/signup/
+[2026-06-15 21:24:21] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:24:21] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 201 | Duration: 0.004s
+[2026-06-15 21:24:22] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:24:22] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.001s
+[2026-06-15 21:24:22] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.001s
+[2026-06-15 21:24:22] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-06-15 21:24:24] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:24:24] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 201 | Duration: 0.003s
+[2026-06-15 21:24:25] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:24:25] WARNING account.views Twilio Verify start request failed: status=401 code=20003
+[2026-06-15 21:24:25] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 502 | Duration: 0.002s
+[2026-06-15 21:24:25] ERROR gtx ERROR | POST /api/account/phone/update/ | Status: 502 | User: Anonymous | Duration: 0.002s
+[2026-06-15 21:24:25] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-06-15 21:24:26] INFO gtx REQUEST | POST /api/account/phone/update/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:24:26] INFO gtx RESPONSE | POST /api/account/phone/update/ | Status: 201 | Duration: 0.002s
+[2026-06-15 21:24:27] INFO gtx REQUEST | POST /api/account/phone/resend-code/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:24:27] INFO gtx RESPONSE | POST /api/account/phone/resend-code/ | Status: 200 | Duration: 0.002s
+[2026-06-15 21:24:28] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:24:28] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 400 | Duration: 0.002s
+[2026-06-15 21:24:28] WARNING gtx ERROR | POST /api/account/phone/verify/ | Status: 400 | User: Anonymous | Duration: 0.002s
+[2026-06-15 21:24:28] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-06-15 21:24:30] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:24:30] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 502 | Duration: 0.002s
+[2026-06-15 21:24:30] ERROR gtx ERROR | POST /api/account/phone/verify/ | Status: 502 | User: Anonymous | Duration: 0.002s
+[2026-06-15 21:24:30] ERROR django.request Bad Gateway: /api/account/phone/verify/
+[2026-06-15 21:24:31] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:24:31] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 200 | Duration: 0.003s
+[2026-06-15 21:24:39] INFO gtx REQUEST | POST /api/account/signup/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:24:40] INFO gtx RESPONSE | POST /api/account/signup/ | Status: 201 | Duration: 1.179s
+[2026-06-15 21:24:40] INFO gtx REQUEST | POST /api/account/signup/ | User: Anonymous | IP: 127.0.0.1
+[2026-06-15 21:24:40] INFO gtx RESPONSE | POST /api/account/signup/ | Status: 400 | Duration: 0.002s
+[2026-06-15 21:24:40] WARNING gtx ERROR | POST /api/account/signup/ | Status: 400 | User: Anonymous | Duration: 0.002s
+[2026-06-15 21:24:40] WARNING django.request Bad Request: /api/account/signup/

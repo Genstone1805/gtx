@@ -348,6 +348,14 @@ Gift card purchase orders.
 | `DATABASE_URL` | PostgreSQL connection string |
 | `EMAIL_HOST_USER` | Gmail email address |
 | `EMAIL_HOST_PASSWORD` | Gmail app password |
+| `TWILIO_ACCOUNT_SID` | Twilio Account SID (`AC...`) |
+| `TWILIO_AUTH_TOKEN` | Twilio Auth Token |
+| `TWILIO_VERIFY_SERVICE_SID` | Twilio Verify Service SID (`VA...`) |
+
+Phone verification uses Twilio Verify over the SMS channel. Create a Verify
+Service in the Twilio Console, set the three variables above, and run
+`python manage.py migrate` before deploying. The app also accepts the aliases
+`TWILIO_SID`, `TWILIO_SECRETE`, and `TWILIO_APP_NAME` for existing deployments.
 
 ### JWT Settings
 

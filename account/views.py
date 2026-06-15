@@ -54,133 +54,199 @@ class PhoneVerificationError(Exception):
     """Raised when the phone verification provider cannot complete the request."""
 
 
-def get_termii_phone_verification_config() -> dict[str, Any]:
-    """Read Termii phone verification settings at runtime for easier overrides and safer defaults."""
-    sender_id = str(getattr(settings, 'TERMII_PHONE_OTP_SENDER_ID', '') or '').strip()
+def get_twilio_phone_verification_config() -> dict[str, Any]:
+    """Read Twilio Verify settings at runtime."""
+
+    def setting_first(*names: str, default: str = '') -> str:
+        for name in names:
+            value = getattr(settings, name, None)
+            if value:
+                return str(value)
+        return default
+
     return {
-        'api_key': str(getattr(settings, 'TERMII_API_KEY', '') or '').strip(),
+        'account_sid': setting_first('TWILIO_ACCOUNT_SID', 'TWILIO_SID').strip(),
+        'auth_token': setting_first(
+            'TWILIO_AUTH_TOKEN',
+            'TWILIO_AUTH_TOKEN_SECRET',
+            'TWILIO_SECRET',
+            'TWILIO_SECRETE',
+        ).strip(),
+        'verify_service_sid': setting_first(
+            'TWILIO_VERIFY_SERVICE_SID',
+            'TWILIO_APP_SID',
+            'TWILIO_APP_NAME',
+        ).strip(),
         'base_url': str(
-            getattr(settings, 'TERMII_BASE_URL', 'https://v3.api.termii.com') or 'https://v3.api.termii.com'
+            getattr(settings, 'TWILIO_VERIFY_BASE_URL', 'https://verify.twilio.com/v2')
+            or 'https://verify.twilio.com/v2'
         ).strip().rstrip('/'),
-        'sender_id': sender_id,
-        'brand_name': str(getattr(settings, 'TERMII_PHONE_OTP_BRAND_NAME', sender_id or 'GTX') or '').strip()
-        or sender_id
-        or 'GTX',
-        'channel': str(getattr(settings, 'TERMII_PHONE_OTP_CHANNEL', 'generic') or 'generic').strip(),
-        'message_type': str(getattr(settings, 'TERMII_PHONE_OTP_MESSAGE_TYPE', 'NUMERIC') or 'NUMERIC').strip(),
-        'attempts': int(getattr(settings, 'TERMII_PHONE_OTP_ATTEMPTS', 3)),
-        'ttl_minutes': int(getattr(settings, 'TERMII_PHONE_OTP_TTL_MINUTES', 10)),
-        'length': int(getattr(settings, 'TERMII_PHONE_OTP_LENGTH', 6)),
-        'placeholder': str(getattr(settings, 'TERMII_PHONE_OTP_PLACEHOLDER', '<123456>') or '<123456>').strip(),
-        'timeout_seconds': int(getattr(settings, 'TERMII_REQUEST_TIMEOUT_SECONDS', 15)),
+        'channel': str(getattr(settings, 'TWILIO_VERIFY_CHANNEL', 'sms') or 'sms').strip(),
+        'timeout_seconds': int(getattr(settings, 'TWILIO_REQUEST_TIMEOUT_SECONDS', 15)),
     }
 
 
-def validate_termii_phone_verification_config(*, require_sender_id: bool) -> dict[str, Any]:
-    """Ensure the minimum Termii configuration required for the current operation exists."""
-    config = get_termii_phone_verification_config()
-    if not config['api_key']:
-        raise PhoneVerificationError('Phone verification is not configured. Set TERMII_API_KEY.')
-    if require_sender_id and not config['sender_id']:
+def validate_twilio_phone_verification_config() -> dict[str, Any]:
+    """Ensure all credentials required by Twilio Verify are configured."""
+    config = get_twilio_phone_verification_config()
+    missing_settings = [
+        setting_label
+        for setting_label, config_key in (
+            ('TWILIO_ACCOUNT_SID or TWILIO_SID', 'account_sid'),
+            ('TWILIO_AUTH_TOKEN or TWILIO_SECRETE', 'auth_token'),
+            ('TWILIO_VERIFY_SERVICE_SID or TWILIO_APP_NAME', 'verify_service_sid'),
+        )
+        if not config[config_key]
+    ]
+    if missing_settings:
         raise PhoneVerificationError(
-            'Phone verification is not configured. '
-            'Set TERMII_PHONE_OTP_SENDER_ID to an active Termii sender ID.'
+            f"Phone verification is not configured. Set {', '.join(missing_settings)}."
         )
     return config
 
 
-def normalize_phone_number_for_termii(phone_number: Any) -> str:
-    """Format a phone number for Termii's international-number requirement."""
+def normalize_phone_number_for_twilio(phone_number: Any) -> str:
+    """Format a phone number as E.164 for Twilio Verify."""
     e164_number = getattr(phone_number, 'as_e164', str(phone_number))
-    return e164_number.replace('+', '').replace(' ', '')
+    normalized_number = e164_number.replace(' ', '')
+    return normalized_number if normalized_number.startswith('+') else f'+{normalized_number}'
 
 
-def parse_termii_response(response: requests.Response) -> dict[str, Any]:
+def parse_phone_verification_response(response: requests.Response) -> dict[str, Any]:
     """Parse the provider response into a JSON object when possible."""
     try:
         data = response.json()
         return data if isinstance(data, dict) else {}
     except ValueError:
-        logger.warning("Received a non-JSON response from Termii.")
+        logger.warning("Received a non-JSON response from Twilio Verify.")
         return {}
 
 
-def normalize_termii_error_detail(detail: Any) -> str | None:
-    """Translate common provider failures into actionable messages."""
-    if detail is None:
-        return None
+def resolve_twilio_verify_service_sid(config: dict[str, Any]) -> str:
+    """Resolve a Verify Service SID from either a SID or a configured friendly name."""
+    service_identifier = str(config["verify_service_sid"]).strip()
+    if service_identifier.upper().startswith("VA"):
+        return service_identifier
 
-    normalized_detail = str(detail).strip()
-    if not normalized_detail:
-        return None
-
-    if 'ApplicationSenderId not found' in normalized_detail or 'Invalid Sender Id' in normalized_detail:
-        sender_id = get_termii_phone_verification_config()['sender_id'] or 'the configured sender ID'
-        return (
-            f"Termii sender ID '{sender_id}' is not active for this account. "
-            'Set TERMII_PHONE_OTP_SENDER_ID to an approved sender ID from your Termii dashboard.'
+    endpoint = f"{config['base_url']}/Services"
+    try:
+        response = requests.get(
+            endpoint,
+            params={"PageSize": 1000},
+            auth=(config["account_sid"], config["auth_token"]),
+            timeout=config["timeout_seconds"],
         )
+    except RequestException as exc:
+        logger.warning("Twilio Verify service lookup failed: %s", exc)
+        raise PhoneVerificationError(
+            "Phone verification provider is currently unavailable."
+        ) from exc
 
-    return normalized_detail
+    response_object = parse_phone_verification_response(response)
+    if response.status_code in (401, 403):
+        raise PhoneVerificationError(
+            "Twilio authentication failed. Check TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN."
+        )
+    if not response.ok:
+        raise PhoneVerificationError("Unable to look up the configured Twilio Verify service.")
 
+    for service in response_object.get("services") or []:
+        friendly_name = service.get("friendly_name") or service.get("friendlyName")
+        if friendly_name == service_identifier and service.get("sid"):
+            return str(service["sid"])
 
+    raise PhoneVerificationError(
+        "Twilio Verify service was not found. Set TWILIO_VERIFY_SERVICE_SID to the VA... service SID "
+        "or set TWILIO_APP_NAME to an existing Verify service friendly name."
+    )
 
 
 def send_phone_verification_token(recipient: str):
-    """
-    Send otp to the registered number
-    """
-    config = validate_termii_phone_verification_config(require_sender_id=True)
-    endpoint = f"{config['base_url']}/api/sms/otp/send"
+    """Start an SMS verification with Twilio Verify."""
+    config = validate_twilio_phone_verification_config()
+    verify_service_sid = resolve_twilio_verify_service_sid(config)
+    endpoint = (
+        f"{config['base_url']}/Services/{verify_service_sid}/Verifications"
+    )
     payload = {
-        "api_key": config["api_key"],
-        "to": normalize_phone_number_for_termii(recipient),
-        "from": config["sender_id"],
-        "message_type": config["message_type"],
-        "channel": config["channel"],
-        "pin_attempts": config["attempts"],
-        "pin_time_to_live": config["ttl_minutes"],
-        "pin_length": config["length"],
-        "pin_placeholder": config["placeholder"],
-        "message_text": f"Your {config['brand_name']} verification code is {config['placeholder']}",
+        "To": normalize_phone_number_for_twilio(recipient),
+        "Channel": config["channel"],
     }
-    headers = {
-        'Content-Type': 'application/json',
-    }
-    
-    response = requests.post(endpoint, json=payload, headers=headers, timeout=config["timeout_seconds"])
-    response_object = parse_termii_response(response)
-    if response.ok and (response_object.get("pin_id") or response_object.get("pinId")):
-        response_object["pin_id"] = response_object.get("pin_id") or response_object.get("pinId")
+
+    try:
+        response = requests.post(
+            endpoint,
+            data=payload,
+            auth=(config["account_sid"], config["auth_token"]),
+            timeout=config["timeout_seconds"],
+        )
+    except RequestException as exc:
+        logger.warning("Twilio Verify start request failed: %s", exc)
+        raise PhoneVerificationError(
+            "Phone verification provider is currently unavailable."
+        ) from exc
+
+    response_object = parse_phone_verification_response(response)
+    if response.ok and response_object.get("sid"):
+        response_object["pin_id"] = response_object["sid"]
         return response_object
 
-    detail = normalize_termii_error_detail(response_object.get("message") or response_object.get("detail"))
+    logger.warning(
+        "Twilio Verify start request failed: status=%s code=%s",
+        response.status_code,
+        response_object.get("code"),
+    )
+    if response.status_code in (401, 403):
+        detail = "Twilio authentication failed. Check TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN."
+    elif response.status_code == 404:
+        detail = "Twilio Verify service was not found. Check TWILIO_VERIFY_SERVICE_SID."
+    elif response.status_code == 429:
+        detail = "Too many verification attempts. Please try again later."
+    else:
+        detail = str(response_object.get("message") or "").strip()
     raise PhoneVerificationError(detail or "Phone verification provider rejected the request.")
 
 
 def verify_phone_verification_token(pin_id: str, code: str, phone_number=None) -> tuple[bool, str | None]:
-    config = validate_termii_phone_verification_config(require_sender_id=False)
-    endpoint = f"{config['base_url']}/api/sms/otp/verify"
+    """Check an SMS code against the pending phone number with Twilio Verify."""
+    config = validate_twilio_phone_verification_config()
+    verify_service_sid = resolve_twilio_verify_service_sid(config)
+    endpoint = (
+        f"{config['base_url']}/Services/{verify_service_sid}/VerificationCheck"
+    )
     payload = {
-        "api_key": config["api_key"],
-        "pin_id": pin_id,
-        "pin": code,
-    }
-    headers = {
-        'Content-Type': 'application/json',
+        "To": normalize_phone_number_for_twilio(phone_number),
+        "Code": code,
     }
 
-    response = requests.post(endpoint, json=payload, headers=headers, timeout=config["timeout_seconds"])
-    response_object = parse_termii_response(response)
-    verified = str(response_object.get("verified", "")).lower() == "true"
-    if not response.ok or not verified:
+    try:
+        response = requests.post(
+            endpoint,
+            data=payload,
+            auth=(config["account_sid"], config["auth_token"]),
+            timeout=config["timeout_seconds"],
+        )
+    except RequestException as exc:
+        logger.warning("Twilio Verify check request failed: %s", exc)
+        raise PhoneVerificationError(
+            "Phone verification provider is currently unavailable."
+        ) from exc
+
+    response_object = parse_phone_verification_response(response)
+    if response.status_code in (401, 403):
+        raise PhoneVerificationError(
+            "Twilio authentication failed. Check TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN."
+        )
+    if response.status_code >= 500:
+        raise PhoneVerificationError(
+            "Phone verification provider is currently unavailable."
+        )
+    if not response.ok or response_object.get("status") != "approved":
         return False, None
 
-    if phone_number is not None:
-        verified_number = str(response_object.get("msisdn") or "").lstrip("+")
-        expected_number = normalize_phone_number_for_termii(phone_number)
-        if verified_number and verified_number != expected_number:
-            return False, "Verification failed for this phone number. Please request a new code."
+    returned_sid = str(response_object.get("sid") or "")
+    if returned_sid and pin_id and returned_sid != pin_id:
+        return False, "Verification failed for this phone number. Please request a new code."
 
     return True, None
 
@@ -909,11 +975,17 @@ class VerifyPhoneNumberView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
             
-        verification_result, verification_error = verify_phone_verification_token(
-            verification_request.pin_id,
-            serializer.validated_data['code'],
-            verification_request.phone_number,
-        )
+        try:
+            verification_result, verification_error = verify_phone_verification_token(
+                verification_request.pin_id,
+                serializer.validated_data['code'],
+                verification_request.phone_number,
+            )
+        except PhoneVerificationError as exc:
+            return Response(
+                {'detail': str(exc)},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
         
         if verification_result:
             if UserProfile.objects.filter(phone_number=verification_request.phone_number).exclude(pk=user.pk).exists():

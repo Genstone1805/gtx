@@ -12,9 +12,9 @@ services:
     environment:
       - DEBUG=False
       - SECRET_KEY=iuytiu897thkm,nui987tyhkjkoiuyhjkliouyuYTUIOKLJHGFYTUIiuytghj
-      - TERMII_API_KEY=TLPlVvPYstukdbJXHylgeDADwRVkYOQmptbCdZWzYQbmiqJMszigizEjzgFcoC
-      - TERMII_BASE_URL=https://v3.api.termii.com
-      - TERMII_PHONE_OTP_SENDER_ID=Greatxchnge
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - TWILIO_VERIFY_SERVICE_SID=${TWILIO_VERIFY_SERVICE_SID}
     volumes:
       - ./media:/app/media
       - ./db.sqlite3:/app/db.sqlite3

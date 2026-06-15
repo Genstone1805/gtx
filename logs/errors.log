@@ -2091,3 +2091,13 @@ KeyError: 'code'
 [2026-05-10 05:27:03] WARNING django.request Not Found: /docks
 [2026-05-10 05:27:03] WARNING django.request Not Found: /favicon.ico
 [2026-05-10 08:28:44] WARNING django.request Unauthorized: /order/create/
+[2026-06-15 21:22:34] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-06-15 21:22:35] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-06-15 21:22:39] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-06-15 21:22:40] ERROR django.request Bad Gateway: /api/account/phone/verify/
+[2026-06-15 21:22:50] WARNING django.request Bad Request: /api/account/signup/
+[2026-06-15 21:24:22] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-06-15 21:24:25] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-06-15 21:24:28] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-06-15 21:24:30] ERROR django.request Bad Gateway: /api/account/phone/verify/
+[2026-06-15 21:24:40] WARNING django.request Bad Request: /api/account/signup/

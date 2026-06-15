@@ -9,7 +9,7 @@ from order.models import GiftCardOrder
 from .models import PhoneVerificationRequest, ReferralCommission, UserProfile
 
 
-class MockTermiiResponse:
+class MockTwilioResponse:
     def __init__(self, payload, status_code=200):
         self._payload = payload
         self.status_code = status_code
@@ -20,11 +20,13 @@ class MockTermiiResponse:
 
 
 @override_settings(
-    TERMII_API_KEY='test-termii-key',
-    TERMII_PHONE_OTP_SENDER_ID='TestSender',
-    TERMII_PHONE_OTP_BRAND_NAME='GTX',
+    TWILIO_ACCOUNT_SID='ACtest-account-sid',
+    TWILIO_AUTH_TOKEN='test-auth-token',
+    TWILIO_VERIFY_SERVICE_SID='VAtest-service-sid',
 )
 class PhoneVerificationFlowTests(APITestCase):
+    verification_sid = f"VE{'1' * 32}"
+
     def setUp(self):
         self.user = UserProfile.objects.create_user(
             email='tester@example.com',
@@ -34,11 +36,11 @@ class PhoneVerificationFlowTests(APITestCase):
 
     @patch('account.views.requests.post')
     def test_add_phone_number_starts_verification_instead_of_saving_immediately(self, mock_post):
-        mock_post.return_value = MockTermiiResponse(
+        mock_post.return_value = MockTwilioResponse(
             {
-                'smsStatus': 'Message Sent',
-                'pin_id': 'pin-123',
-                'status': '200',
+                'sid': self.verification_sid,
+                'status': 'pending',
+                'to': '+2348109477743',
             }
         )
 
@@ -55,24 +57,30 @@ class PhoneVerificationFlowTests(APITestCase):
         self.assertIsNone(self.user.phone_number)
 
         verification_request = PhoneVerificationRequest.objects.get(user=self.user)
-        self.assertEqual(verification_request.pin_id, 'pin-123')
+        self.assertEqual(verification_request.pin_id, self.verification_sid)
         self.assertEqual(verification_request.phone_number.as_e164, '+2348109477743')
 
         call_args, call_kwargs = mock_post.call_args
-        self.assertTrue(call_args[0].endswith('/api/sms/otp/send'))
-        self.assertEqual(call_kwargs['json']['to'], '2348109477743')
-        self.assertEqual(call_kwargs['json']['from'], 'TestSender')
-        self.assertEqual(call_kwargs['json']['message_type'], 'NUMERIC')
-        self.assertEqual(call_kwargs['headers']['Content-Type'], 'application/json')
+        self.assertTrue(call_args[0].endswith('/Services/VAtest-service-sid/Verifications'))
+        self.assertEqual(call_kwargs['data']['To'], '+2348109477743')
+        self.assertEqual(call_kwargs['data']['Channel'], 'sms')
+        self.assertEqual(
+            call_kwargs['auth'],
+            ('ACtest-account-sid', 'test-auth-token'),
+        )
 
     @patch('account.views.requests.post')
     def test_verify_phone_number_saves_phone_after_successful_token_check(self, mock_post):
-        PhoneVerificationRequest.create_for_user(self.user, '+2348109477743', 'pin-123')
-        mock_post.return_value = MockTermiiResponse(
+        PhoneVerificationRequest.create_for_user(
+            self.user,
+            '+2348109477743',
+            self.verification_sid,
+        )
+        mock_post.return_value = MockTwilioResponse(
             {
-                'pinId': 'pin-123',
-                'verified': 'True',
-                'msisdn': '2348109477743',
+                'sid': self.verification_sid,
+                'status': 'approved',
+                'to': '+2348109477743',
             }
         )
 
@@ -90,19 +98,26 @@ class PhoneVerificationFlowTests(APITestCase):
         self.assertFalse(PhoneVerificationRequest.objects.filter(user=self.user).exists())
 
         call_args, call_kwargs = mock_post.call_args
-        self.assertTrue(call_args[0].endswith('/api/sms/otp/verify'))
-        self.assertEqual(call_kwargs['json']['pin_id'], 'pin-123')
-        self.assertEqual(call_kwargs['json']['pin'], '123456')
-        self.assertEqual(call_kwargs['headers']['Content-Type'], 'application/json')
+        self.assertTrue(call_args[0].endswith('/Services/VAtest-service-sid/VerificationCheck'))
+        self.assertEqual(call_kwargs['data']['To'], '+2348109477743')
+        self.assertEqual(call_kwargs['data']['Code'], '123456')
+        self.assertEqual(
+            call_kwargs['auth'],
+            ('ACtest-account-sid', 'test-auth-token'),
+        )
 
     @patch('account.views.requests.post')
-    def test_verify_phone_number_rejects_mismatched_verified_number(self, mock_post):
-        PhoneVerificationRequest.create_for_user(self.user, '+2348109477743', 'pin-123')
-        mock_post.return_value = MockTermiiResponse(
+    def test_verify_phone_number_rejects_mismatched_verification_sid(self, mock_post):
+        PhoneVerificationRequest.create_for_user(
+            self.user,
+            '+2348109477743',
+            self.verification_sid,
+        )
+        mock_post.return_value = MockTwilioResponse(
             {
-                'pinId': 'pin-123',
-                'verified': 'True',
-                'msisdn': '2348109077743',
+                'sid': f"VE{'2' * 32}",
+                'status': 'approved',
+                'to': '+2348109477743',
             }
         )
 
@@ -124,12 +139,15 @@ class PhoneVerificationFlowTests(APITestCase):
 
     @patch('account.views.requests.post')
     def test_resend_phone_verification_replaces_existing_pin_id(self, mock_post):
-        PhoneVerificationRequest.create_for_user(self.user, '+2348109477743', 'pin-old')
-        mock_post.return_value = MockTermiiResponse(
+        PhoneVerificationRequest.create_for_user(
+            self.user,
+            '+2348109477743',
+            f"VE{'0' * 32}",
+        )
+        mock_post.return_value = MockTwilioResponse(
             {
-                'smsStatus': 'Message Sent',
-                'pinId': 'pin-new',
-                'status': '200',
+                'sid': self.verification_sid,
+                'status': 'pending',
             }
         )
 
@@ -139,11 +157,11 @@ class PhoneVerificationFlowTests(APITestCase):
         self.assertEqual(response.data['detail'], 'Verification code resent successfully.')
 
         verification_request = PhoneVerificationRequest.objects.get(user=self.user)
-        self.assertEqual(verification_request.pin_id, 'pin-new')
+        self.assertEqual(verification_request.pin_id, self.verification_sid)
 
-    @override_settings(TERMII_PHONE_OTP_SENDER_ID='')
+    @override_settings(TWILIO_VERIFY_SERVICE_SID='')
     @patch('account.views.requests.post')
-    def test_add_phone_number_requires_configured_sender_id(self, mock_post):
+    def test_add_phone_number_requires_configured_verify_service(self, mock_post):
         response = self.client.post(
             reverse('add-phone-number'),
             {'phone_number': '+2348109477743'},
@@ -153,21 +171,91 @@ class PhoneVerificationFlowTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_502_BAD_GATEWAY)
         self.assertEqual(
             response.data['detail'],
-            'Phone verification is not configured. '
-            'Set TERMII_PHONE_OTP_SENDER_ID to an active Termii sender ID.',
+            'Phone verification is not configured. Set TWILIO_VERIFY_SERVICE_SID or TWILIO_APP_NAME.',
         )
         mock_post.assert_not_called()
 
+    @override_settings(
+        TWILIO_ACCOUNT_SID='',
+        TWILIO_AUTH_TOKEN='',
+        TWILIO_VERIFY_SERVICE_SID='',
+        TWILIO_SID='ACalias-account-sid',
+        TWILIO_SECRETE='alias-auth-token',
+        TWILIO_APP_NAME='VAalias-service-sid',
+    )
     @patch('account.views.requests.post')
-    def test_add_phone_number_returns_actionable_error_for_unregistered_sender_id(self, mock_post):
-        mock_post.return_value = MockTermiiResponse(
+    def test_add_phone_number_accepts_provided_alias_credential_names(self, mock_post):
+        mock_post.return_value = MockTwilioResponse(
             {
-                'message': (
-                    'ApplicationSenderId not found for applicationId: 37677 '
-                    'and senderName: TestSender'
-                ),
+                'sid': self.verification_sid,
+                'status': 'pending',
+                'to': '+2348109477743',
+            }
+        )
+
+        response = self.client.post(
+            reverse('add-phone-number'),
+            {'phone_number': '+2348109477743'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        call_args, call_kwargs = mock_post.call_args
+        self.assertTrue(call_args[0].endswith('/Services/VAalias-service-sid/Verifications'))
+        self.assertEqual(call_kwargs['auth'], ('ACalias-account-sid', 'alias-auth-token'))
+
+    @override_settings(
+        TWILIO_ACCOUNT_SID='',
+        TWILIO_AUTH_TOKEN='',
+        TWILIO_VERIFY_SERVICE_SID='',
+        TWILIO_SID='ACalias-account-sid',
+        TWILIO_SECRETE='alias-auth-token',
+        TWILIO_APP_NAME='GTX',
+    )
+    @patch('account.views.requests.get')
+    @patch('account.views.requests.post')
+    def test_add_phone_number_resolves_twilio_app_name_to_verify_service_sid(self, mock_post, mock_get):
+        mock_get.return_value = MockTwilioResponse(
+            {
+                'services': [
+                    {
+                        'sid': 'VAresolved-service-sid',
+                        'friendly_name': 'GTX',
+                    }
+                ]
+            }
+        )
+        mock_post.return_value = MockTwilioResponse(
+            {
+                'sid': self.verification_sid,
+                'status': 'pending',
+                'to': '+2348109477743',
+            }
+        )
+
+        response = self.client.post(
+            reverse('add-phone-number'),
+            {'phone_number': '+2348109477743'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        lookup_args, lookup_kwargs = mock_get.call_args
+        self.assertTrue(lookup_args[0].endswith('/Services'))
+        self.assertEqual(lookup_kwargs['params']['PageSize'], 1000)
+
+        post_args, post_kwargs = mock_post.call_args
+        self.assertTrue(post_args[0].endswith('/Services/VAresolved-service-sid/Verifications'))
+        self.assertEqual(post_kwargs['auth'], ('ACalias-account-sid', 'alias-auth-token'))
+
+    @patch('account.views.requests.post')
+    def test_add_phone_number_returns_actionable_error_for_invalid_credentials(self, mock_post):
+        mock_post.return_value = MockTwilioResponse(
+            {
+                'code': 20003,
+                'message': 'Authentication Error - invalid username',
             },
-            status_code=404,
+            status_code=401,
         )
 
         response = self.client.post(
@@ -179,8 +267,32 @@ class PhoneVerificationFlowTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_502_BAD_GATEWAY)
         self.assertEqual(
             response.data['detail'],
-            "Termii sender ID 'TestSender' is not active for this account. "
-            'Set TERMII_PHONE_OTP_SENDER_ID to an approved sender ID from your Termii dashboard.',
+            'Twilio authentication failed. '
+            'Check TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN.',
+        )
+
+    @patch('account.views.requests.post')
+    def test_verify_phone_number_returns_bad_gateway_for_twilio_outage(self, mock_post):
+        PhoneVerificationRequest.create_for_user(
+            self.user,
+            '+2348109477743',
+            self.verification_sid,
+        )
+        mock_post.return_value = MockTwilioResponse(
+            {'code': 20500, 'message': 'Internal Server Error'},
+            status_code=500,
+        )
+
+        response = self.client.post(
+            reverse('verify-phone-number'),
+            {'code': '123456'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_502_BAD_GATEWAY)
+        self.assertEqual(
+            response.data['detail'],
+            'Phone verification provider is currently unavailable.',
         )
 
 
