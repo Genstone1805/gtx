@@ -2101,3 +2101,8 @@ KeyError: 'code'
 [2026-06-15 21:24:28] WARNING django.request Bad Request: /api/account/phone/verify/
 [2026-06-15 21:24:30] ERROR django.request Bad Gateway: /api/account/phone/verify/
 [2026-06-15 21:24:40] WARNING django.request Bad Request: /api/account/signup/
+[2026-06-15 22:52:31] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-06-15 22:52:34] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-06-15 22:52:38] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-06-15 22:52:39] ERROR django.request Bad Gateway: /api/account/phone/verify/
+[2026-06-15 22:52:50] WARNING django.request Bad Request: /api/account/signup/
