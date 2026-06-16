@@ -105,4 +105,5 @@ class NotificationEvent(models.Model):
 
 
 class PushNotificationToken(models.Model):
-    data = models.JSONField(default=list, blank=True)
+    token = models.CharField(max_length=150, default="")
+    platform = models.CharField(max_length=25, default="")
