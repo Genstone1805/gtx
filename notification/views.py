@@ -7,7 +7,7 @@ from rest_framework.exceptions import ValidationError
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema, inline_serializer
 
-from .models import Notification, NotificationEvent
+from .models import Notification, NotificationEvent, PushNotificationToken
 from .services import NotificationService
 from .serializers import (
     NotificationSerializer,
@@ -20,6 +20,24 @@ from .serializers import (
 class PushNotificationTokenView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = PushNotificationTokenSerializer
+    
+    def post(self, request, *args, **kwargs):
+        data = request.data()
+        serializer=self.serializer_class(data=data)
+        
+        print("------------------------------------REQUEST BODY-----------------------")
+        print(data)
+        print("------------------------------------REQUEST BODY-----------------------")
+        
+        try:
+            serializer.is_valid(raise_exception=True)
+            print("------------------------------------VALIDATED DATA-----------------------")
+            print(serializer.validated_data)
+            print("------------------------------------VALIDATED DATA-----------------------")
+            # PushNotificationToken.objects.create()
+            return Response("valid data submitted", status=200)
+        except Exception as e:
+            return Response(str(e), status=500)
 
 
 class NotificationListView(ListAPIView):
