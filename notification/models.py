@@ -105,5 +105,24 @@ class NotificationEvent(models.Model):
 
 
 class PushNotificationToken(models.Model):
-    token = models.CharField(max_length=150, default="")
-    platform = models.CharField(max_length=25, default="")
+    PLATFORM_CHOICES = (
+        ("ios", "iOS"),
+        ("android", "Android"),
+        ("web", "Web"),
+    )
+
+    user = models.ForeignKey(
+        "auth.User",
+        on_delete=models.CASCADE,
+        related_name="push_tokens"
+    )
+
+    token = models.CharField(max_length=255, unique=True)
+    platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
+
+    device_id = models.CharField(max_length=120, null=True, blank=True)
+
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

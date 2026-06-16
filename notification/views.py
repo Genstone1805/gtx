@@ -20,24 +20,34 @@ from .serializers import (
 class PushNotificationTokenView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = PushNotificationTokenSerializer
-    
+
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         data = request.data
-        serializer=self.serializer_class(data=data)
-        
-        print("------------------------------------REQUEST BODY-----------------------")
-        print(data)
-        print("------------------------------------REQUEST BODY-----------------------")
-        
-        try:
-            serializer.is_valid(raise_exception=True)
-            print("------------------------------------VALIDATED DATA-----------------------")
-            print(serializer.validated_data)
-            print("------------------------------------VALIDATED DATA-----------------------")
-            # PushNotificationToken.objects.create()
-            return Response("valid data submitted", status=200)
-        except Exception as e:
-            return Response(str(e), status=500)
+        serializer = self.serializer_class(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        token = serializer.validated_data["token"]
+        platform = serializer.validated_data["platform"]
+        device_id = serializer.validated_data.get("device_id", "")
+
+        obj, created = PushNotificationToken.objects.update_or_create(
+            token=token,
+            defaults={
+                "user": request.user,
+                "platform": platform,
+                "device_id": device_id,
+                "is_active": True,
+            }
+        )
+
+        return Response(
+            {
+                "created": created,
+                "message": "token stored/updated"
+            },
+            status=200
+        )
 
 
 class NotificationListView(ListAPIView):

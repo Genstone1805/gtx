@@ -88,4 +88,4 @@ class NotificationEventSerializer(serializers.ModelSerializer):
 class PushNotificationTokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = PushNotificationToken
-        fields = ["token", "platform"]
+        fields = ["token", "platform", "device_id"]
