@@ -104,7 +104,7 @@ class NotificationEvent(models.Model):
         return f"{self.event_type} - {self.user.email} - {self.status}"
 
 
-class PushNotificationToken(models.Model):
+class PushNotificationSubscriber(models.Model):
     PLATFORM_CHOICES = (
         ("ios", "iOS"),
         ("android", "Android"),
@@ -112,7 +112,7 @@ class PushNotificationToken(models.Model):
     )
 
     user = models.ForeignKey(
-        "auth.User",
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="push_tokens"
     )

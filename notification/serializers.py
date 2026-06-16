@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
-from .models import Notification, NotificationEvent, PushNotificationToken
+from .models import Notification, NotificationEvent, PushNotificationSubscriber
 
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -85,7 +85,7 @@ class NotificationEventSerializer(serializers.ModelSerializer):
         return obj.event_type.replace("_", " ").title()
 
 
-class PushNotificationTokenSerializer(serializers.ModelSerializer):
+class PushNotificationSubscriberSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PushNotificationToken
+        model = PushNotificationSubscriber
         fields = ["token", "platform", "device_id"]

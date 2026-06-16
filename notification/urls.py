@@ -7,7 +7,7 @@ from .views import (
     NotificationUnreadCountView,
     AdminNotificationEventListView,
     AdminNotificationStatsView,
-    PushNotificationTokenView,
+    PushNotificationSubscriberView,
 )
 
 app_name = "notification"
@@ -17,7 +17,7 @@ urlpatterns = [
     path("", NotificationListView.as_view(), name="notification-list"),
     path(
         "push-notification-token/",
-        PushNotificationTokenView.as_view(),
+        PushNotificationSubscriberView.as_view(),
         name="push-notification-token",
     ),
     path(

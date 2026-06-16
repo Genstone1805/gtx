@@ -4,22 +4,23 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.exceptions import ValidationError
+from django.db import transaction
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema, inline_serializer
 
-from .models import Notification, NotificationEvent, PushNotificationToken
+from .models import Notification, NotificationEvent, PushNotificationSubscriber
 from .services import NotificationService
 from .serializers import (
     NotificationSerializer,
     NotificationMarkAsReadSerializer,
     NotificationEventSerializer,
-    PushNotificationTokenSerializer,
+    PushNotificationSubscriberSerializer,
 )
 
 
-class PushNotificationTokenView(CreateAPIView):
+class PushNotificationSubscriberView(CreateAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = PushNotificationTokenSerializer
+    serializer_class = PushNotificationSubscriberSerializer
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
@@ -31,7 +32,7 @@ class PushNotificationTokenView(CreateAPIView):
         platform = serializer.validated_data["platform"]
         device_id = serializer.validated_data.get("device_id", "")
 
-        obj, created = PushNotificationToken.objects.update_or_create(
+        obj, created = PushNotificationSubscriber.objects.update_or_create(
             token=token,
             defaults={
                 "user": request.user,

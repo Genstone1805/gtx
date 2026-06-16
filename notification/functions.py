@@ -1,6 +1,6 @@
-from .models import PushNotificationToken
+from .models import PushNotificationSubscriber
 
 
 
 def deactivate_token(token):
-    PushNotificationToken.objects.filter(token=token).update(is_active=False)
+    PushNotificationSubscriber.objects.filter(token=token).update(is_active=False)
