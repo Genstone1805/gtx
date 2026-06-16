@@ -16,9 +16,6 @@ from .serializers import (
     PushNotificationTokenSerializer,
 )
 
-import logging
-
-logger = logging.getLogger(__name__)
 
 class PushNotificationTokenView(CreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -28,15 +25,15 @@ class PushNotificationTokenView(CreateAPIView):
         data = request.data
         serializer=self.serializer_class(data=data)
         
-        logger.info("------ PUSH TOKEN REQUEST BODY ------")
-        logger.info(data)
-        logger.info("-------------------------------------")
+        print("------------------------------------REQUEST BODY-----------------------")
+        print(data)
+        print("------------------------------------REQUEST BODY-----------------------")
         
         try:
             serializer.is_valid(raise_exception=True)
-            logger.info("------ VALIDATED DATA ------")
-            logger.info(serializer.validated_data)
-            logger.info("----------------------------")
+            print("------------------------------------VALIDATED DATA-----------------------")
+            print(serializer.validated_data)
+            print("------------------------------------VALIDATED DATA-----------------------")
             # PushNotificationToken.objects.create()
             return Response("valid data submitted", status=200)
         except Exception as e:
