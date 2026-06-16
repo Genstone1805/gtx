@@ -26,29 +26,32 @@ class PushNotificationSubscriberView(CreateAPIView):
     def post(self, request, *args, **kwargs):
         data = request.data
         serializer = self.serializer_class(data=data)
-        serializer.is_valid(raise_exception=True)
+        try:
+            serializer.is_valid(raise_exception=True)
 
-        token = serializer.validated_data["token"]
-        platform = serializer.validated_data["platform"]
-        device_id = serializer.validated_data.get("device_id", "")
+            token = serializer.validated_data["token"]
+            platform = serializer.validated_data["platform"]
+            device_id = serializer.validated_data.get("device_id", "")
 
-        obj, created = PushNotificationSubscriber.objects.update_or_create(
-            token=token,
-            defaults={
-                "user": request.user,
-                "platform": platform,
-                "device_id": device_id,
-                "is_active": True,
-            }
-        )
+            obj, created = PushNotificationSubscriber.objects.update_or_create(
+                token=token,
+                defaults={
+                    "user": request.user,
+                    "platform": platform,
+                    "device_id": device_id,
+                    "is_active": True,
+                }
+            )
 
-        return Response(
-            {
-                "created": created,
-                "message": "token stored/updated"
-            },
-            status=200
-        )
+            return Response(
+                {
+                    "created": created,
+                    "message": "token stored/updated"
+                },
+                status=200
+            )
+        except Exception as e:
+            return Response("error", status=500)
 
 
 class NotificationListView(ListAPIView):
