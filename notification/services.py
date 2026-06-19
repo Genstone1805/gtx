@@ -4,6 +4,7 @@ Handles both email and in-app notifications.
 """
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Optional, Dict, Any
 from django.core.mail import EmailMultiAlternatives
 from django.template import TemplateDoesNotExist
@@ -15,7 +16,20 @@ from django.db import transaction
 if TYPE_CHECKING:
     from account.models import UserProfile
 
-from .models import Notification, NotificationEvent
+from .models import Notification, NotificationEvent, PushNotificationSubscriber
+
+logger = logging.getLogger(__name__)
+
+
+PUSH_NOTIFICATION_EXCLUDED_TYPES = {
+    'registration',
+    'register',
+    'signin',
+    'sign_in',
+    'login',
+    'new_login',
+    'welcome',
+}
 
 
 class NotificationService:
@@ -32,6 +46,7 @@ class NotificationService:
         message: str,
         priority: str = 'medium',
         send_email: bool = True,
+        send_push: bool = True,
         object_id: Optional[int] = None,
         content_type: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
@@ -46,6 +61,7 @@ class NotificationService:
             message: Notification message body
             priority: Priority level (low, medium, high, urgent)
             send_email: Whether to also send email notification
+            send_push: Whether to also send push notification
             object_id: Optional related object ID
             content_type: Optional content type (e.g., 'order', 'withdrawal')
             metadata: Optional additional metadata
@@ -81,6 +97,31 @@ class NotificationService:
                     metadata=metadata or {},
                 )
 
+            push_allowed = (
+                send_push
+                and notification_type not in PUSH_NOTIFICATION_EXCLUDED_TYPES
+            )
+            push_result = None
+
+            if push_allowed:
+                push_result = PushNotificationSender.send(
+                    user=user,
+                    title=title,
+                    body=message,
+                    data={
+                        'notification_id': notification.id,
+                        'notification_type': notification_type,
+                        'object_id': object_id,
+                        'content_type': content_type,
+                        **(metadata or {}),
+                    },
+                )
+                event.metadata = {
+                    **(event.metadata or {}),
+                    'push': push_result,
+                }
+                event.save(update_fields=['metadata'])
+
             # Send email asynchronously (outside atomic block)
             if send_email:
                 sent, error_message = EmailNotificationSender.send(
@@ -111,7 +152,7 @@ class NotificationService:
 
         except Exception as e:
             # Log error but don't raise - notification failure shouldn't break main flow
-            print(f"Notification service error: {e}")
+            logger.exception("Notification service error: %s", e)
             return None, None
 
     @staticmethod
@@ -185,7 +226,7 @@ class EmailNotificationSender:
 
             return True, None
         except Exception as e:
-            print(f"Email send error: {e}")
+            logger.exception("Email send error: %s", e)
             return False, str(e)
 
     @staticmethod
@@ -205,6 +246,116 @@ class EmailNotificationSender:
             except TemplateDoesNotExist:
                 continue
         return None, None
+
+
+class PushNotificationSender:
+    """Handles sending Expo push notifications to active subscriber tokens."""
+
+    @staticmethod
+    def send(
+        user: 'UserProfile',
+        title: str,
+        body: str,
+        data: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Send a push notification to all active tokens for a user.
+
+        Returns a serializable result that can be stored on NotificationEvent.metadata.
+        """
+        tokens = list(
+            PushNotificationSubscriber.objects.filter(
+                user=user,
+                is_active=True,
+            ).values_list('token', flat=True)
+        )
+
+        if not tokens:
+            return {
+                'attempted': 0,
+                'sent': 0,
+                'failed': 0,
+                'deactivated': 0,
+                'errors': [],
+            }
+
+        try:
+            from exponent_server_sdk import (
+                DeviceNotRegisteredError,
+                PushClient,
+                PushMessage,
+            )
+        except ImportError as exc:
+            logger.exception("Expo push SDK is not installed: %s", exc)
+            return {
+                'attempted': len(tokens),
+                'sent': 0,
+                'failed': len(tokens),
+                'deactivated': 0,
+                'errors': ['Expo push SDK is not installed.'],
+            }
+
+        messages = [
+            PushMessage(
+                to=token,
+                title=title,
+                body=body,
+                sound='default',
+                data=PushNotificationSender._clean_data(data or {}),
+            )
+            for token in tokens
+        ]
+
+        sent_count = 0
+        failed_count = 0
+        deactivated_count = 0
+        errors = []
+
+        try:
+            tickets = PushClient().publish_multiple(messages)
+        except Exception as exc:
+            logger.exception("Expo push send error: %s", exc)
+            return {
+                'attempted': len(tokens),
+                'sent': 0,
+                'failed': len(tokens),
+                'deactivated': 0,
+                'errors': [str(exc)],
+            }
+
+        for token, ticket in zip(tokens, tickets):
+            try:
+                ticket.validate_response()
+                sent_count += 1
+            except DeviceNotRegisteredError as exc:
+                PushNotificationSubscriber.objects.filter(token=token).update(is_active=False)
+                deactivated_count += 1
+                failed_count += 1
+                errors.append(str(exc))
+            except Exception as exc:
+                failed_count += 1
+                errors.append(str(exc))
+
+        return {
+            'attempted': len(tokens),
+            'sent': sent_count,
+            'failed': failed_count,
+            'deactivated': deactivated_count,
+            'errors': errors[:10],
+        }
+
+    @staticmethod
+    def _clean_data(data: Dict[str, Any]) -> Dict[str, Any]:
+        """Expo push data must be JSON-serializable."""
+        clean = {}
+        for key, value in data.items():
+            if value is None:
+                continue
+            if isinstance(value, (str, int, float, bool)):
+                clean[key] = value
+            else:
+                clean[key] = str(value)
+        return clean
 
 
 # Convenience functions for common notification types
