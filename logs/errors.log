@@ -2106,3 +2106,20 @@ KeyError: 'code'
 [2026-06-15 22:52:38] WARNING django.request Bad Request: /api/account/phone/verify/
 [2026-06-15 22:52:39] ERROR django.request Bad Gateway: /api/account/phone/verify/
 [2026-06-15 22:52:50] WARNING django.request Bad Request: /api/account/signup/
+[2026-06-28 09:01:45] WARNING django.request Forbidden: /notifications/admin/push-test/
+[2026-07-02 21:55:31] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-07-02 21:55:36] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-07-02 21:55:38] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-07-02 21:55:42] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-07-02 21:55:49] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-07-02 21:55:52] ERROR django.request Bad Gateway: /api/account/phone/verify/
+[2026-07-02 21:57:11] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-07-02 21:57:14] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-07-02 21:57:22] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-07-02 21:57:31] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-07-02 21:57:35] ERROR django.request Bad Gateway: /api/account/phone/verify/
+[2026-07-02 21:59:29] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-07-02 21:59:31] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-07-02 21:59:37] ERROR django.request Bad Gateway: /api/account/phone/update/
+[2026-07-02 21:59:45] WARNING django.request Bad Request: /api/account/phone/verify/
+[2026-07-02 21:59:47] ERROR django.request Bad Gateway: /api/account/phone/verify/

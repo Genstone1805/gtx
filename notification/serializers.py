@@ -1,7 +1,12 @@
 from rest_framework import serializers
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
-from .models import Notification, NotificationEvent, PushNotificationSubscriber
+from .models import (
+    Notification,
+    NotificationEvent,
+    PushNotificationSubscriber,
+    PushNotificationLog,
+)
 
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -89,3 +94,53 @@ class PushNotificationSubscriberSerializer(serializers.ModelSerializer):
     class Meta:
         model = PushNotificationSubscriber
         fields = ["token", "platform", "device_id"]
+
+
+class PushNotificationLogSerializer(serializers.ModelSerializer):
+    """Full debug record of a single push attempt."""
+
+    user_email = serializers.EmailField(source="user.email", read_only=True, default=None)
+    status_display = serializers.CharField(source="get_status_display", read_only=True)
+    trigger_display = serializers.CharField(source="get_trigger_display", read_only=True)
+
+    class Meta:
+        model = PushNotificationLog
+        fields = [
+            "id",
+            "user",
+            "user_email",
+            "trigger",
+            "trigger_display",
+            "status",
+            "status_display",
+            "title",
+            "body",
+            "attempted",
+            "sent",
+            "failed",
+            "deactivated",
+            "tokens",
+            "request_payload",
+            "response",
+            "errors",
+            "created_at",
+        ]
+        read_only_fields = fields
+
+
+class PushNotificationTestSerializer(serializers.Serializer):
+    """Input for the admin push-debug endpoint."""
+
+    user_id = serializers.IntegerField(
+        required=False,
+        help_text="Target user id. Defaults to the requesting admin's own account.",
+    )
+    title = serializers.CharField(
+        required=False, default="Test Push Notification", max_length=255
+    )
+    body = serializers.CharField(
+        required=False, default="This is a test push notification from the backend.",
+    )
+    payload = serializers.DictField(
+        required=False, default=dict, help_text="Optional JSON data payload sent with the push."
+    )

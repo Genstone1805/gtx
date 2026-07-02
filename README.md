@@ -355,7 +355,9 @@ Gift card purchase orders.
 Phone verification uses Twilio Verify over the SMS channel. Create a Verify
 Service in the Twilio Console, set the three variables above, and run
 `python manage.py migrate` before deploying. The app also accepts the aliases
-`TWILIO_SID`, `TWILIO_SECRETE`, and `TWILIO_APP_NAME` for existing deployments.
+`TWILIO_SID`, `TWILIO_SECRETE`, and `TWILIO_APP_SID` for existing deployments.
+Use `TWILIO_VERIFY_SERVICE_NAME` only as a friendly-name fallback; production
+deployments should set the `VA...` service SID directly.
 
 ### JWT Settings
 

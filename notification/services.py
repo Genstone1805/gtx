@@ -251,34 +251,125 @@ class EmailNotificationSender:
 class PushNotificationSender:
     """Handles sending Expo push notifications to active subscriber tokens."""
 
+    # Don't let a slow/unreachable Expo endpoint hang the web worker forever.
+    DEFAULT_TIMEOUT_SECONDS = 10
+
+    @staticmethod
+    def _empty_result(attempted: int = 0, failed: int = 0, errors=None) -> Dict[str, Any]:
+        return {
+            'attempted': attempted,
+            'sent': 0,
+            'failed': failed,
+            'deactivated': 0,
+            'errors': errors or [],
+        }
+
+    @staticmethod
+    def _build_client(PushClient):
+        """
+        Build an Expo PushClient with a request timeout and, if configured, an
+        access token. An access token is required when the Expo project has
+        "Enhanced Security for Push Notifications" enabled - otherwise sends are
+        silently rejected.
+        """
+        import requests
+
+        timeout = getattr(settings, 'EXPO_PUSH_TIMEOUT_SECONDS', PushNotificationSender.DEFAULT_TIMEOUT_SECONDS)
+        access_token = getattr(settings, 'EXPO_ACCESS_TOKEN', '') or ''
+        force_fcm_v1 = getattr(settings, 'EXPO_FORCE_FCM_V1', None)
+
+        session = requests.Session()
+        session.headers.update({
+            'accept': 'application/json',
+            'accept-encoding': 'gzip, deflate',
+            'content-type': 'application/json',
+        })
+        if access_token:
+            session.headers['Authorization'] = f'Bearer {access_token}'
+
+        return PushClient(session=session, timeout=timeout, force_fcm_v1=force_fcm_v1)
+
+    @staticmethod
+    def _ticket_to_dict(token: str, ticket) -> Dict[str, Any]:
+        """Serialize an Expo PushTicket into a JSON-storable record."""
+        record: Dict[str, Any] = {'token': token}
+        for attr in ('status', 'id', 'message', 'details'):
+            value = getattr(ticket, attr, None)
+            if value is not None:
+                record[attr] = value if isinstance(value, (str, int, float, bool, dict, list)) else str(value)
+        try:
+            record['is_success'] = bool(ticket.is_success())
+        except Exception:
+            record['is_success'] = None
+        return record
+
+    @staticmethod
+    def _record_log(
+        *,
+        user,
+        title: str,
+        body: str,
+        trigger: str,
+        result: Dict[str, Any],
+        tokens=None,
+        request_payload=None,
+        response=None,
+    ):
+        """Persist a PushNotificationLog. Never let logging break the send path."""
+        from .models import PushNotificationLog
+
+        attempted = result.get('attempted', 0)
+        sent = result.get('sent', 0)
+        failed = result.get('failed', 0)
+
+        if attempted == 0:
+            status = 'no_tokens'
+        elif sent == 0:
+            status = 'failed'
+        elif failed == 0:
+            status = 'success'
+        else:
+            status = 'partial'
+
+        result['status'] = status
+
+        try:
+            log = PushNotificationLog.objects.create(
+                user=user,
+                trigger=trigger,
+                status=status,
+                title=title or '',
+                body=body or '',
+                attempted=attempted,
+                sent=sent,
+                failed=failed,
+                deactivated=result.get('deactivated', 0),
+                tokens=tokens or [],
+                request_payload=request_payload or [],
+                response=response or [],
+                errors=result.get('errors', []),
+            )
+            result['log_id'] = log.id
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.exception("Failed to write PushNotificationLog: %s", exc)
+
+        return result
+
     @staticmethod
     def send(
         user: 'UserProfile',
         title: str,
         body: str,
         data: Optional[Dict[str, Any]] = None,
+        trigger: str = 'notification',
     ) -> Dict[str, Any]:
         """
         Send a push notification to all active tokens for a user.
 
-        Returns a serializable result that can be stored on NotificationEvent.metadata.
+        Writes a PushNotificationLog capturing the request, response, errors and
+        status, and returns a serializable result (also stored on
+        NotificationEvent.metadata).
         """
-        tokens = list(
-            PushNotificationSubscriber.objects.filter(
-                user=user,
-                is_active=True,
-            ).values_list('token', flat=True)
-        )
-
-        if not tokens:
-            return {
-                'attempted': 0,
-                'sent': 0,
-                'failed': 0,
-                'deactivated': 0,
-                'errors': [],
-            }
-
         try:
             from exponent_server_sdk import (
                 DeviceNotRegisteredError,
@@ -287,13 +378,54 @@ class PushNotificationSender:
             )
         except ImportError as exc:
             logger.exception("Expo push SDK is not installed: %s", exc)
-            return {
-                'attempted': len(tokens),
-                'sent': 0,
-                'failed': len(tokens),
-                'deactivated': 0,
-                'errors': ['Expo push SDK is not installed.'],
-            }
+            return PushNotificationSender._record_log(
+                user=user, title=title, body=body, trigger=trigger,
+                result=PushNotificationSender._empty_result(
+                    errors=['Expo push SDK is not installed.'],
+                ),
+            )
+
+        tokens = list(
+            PushNotificationSubscriber.objects.filter(
+                user=user,
+                is_active=True,
+            ).values_list('token', flat=True)
+        )
+
+        if not tokens:
+            return PushNotificationSender._record_log(
+                user=user, title=title, body=body, trigger=trigger,
+                result=PushNotificationSender._empty_result(),
+            )
+
+        # Drop and deactivate anything that isn't a valid Expo push token so we
+        # don't waste a request (and so a bad token can't poison the batch).
+        valid_tokens = []
+        invalid_tokens = []
+        for token in tokens:
+            if PushClient.is_exponent_push_token(token):
+                valid_tokens.append(token)
+            else:
+                invalid_tokens.append(token)
+
+        deactivated_count = 0
+        errors = []
+        if invalid_tokens:
+            PushNotificationSubscriber.objects.filter(token__in=invalid_tokens).update(is_active=False)
+            deactivated_count += len(invalid_tokens)
+            errors.append(f'{len(invalid_tokens)} invalid Expo token(s) deactivated.')
+
+        if not valid_tokens:
+            result = PushNotificationSender._empty_result(
+                attempted=len(tokens),
+                failed=len(invalid_tokens),
+                errors=errors,
+            )
+            result['deactivated'] = deactivated_count
+            return PushNotificationSender._record_log(
+                user=user, title=title, body=body, trigger=trigger,
+                result=result, tokens=tokens,
+            )
 
         messages = [
             PushMessage(
@@ -303,27 +435,32 @@ class PushNotificationSender:
                 sound='default',
                 data=PushNotificationSender._clean_data(data or {}),
             )
-            for token in tokens
+            for token in valid_tokens
         ]
-
-        sent_count = 0
-        failed_count = 0
-        deactivated_count = 0
-        errors = []
+        request_payload = [m.get_payload() for m in messages]
 
         try:
-            tickets = PushClient().publish_multiple(messages)
+            client = PushNotificationSender._build_client(PushClient)
+            tickets = client.publish_multiple(messages)
         except Exception as exc:
             logger.exception("Expo push send error: %s", exc)
-            return {
-                'attempted': len(tokens),
-                'sent': 0,
-                'failed': len(tokens),
-                'deactivated': 0,
-                'errors': [str(exc)],
-            }
+            result = PushNotificationSender._empty_result(
+                attempted=len(tokens),
+                failed=len(tokens),
+                errors=errors + [str(exc)],
+            )
+            result['deactivated'] = deactivated_count
+            return PushNotificationSender._record_log(
+                user=user, title=title, body=body, trigger=trigger,
+                result=result, tokens=tokens, request_payload=request_payload,
+            )
 
-        for token, ticket in zip(tokens, tickets):
+        sent_count = 0
+        failed_count = len(invalid_tokens)
+        response = []
+
+        for token, ticket in zip(valid_tokens, tickets):
+            response.append(PushNotificationSender._ticket_to_dict(token, ticket))
             try:
                 ticket.validate_response()
                 sent_count += 1
@@ -336,13 +473,18 @@ class PushNotificationSender:
                 failed_count += 1
                 errors.append(str(exc))
 
-        return {
+        result = {
             'attempted': len(tokens),
             'sent': sent_count,
             'failed': failed_count,
             'deactivated': deactivated_count,
             'errors': errors[:10],
         }
+        return PushNotificationSender._record_log(
+            user=user, title=title, body=body, trigger=trigger,
+            result=result, tokens=tokens,
+            request_payload=request_payload, response=response,
+        )
 
     @staticmethod
     def _clean_data(data: Dict[str, Any]) -> Dict[str, Any]:

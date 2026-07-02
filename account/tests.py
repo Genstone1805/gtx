@@ -23,6 +23,7 @@ class MockTwilioResponse:
     TWILIO_ACCOUNT_SID='ACtest-account-sid',
     TWILIO_AUTH_TOKEN='test-auth-token',
     TWILIO_VERIFY_SERVICE_SID='VAtest-service-sid',
+    TWILIO_VERIFY_SERVICE_NAME='',
 )
 class PhoneVerificationFlowTests(APITestCase):
     verification_sid = f"VE{'1' * 32}"
@@ -171,7 +172,7 @@ class PhoneVerificationFlowTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_502_BAD_GATEWAY)
         self.assertEqual(
             response.data['detail'],
-            'Phone verification is not configured. Set TWILIO_VERIFY_SERVICE_SID or TWILIO_APP_NAME.',
+            'Phone verification is not configured. Set TWILIO_VERIFY_SERVICE_SID or TWILIO_VERIFY_SERVICE_NAME.',
         )
         mock_post.assert_not_called()
 
@@ -181,7 +182,7 @@ class PhoneVerificationFlowTests(APITestCase):
         TWILIO_VERIFY_SERVICE_SID='',
         TWILIO_SID='ACalias-account-sid',
         TWILIO_SECRETE='alias-auth-token',
-        TWILIO_APP_NAME='VAalias-service-sid',
+        TWILIO_APP_SID='VAalias-service-sid',
     )
     @patch('account.views.requests.post')
     def test_add_phone_number_accepts_provided_alias_credential_names(self, mock_post):
@@ -210,7 +211,7 @@ class PhoneVerificationFlowTests(APITestCase):
         TWILIO_VERIFY_SERVICE_SID='',
         TWILIO_SID='ACalias-account-sid',
         TWILIO_SECRETE='alias-auth-token',
-        TWILIO_APP_NAME='GTX',
+        TWILIO_VERIFY_SERVICE_NAME='GTX',
     )
     @patch('account.views.requests.get')
     @patch('account.views.requests.post')
@@ -247,6 +248,50 @@ class PhoneVerificationFlowTests(APITestCase):
         post_args, post_kwargs = mock_post.call_args
         self.assertTrue(post_args[0].endswith('/Services/VAresolved-service-sid/Verifications'))
         self.assertEqual(post_kwargs['auth'], ('ACalias-account-sid', 'alias-auth-token'))
+
+    @override_settings(
+        TWILIO_VERIFY_SERVICE_SID='GTX',
+        TWILIO_VERIFY_SERVICE_NAME='',
+    )
+    @patch('account.views.requests.post')
+    def test_add_phone_number_rejects_non_sid_service_sid(self, mock_post):
+        response = self.client.post(
+            reverse('add-phone-number'),
+            {'phone_number': '+2348109477743'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_502_BAD_GATEWAY)
+        self.assertEqual(
+            response.data['detail'],
+            'TWILIO_VERIFY_SERVICE_SID must be the Verify Service SID that starts with VA. '
+            'Use TWILIO_VERIFY_SERVICE_NAME for a friendly name.',
+        )
+        mock_post.assert_not_called()
+
+    @override_settings(
+        TWILIO_VERIFY_SERVICE_SID='',
+        TWILIO_APP_NAME='VAlegacy-service-sid',
+    )
+    @patch('account.views.requests.post')
+    def test_add_phone_number_accepts_legacy_app_name_when_it_is_a_sid(self, mock_post):
+        mock_post.return_value = MockTwilioResponse(
+            {
+                'sid': self.verification_sid,
+                'status': 'pending',
+                'to': '+2348109477743',
+            }
+        )
+
+        response = self.client.post(
+            reverse('add-phone-number'),
+            {'phone_number': '+2348109477743'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        call_args, _ = mock_post.call_args
+        self.assertTrue(call_args[0].endswith('/Services/VAlegacy-service-sid/Verifications'))
 
     @patch('account.views.requests.post')
     def test_add_phone_number_returns_actionable_error_for_invalid_credentials(self, mock_post):

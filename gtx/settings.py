@@ -296,7 +296,11 @@ EMAIL_TIMEOUT = int(os.environ.get('EMAIL_TIMEOUT') or 10)
 
 TWILIO_ACCOUNT_SID = env_first('TWILIO_ACCOUNT_SID', 'TWILIO_SID').strip()
 TWILIO_AUTH_TOKEN = env_first('TWILIO_AUTH_TOKEN', 'TWILIO_AUTH_TOKEN_SECRET', 'TWILIO_SECRET', 'TWILIO_SECRETE').strip()
-TWILIO_VERIFY_SERVICE_SID = env_first('TWILIO_VERIFY_SERVICE_SID', 'TWILIO_APP_SID', 'TWILIO_APP_NAME').strip()
+_twilio_app_name = os.environ.get('TWILIO_APP_NAME', '').strip()
+TWILIO_VERIFY_SERVICE_SID = env_first('TWILIO_VERIFY_SERVICE_SID', 'TWILIO_APP_SID').strip()
+if not TWILIO_VERIFY_SERVICE_SID and _twilio_app_name.upper().startswith('VA'):
+    TWILIO_VERIFY_SERVICE_SID = _twilio_app_name
+TWILIO_VERIFY_SERVICE_NAME = env_first('TWILIO_VERIFY_SERVICE_NAME', 'TWILIO_APP_NAME').strip()
 TWILIO_VERIFY_BASE_URL = os.environ.get(
     'TWILIO_VERIFY_BASE_URL',
     'https://verify.twilio.com/v2',
@@ -304,6 +308,20 @@ TWILIO_VERIFY_BASE_URL = os.environ.get(
 TWILIO_VERIFY_CHANNEL = os.environ.get('TWILIO_VERIFY_CHANNEL', 'sms').strip()
 TWILIO_REQUEST_TIMEOUT_SECONDS = int(os.environ.get('TWILIO_REQUEST_TIMEOUT_SECONDS', '15'))
 
+
+
+# Expo push notifications
+# EXPO_ACCESS_TOKEN is only required if "Enhanced Security for Push
+# Notifications" is enabled on the Expo project; otherwise leave it blank.
+EXPO_ACCESS_TOKEN = os.environ.get('EXPO_ACCESS_TOKEN', '').strip()
+EXPO_PUSH_TIMEOUT_SECONDS = int(os.environ.get('EXPO_PUSH_TIMEOUT_SECONDS', '10'))
+# Force Android delivery via FCM v1. Leave unset (None) to let Expo decide;
+# set to 'true'/'false' only if you know your FCM credential setup.
+_expo_force_fcm_v1 = os.environ.get('EXPO_FORCE_FCM_V1')
+EXPO_FORCE_FCM_V1 = (
+    None if _expo_force_fcm_v1 is None
+    else _expo_force_fcm_v1.lower() in ('true', '1', 'yes')
+)
 
 
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")

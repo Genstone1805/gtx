@@ -7,6 +7,8 @@ from .views import (
     NotificationUnreadCountView,
     AdminNotificationEventListView,
     AdminNotificationStatsView,
+    AdminPushNotificationLogListView,
+    AdminPushNotificationTestView,
     PushNotificationSubscriberView,
 )
 
@@ -46,5 +48,15 @@ urlpatterns = [
         "admin/stats/",
         AdminNotificationStatsView.as_view(),
         name="admin-notification-stats",
+    ),
+    path(
+        "admin/push-logs/",
+        AdminPushNotificationLogListView.as_view(),
+        name="admin-push-logs",
+    ),
+    path(
+        "admin/push-test/",
+        AdminPushNotificationTestView.as_view(),
+        name="admin-push-test",
     ),
 ]

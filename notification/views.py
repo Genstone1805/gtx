@@ -8,13 +8,20 @@ from django.db import transaction
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema, inline_serializer
 
-from .models import Notification, NotificationEvent, PushNotificationSubscriber
-from .services import NotificationService
+from .models import (
+    Notification,
+    NotificationEvent,
+    PushNotificationSubscriber,
+    PushNotificationLog,
+)
+from .services import NotificationService, PushNotificationSender
 from .serializers import (
     NotificationSerializer,
     NotificationMarkAsReadSerializer,
     NotificationEventSerializer,
     PushNotificationSubscriberSerializer,
+    PushNotificationLogSerializer,
+    PushNotificationTestSerializer,
 )
 
 
@@ -24,34 +31,32 @@ class PushNotificationSubscriberView(CreateAPIView):
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
-        data = request.data
-        serializer = self.serializer_class(data=data)
-        try:
-            serializer.is_valid(raise_exception=True)
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-            token = serializer.validated_data["token"]
-            platform = serializer.validated_data["platform"]
-            device_id = serializer.validated_data.get("device_id", "")
+        token = serializer.validated_data["token"]
+        platform = serializer.validated_data["platform"]
+        device_id = serializer.validated_data.get("device_id", "")
 
-            obj, created = PushNotificationSubscriber.objects.update_or_create(
-                token=token,
-                defaults={
-                    "user": request.user,
-                    "platform": platform,
-                    "device_id": device_id,
-                    "is_active": True,
-                }
-            )
+        # A device sends a stable Expo token; re-registering reassigns it to the
+        # current user and reactivates it (handles account switch / re-login).
+        obj, created = PushNotificationSubscriber.objects.update_or_create(
+            token=token,
+            defaults={
+                "user": request.user,
+                "platform": platform,
+                "device_id": device_id,
+                "is_active": True,
+            },
+        )
 
-            return Response(
-                {
-                    "created": created,
-                    "message": "token stored/updated"
-                },
-                status=200
-            )
-        except Exception as e:
-            return Response("error", status=500)
+        return Response(
+            {
+                "created": created,
+                "message": "token stored/updated",
+            },
+            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+        )
 
 
 class NotificationListView(ListAPIView):
@@ -264,5 +269,112 @@ class AdminNotificationStatsView(APIView):
                 "failed_events": failed_events,
                 "success_rate": f"{(sent_events / total_events * 100) if total_events > 0 else 0:.2f}%",
                 "notifications_by_type": list(notifications_by_type),
+            }
+        )
+
+
+class AdminPushNotificationLogListView(ListAPIView):
+    """
+    List push notification debug logs (admin only).
+
+    Each entry captures the request sent to Expo, the response received,
+    per-token results, collected errors and the final status.
+
+    Query params:
+      - status: success | partial | failed | no_tokens | skipped
+      - trigger: notification | test
+      - user_id: filter by target user
+    """
+
+    permission_classes = [IsAdminUser]
+    serializer_class = PushNotificationLogSerializer
+
+    def get_queryset(self):
+        queryset = PushNotificationLog.objects.all().order_by("-created_at")
+
+        status_param = self.request.query_params.get("status")
+        if status_param:
+            queryset = queryset.filter(status=status_param)
+
+        trigger_param = self.request.query_params.get("trigger")
+        if trigger_param:
+            queryset = queryset.filter(trigger=trigger_param)
+
+        user_param = self.request.query_params.get("user_id")
+        if user_param:
+            queryset = queryset.filter(user_id=user_param)
+
+        return queryset[:100]  # Limit to 100 most recent
+
+
+class AdminPushNotificationTestView(APIView):
+    """
+    Fire a test push notification and return the full push behaviour (admin only).
+
+    Sends to the active Expo tokens of the target user (defaults to the
+    requesting admin), then returns the exact request/response/errors/status -
+    the same detail that is persisted to PushNotificationLog and visible in the
+    Django admin.
+    """
+
+    permission_classes = [IsAdminUser]
+    serializer_class = PushNotificationTestSerializer
+
+    @extend_schema(
+        request=PushNotificationTestSerializer,
+        responses={
+            200: inline_serializer(
+                name="AdminPushNotificationTestResponse",
+                fields={
+                    "target_user_id": serializers.IntegerField(),
+                    "target_user_email": serializers.CharField(),
+                    "active_tokens": serializers.IntegerField(),
+                    "result": serializers.DictField(),
+                    "log": PushNotificationLogSerializer(),
+                },
+            )
+        },
+    )
+    def post(self, request):
+        from django.contrib.auth import get_user_model
+
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated = serializer.validated_data
+
+        User = get_user_model()
+        user_id = validated.get("user_id")
+        if user_id:
+            try:
+                target_user = User.objects.get(pk=user_id)
+            except User.DoesNotExist:
+                raise ValidationError({"user_id": "No user with this id."})
+        else:
+            target_user = request.user
+
+        active_tokens = PushNotificationSubscriber.objects.filter(
+            user=target_user, is_active=True
+        ).count()
+
+        result = PushNotificationSender.send(
+            user=target_user,
+            title=validated.get("title") or "Test Push Notification",
+            body=validated.get("body") or "This is a test push notification from the backend.",
+            data={"type": "test", **(validated.get("payload") or {})},
+            trigger="test",
+        )
+
+        log = None
+        log_id = result.get("log_id")
+        if log_id:
+            log = PushNotificationLog.objects.filter(pk=log_id).first()
+
+        return Response(
+            {
+                "target_user_id": target_user.id,
+                "target_user_email": getattr(target_user, "email", None),
+                "active_tokens": active_tokens,
+                "result": result,
+                "log": PushNotificationLogSerializer(log).data if log else None,
             }
         )

@@ -64,6 +64,18 @@ def get_twilio_phone_verification_config() -> dict[str, Any]:
                 return str(value)
         return default
 
+    verify_service_sid = setting_first(
+        'TWILIO_VERIFY_SERVICE_SID',
+        'TWILIO_APP_SID',
+    ).strip()
+    verify_service_name = setting_first(
+        'TWILIO_VERIFY_SERVICE_NAME',
+        'TWILIO_APP_NAME',
+    ).strip()
+    if not verify_service_sid and verify_service_name.upper().startswith('VA'):
+        verify_service_sid = verify_service_name
+        verify_service_name = ''
+
     return {
         'account_sid': setting_first('TWILIO_ACCOUNT_SID', 'TWILIO_SID').strip(),
         'auth_token': setting_first(
@@ -72,11 +84,8 @@ def get_twilio_phone_verification_config() -> dict[str, Any]:
             'TWILIO_SECRET',
             'TWILIO_SECRETE',
         ).strip(),
-        'verify_service_sid': setting_first(
-            'TWILIO_VERIFY_SERVICE_SID',
-            'TWILIO_APP_SID',
-            'TWILIO_APP_NAME',
-        ).strip(),
+        'verify_service_sid': verify_service_sid,
+        'verify_service_name': verify_service_name,
         'base_url': str(
             getattr(settings, 'TWILIO_VERIFY_BASE_URL', 'https://verify.twilio.com/v2')
             or 'https://verify.twilio.com/v2'
@@ -94,10 +103,11 @@ def validate_twilio_phone_verification_config() -> dict[str, Any]:
         for setting_label, config_key in (
             ('TWILIO_ACCOUNT_SID or TWILIO_SID', 'account_sid'),
             ('TWILIO_AUTH_TOKEN or TWILIO_SECRETE', 'auth_token'),
-            ('TWILIO_VERIFY_SERVICE_SID or TWILIO_APP_NAME', 'verify_service_sid'),
         )
         if not config[config_key]
     ]
+    if not config['verify_service_sid'] and not config['verify_service_name']:
+        missing_settings.append('TWILIO_VERIFY_SERVICE_SID or TWILIO_VERIFY_SERVICE_NAME')
     if missing_settings:
         raise PhoneVerificationError(
             f"Phone verification is not configured. Set {', '.join(missing_settings)}."
@@ -125,8 +135,18 @@ def parse_phone_verification_response(response: requests.Response) -> dict[str, 
 def resolve_twilio_verify_service_sid(config: dict[str, Any]) -> str:
     """Resolve a Verify Service SID from either a SID or a configured friendly name."""
     service_identifier = str(config["verify_service_sid"]).strip()
-    if service_identifier.upper().startswith("VA"):
-        return service_identifier
+    service_name = str(config["verify_service_name"]).strip()
+    if service_identifier:
+        if service_identifier.upper().startswith("VA"):
+            return service_identifier
+        raise PhoneVerificationError(
+            "TWILIO_VERIFY_SERVICE_SID must be the Verify Service SID that starts with VA. "
+            "Use TWILIO_VERIFY_SERVICE_NAME for a friendly name."
+        )
+    if not service_name:
+        raise PhoneVerificationError(
+            "Phone verification is not configured. Set TWILIO_VERIFY_SERVICE_SID."
+        )
 
     endpoint = f"{config['base_url']}/Services"
     try:
@@ -148,16 +168,23 @@ def resolve_twilio_verify_service_sid(config: dict[str, Any]) -> str:
             "Twilio authentication failed. Check TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN."
         )
     if not response.ok:
-        raise PhoneVerificationError("Unable to look up the configured Twilio Verify service.")
+        provider_message = str(response_object.get("message") or "").strip()
+        detail = (
+            "Unable to look up the configured Twilio Verify service. "
+            "Set TWILIO_VERIFY_SERVICE_SID to the VA... service SID instead of a friendly name."
+        )
+        if provider_message:
+            detail = f"{detail} Twilio returned: {provider_message}"
+        raise PhoneVerificationError(detail)
 
     for service in response_object.get("services") or []:
         friendly_name = service.get("friendly_name") or service.get("friendlyName")
-        if friendly_name == service_identifier and service.get("sid"):
+        if friendly_name == service_name and service.get("sid"):
             return str(service["sid"])
 
     raise PhoneVerificationError(
         "Twilio Verify service was not found. Set TWILIO_VERIFY_SERVICE_SID to the VA... service SID "
-        "or set TWILIO_APP_NAME to an existing Verify service friendly name."
+        "or set TWILIO_VERIFY_SERVICE_NAME to an existing Verify service friendly name."
     )
 
 

@@ -126,3 +126,68 @@ class PushNotificationSubscriber(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class PushNotificationLog(models.Model):
+    """
+    Debug log for every Expo push attempt.
+
+    Captures the full picture of a push send - the request that went to Expo,
+    the response that came back, per-token results, any errors, and the final
+    status - so push behaviour can be inspected and debugged from the admin.
+    """
+
+    STATUS_CHOICES = [
+        ("success", "Success"),          # all targeted tokens delivered
+        ("partial", "Partial"),          # some delivered, some failed
+        ("failed", "Failed"),            # nothing delivered
+        ("no_tokens", "No Tokens"),      # user had no active tokens
+        ("skipped", "Skipped"),          # send was not attempted
+    ]
+
+    TRIGGER_CHOICES = [
+        ("notification", "Notification"),  # fired alongside an in-app notification
+        ("test", "Test Endpoint"),         # fired manually from the debug endpoint
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="push_logs",
+    )
+    trigger = models.CharField(
+        max_length=20, choices=TRIGGER_CHOICES, default="notification"
+    )
+    status = models.CharField(
+        max_length=20, choices=STATUS_CHOICES, default="skipped"
+    )
+
+    title = models.CharField(max_length=255, blank=True)
+    body = models.TextField(blank=True)
+
+    # Counts
+    attempted = models.PositiveIntegerField(default=0)
+    sent = models.PositiveIntegerField(default=0)
+    failed = models.PositiveIntegerField(default=0)
+    deactivated = models.PositiveIntegerField(default=0)
+
+    # Full debug payloads (all JSON-serializable)
+    tokens = models.JSONField(default=list, blank=True)            # tokens targeted
+    request_payload = models.JSONField(default=list, blank=True)   # what was sent to Expo
+    response = models.JSONField(default=list, blank=True)          # per-token Expo response
+    errors = models.JSONField(default=list, blank=True)            # collected errors
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["-created_at"], name="pushlog_created_idx"),
+            models.Index(fields=["status"], name="pushlog_status_idx"),
+        ]
+
+    def __str__(self):
+        who = self.user.email if self.user else "unknown"
+        return f"push[{self.status}] -> {who} ({self.sent}/{self.attempted})"
