@@ -5,7 +5,7 @@ from .views import (
     PasswordResetRequestView, PasswordResetVerifyView,
     LoginView, CreateTransactionPinView, UpdateTransactionPinView,
     VerifyTransactionPinView, SubmitLevel2CredentialsView, SubmitLevel3CredentialsView,
-    CurrentUserView, UploadProfilePictureView,
+    CurrentUserView, DeleteAccountView, UploadProfilePictureView,
     UpdateProfilePictureView,
     ChangePasswordView, AddPhoneNumberView, VerifyPhoneNumberView, ResendPhoneVerificationView,
     AttachBankDetailsView, EditBankDetailsView, DeleteBankDetailsView,
@@ -33,6 +33,7 @@ urlpatterns = [
 
     # User profile
     path('me/', CurrentUserView.as_view(), name='current-user'),
+    path('delete/', DeleteAccountView.as_view(), name='delete-account'),
     path('profile/picture/upload/', UploadProfilePictureView.as_view(), name='profile-picture-upload'),
     path('profile/picture/update/', UpdateProfilePictureView.as_view(), name='profile-picture-update'),
     path('phone/update/', AddPhoneNumberView.as_view(), name='add-phone-number'),

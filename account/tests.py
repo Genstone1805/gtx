@@ -346,6 +346,21 @@ class PhoneVerificationFlowTests(APITestCase):
     REFERRAL_QUALIFYING_AMOUNT='100.00',
     REFERRAL_COMMISSION_PERCENT='10.00',
 )
+class AccountDeletionTests(APITestCase):
+    def test_authenticated_user_can_delete_their_account(self):
+        user = UserProfile.objects.create_user(
+            email='delete-me@example.com',
+            password='StrongPassword123',
+        )
+        self.client.force_authenticate(user=user)
+
+        response = self.client.delete(reverse('delete-account'))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['detail'], 'Account deleted successfully.')
+        self.assertFalse(UserProfile.objects.filter(pk=user.pk).exists())
+
+
 class ReferralFlowTests(APITestCase):
     def test_user_gets_referral_code_automatically(self):
         user = UserProfile.objects.create_user(

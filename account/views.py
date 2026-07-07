@@ -850,6 +850,19 @@ class CurrentUserView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class DeleteAccountView(APIView):
+    """Delete the authenticated user's account."""
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request: Request) -> Response:
+        user = request.user
+        user.delete()
+        return Response(
+            {'detail': 'Account deleted successfully.'},
+            status=status.HTTP_200_OK,
+        )
+
+
 class UploadProfilePictureView(APIView):
     """Upload profile picture for the authenticated user."""
     permission_classes = [IsAuthenticated]

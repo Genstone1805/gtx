@@ -3996,3 +3996,5 @@ KeyError: 'code'
 [2026-07-02 21:59:47] ERROR django.request Bad Gateway: /api/account/phone/verify/
 [2026-07-02 21:59:49] INFO gtx REQUEST | POST /api/account/phone/verify/ | User: Anonymous | IP: 127.0.0.1
 [2026-07-02 21:59:49] INFO gtx RESPONSE | POST /api/account/phone/verify/ | Status: 200 | Duration: 0.005s
+[2026-07-07 23:53:51] INFO gtx REQUEST | DELETE /api/account/delete/ | User: Anonymous | IP: 127.0.0.1
+[2026-07-07 23:53:51] INFO gtx RESPONSE | DELETE /api/account/delete/ | Status: 200 | Duration: 0.023s
